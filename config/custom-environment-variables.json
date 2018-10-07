@@ -1,0 +1,26 @@
+{
+  "Server": {
+    "host": "HOST",
+    "port": "PORT"
+  },
+  "Facebook": {
+    "clientId": "FACEBOOK_CLIENT_ID",
+    "clientPassword": "FACEBOOK_CLIENT_SECRET"
+  },
+  "Github" : {
+    "username": "GITHUB_USERNAME",
+    "token": "GITHUB_TOKEN"
+  },
+  "Storage" : {
+    "tokenHashSeed": "STORAGE_TOKEN_HASH_SEED",
+    "encryptionPassword": "STORAGE_ENCRYPTION_PASSWORD"
+  },
+  "SMTP" : {
+    "host": "SMTP_HOST",
+    "port": "SMTP_PORT",
+    "username": "SMTP_USERNAME",
+    "password": "SMTP_PASSWORD",
+    "secure": "SMTP_SECURE",
+    "from": "SMTP_FROM"
+  }
+}
