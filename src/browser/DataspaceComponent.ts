@@ -83,6 +83,7 @@ export class DataspaceComponent extends AbstractComponent {
     }
 
     tick(time: number, timeDelta: number): void {
+        this.space!!.simulate(timeDelta / 1000);
     }
 }
 

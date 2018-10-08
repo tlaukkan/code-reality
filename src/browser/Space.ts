@@ -64,4 +64,12 @@ export class Space {
         actuator!!.acted(action);
     }
 
+    simulate(t: number) {
+        this.actuatorsMap.forEach(((actuators) => {
+           actuators.forEach((actuator => {
+               actuator.simulate(t);
+           }))
+        }));
+    }
+
 }
