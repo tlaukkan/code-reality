@@ -5,7 +5,7 @@
   "main": "src/node/server.js",
   "scripts": {
     "lint": "eslint src test *.js",
-    "start": "node-ts src/node/app.js",
+    "start": "ts-node src/node/app.js",
     "dev:node": "ts-node-dev src/node/app.js",
     "dev:browser": "webpack-dev-server --open",
     "test:node": "mocha --require ts-node/register --exit ./test/node/**/*.ts ./test/common/**/*.ts",

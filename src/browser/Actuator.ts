@@ -23,6 +23,7 @@ export class Actuator {
         this.entity.object3D.position.y = y;
         this.entity.object3D.position.z = z;
         this.entity.object3D.rotation.setFromQuaternion(new Quaternion(rx, ry, rz, rw));
+
         this.root.appendChild(this.entity);
 
         this.springOne.currentPosition.x = x;
@@ -31,12 +32,31 @@ export class Actuator {
         this.springOne.targetPosition.x = x;
         this.springOne.targetPosition.y = y;
         this.springOne.targetPosition.z = z;
+
+        this.springOne.currentOrientation.x = rx;
+        this.springOne.currentOrientation.y = ry;
+        this.springOne.currentOrientation.z = rz;
+        this.springOne.currentOrientation.w = rw;
+        this.springOne.targetOrientation.x = rx;
+        this.springOne.targetOrientation.y = ry;
+        this.springOne.targetOrientation.z = rz;
+        this.springOne.targetOrientation.w = rw;
+
         this.springTwo.currentPosition.x = x;
         this.springTwo.currentPosition.y = y;
         this.springTwo.currentPosition.z = z;
         this.springTwo.targetPosition.x = x;
         this.springTwo.targetPosition.y = y;
         this.springTwo.targetPosition.z = z;
+
+        this.springTwo.currentOrientation.x = rx;
+        this.springTwo.currentOrientation.y = ry;
+        this.springTwo.currentOrientation.z = rz;
+        this.springTwo.currentOrientation.w = rw;
+        this.springTwo.targetOrientation.x = rx;
+        this.springTwo.targetOrientation.y = ry;
+        this.springTwo.targetOrientation.z = rz;
+        this.springTwo.targetOrientation.w = rw;
     }
 
     updated(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
@@ -44,6 +64,11 @@ export class Actuator {
         this.springOne.targetPosition.x = x;
         this.springOne.targetPosition.y = y;
         this.springOne.targetPosition.z = z;
+
+        this.springOne.targetOrientation.x = rx;
+        this.springOne.targetOrientation.y = ry;
+        this.springOne.targetOrientation.z = rz;
+        this.springOne.targetOrientation.w = rw;
     }
 
     removed() : void {
@@ -63,10 +88,17 @@ export class Actuator {
         this.springTwo.targetPosition.x = this.springOne.currentPosition.x;
         this.springTwo.targetPosition.y = this.springOne.currentPosition.y;
         this.springTwo.targetPosition.z = this.springOne.currentPosition.z;
+
+        this.springTwo.targetOrientation.x = this.springOne.currentOrientation.x;
+        this.springTwo.targetOrientation.y = this.springOne.currentOrientation.y;
+        this.springTwo.targetOrientation.z = this.springOne.currentOrientation.z;
+        this.springTwo.targetOrientation.w = this.springOne.currentOrientation.w;
+
         this.springTwo.simulate(t);
         this.entity.object3D.position.x = this.springTwo.currentPosition.x;
         this.entity.object3D.position.y = this.springTwo.currentPosition.y;
         this.entity.object3D.position.z = this.springTwo.currentPosition.z;
+        this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
     }
 
 }

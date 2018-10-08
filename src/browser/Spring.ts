@@ -3,7 +3,7 @@ import {Quaternion, Vector3} from "three";
 export class Spring {
 
 
-    relaxationTime: number = 1;
+    relaxationTime: number = 1.5;
     currentPosition: Vector3 = new Vector3();
     targetPosition: Vector3 = new Vector3();
     temporary: Vector3 = new Vector3();
@@ -27,6 +27,11 @@ export class Spring {
 
         // Add delta to current position-
         this.currentPosition.add(this.temporary);
+
+        // Interpolate orientation change
+        this.currentOrientation.slerp(this.targetOrientation, t / this.relaxationTime);
+        this.currentOrientation.normalize();
+
     }
 
 }
