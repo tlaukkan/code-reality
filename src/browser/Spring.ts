@@ -3,7 +3,7 @@ import {Quaternion, Vector3} from "three";
 export class Spring {
 
 
-    relaxationTime: number = 1.5;
+    relaxationTime: number = 1.2;
     currentPosition: Vector3 = new Vector3();
     targetPosition: Vector3 = new Vector3();
     temporary: Vector3 = new Vector3();
