@@ -9,6 +9,7 @@ export class DataspaceComponent extends AbstractComponent {
     private client: ClusterClient | undefined = undefined;
     private url: string | undefined = undefined;
     private space: Space | undefined = undefined;
+    private lastRefresh: number = 0;
 
     constructor() {
         super(
@@ -83,7 +84,13 @@ export class DataspaceComponent extends AbstractComponent {
     }
 
     tick(time: number, timeDelta: number): void {
-        this.space!!.simulate(timeDelta / 1000);
+        if (this.client) {
+            this.space!!.simulate(timeDelta / 1000);
+            if (time - this.lastRefresh > 300) {
+                this.client!!.refresh(0, 0, 0, 0, 0, 0, 1);
+                this.lastRefresh = time;
+            }
+        }
     }
 }
 
