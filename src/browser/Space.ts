@@ -42,7 +42,7 @@ export class Space {
 
     updated(serverUrl: string, index: number, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
         if (index === this.avatarIndex) {
-            console.log("dataspace - observed own avatar update.");
+            //console.log("dataspace - observed own avatar update.");
             return;
         }
         const actuators = this.actuatorsMap.get(serverUrl);

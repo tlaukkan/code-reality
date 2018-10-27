@@ -12,6 +12,9 @@ export class Actuator {
     springOne: Spring = new Spring();
     springTwo: Spring = new Spring();
 
+    lastUpdateTime: number = 0;
+    averageUpdateInterval: number = 0.200;
+
     constructor(root: Entity, id: string, description: string) {
         this.root = root;
         this.id = id;
@@ -62,7 +65,16 @@ export class Actuator {
     }
 
     updated(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
+        const time = new Date().getTime() / 1000.0;
+        if (this.lastUpdateTime != 0) {
+            this.averageUpdateInterval = (this.averageUpdateInterval * 9 + (time - this.lastUpdateTime)) / 10;
+            this.springOne.relaxationTime = 2 * this.averageUpdateInterval;
+            this.springTwo.relaxationTime = 2 * this.averageUpdateInterval;
+        }
+        this.lastUpdateTime = time;
+
         //this.entity.setAttribute("position", x + " " + y + " " + z);
+
         this.springOne.targetPosition.x = x;
         this.springOne.targetPosition.y = y;
         this.springOne.targetPosition.z = z;

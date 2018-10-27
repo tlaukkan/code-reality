@@ -51,10 +51,17 @@ export class DataspaceComponent extends AbstractComponent {
 
     play(): void {
         console.log(this.name + " play");
+        if (this.playerElement && !this.playerObject) {
+            this.playerObject = this.playerElement!!.object3D;
+            if (!this.playerObject) {
+                console.log("No player object.");
+            }
+        }
+
         if (this.url) {
             this.client = new ClusterClient(this.url!!, this.avatarId, 0, 0, 0, 0, 0, 0, 0, "<a-sphere></a-sphere>");
             this.client.onReceive = (serverUrl: string, type: string, message: string[]) => {
-                console.log(message);
+                //console.log(message);
                 if (type === Encode.ADDED) {
                     const m = Decode.added(message);
                     this.space!!.added(serverUrl, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9]);
@@ -95,14 +102,7 @@ export class DataspaceComponent extends AbstractComponent {
     tick(time: number, timeDelta: number): void {
         if (this.client) {
             this.space!!.simulate(timeDelta / 1000);
-            if (time - this.lastRefresh > 300) {
-                //.setAttribute("value", data.name);
-                if (this.playerElement && !this.playerObject) {
-                    this.playerObject = this.playerElement!!.object3D;
-                    if (!this.playerObject) {
-                        console.log("No player object.");
-                    }
-                }
+            if (time - this.lastRefresh > 200) {
                 if (this.playerObject) {
 
                     this.client!!.refresh(this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
