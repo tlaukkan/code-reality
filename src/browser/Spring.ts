@@ -13,6 +13,10 @@ export class Spring {
 
 
     simulate(t: number) {
+        if (t > 0.1) {
+            t = 0.1;
+        }
+
         // Calculate distance between current position and target position.
         const totalDistance = this.currentPosition.distanceTo(this.targetPosition);
         const v = Math.pow(totalDistance / this.relaxationTime, 2);
