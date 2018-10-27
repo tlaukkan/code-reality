@@ -6,6 +6,7 @@ import {Spring} from "./Spring";
 export class Actuator {
 
     id: string;
+    description: string;
     root: Entity;
     entity: Entity;
     springOne: Spring = new Spring();
@@ -14,7 +15,8 @@ export class Actuator {
     constructor(root: Entity, id: string, description: string) {
         this.root = root;
         this.id = id;
-        this.entity = createElement("<a-box></a-box>") as Entity;
+        this.description = description;
+        this.entity = createElement(description) as Entity;
     }
 
     added(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
@@ -76,6 +78,7 @@ export class Actuator {
     }
 
     described(description: string) : void {
+        this.description = description;
 
     }
 

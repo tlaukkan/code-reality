@@ -1,3 +1,3 @@
 # Run
-npm run start:dev:node
-npm run start:dev:browser
+npm run dev:node
+npm run dev:browser

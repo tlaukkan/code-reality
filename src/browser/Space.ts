@@ -4,9 +4,12 @@ import {Actuator} from "./Actuator";
 export class Space {
 
     root: Entity;
+    avatarId: string;
+    avatarIndex: number = -1;
     actuatorsMap: Map<string, Map<number, Actuator>> = new Map<string, Map<number, Actuator>>();
 
-    constructor(root: Entity) {
+    constructor(root: Entity, avatarId: string) {
+        this.avatarId = avatarId;
         this.root = root;
     }
 
@@ -25,6 +28,11 @@ export class Space {
     }
 
     added(serverUrl: string, index: number, id: string, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number, description: string) : void {
+        if (id === this.avatarId) {
+            this.avatarIndex = index;
+            console.log("dataspace - observed own avatar add.")
+            return;
+        }
         const actuators = this.actuatorsMap.get(serverUrl);
         if (!actuators) { return; }
         const actuator = new Actuator(this.root, id, description);
@@ -33,6 +41,10 @@ export class Space {
     }
 
     updated(serverUrl: string, index: number, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
+        if (index === this.avatarIndex) {
+            console.log("dataspace - observed own avatar update.");
+            return;
+        }
         const actuators = this.actuatorsMap.get(serverUrl);
         if (!actuators) { return; }
         const actuator = actuators.get(index);
@@ -41,6 +53,10 @@ export class Space {
     }
 
     removed(serverUrl: string, index: number, id: string) : void {
+        if (index == this.avatarIndex) {
+            console.log("dataspace - observed own avatar remove.")
+            return;
+        }
         const actuators = this.actuatorsMap.get(serverUrl);
         if (!actuators) { return; }
         const actuator = actuators.get(index);
@@ -49,6 +65,9 @@ export class Space {
     }
 
     described(serverUrl: string, index: number, description: string) : void {
+        if (index == this.avatarIndex) {
+            return;
+        }
         const actuators = this.actuatorsMap.get(serverUrl);
         if (!actuators) { return; }
         const actuator = actuators.get(index);
@@ -57,6 +76,9 @@ export class Space {
     }
 
     acted(serverUrl: string, index: number, action: string) : void {
+        if (index == this.avatarIndex) {
+            return;
+        }
         const actuators = this.actuatorsMap.get(serverUrl);
         if (!actuators) { return; }
         const actuator = actuators.get(index);

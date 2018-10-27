@@ -2,10 +2,14 @@ import {AbstractComponent} from "./AFrame";
 import {ClusterClient, Decode, Encode} from "@tlaukkan/aframe-dataspace";
 import uuid = require("uuid");
 import {Space} from "./Space";
+import {Object3D} from "three";
+import {Entity} from "aframe";
 
 export class DataspaceComponent extends AbstractComponent {
 
     private avatarId = uuid.v4();
+    private playerElement: Entity | null = null;
+    private playerObject: Object3D | undefined = undefined;
     private client: ClusterClient | undefined = undefined;
     private url: string | undefined = undefined;
     private space: Space | undefined = undefined;
@@ -21,7 +25,12 @@ export class DataspaceComponent extends AbstractComponent {
 
     init(): void {
         console.log(this.name + " init: " + JSON.stringify(this.data));
-        this.space = new Space(this.entity!!);
+        this.playerElement = document.getElementById("player") as Entity;
+        if (!this.playerElement) {
+            console.log("dataspace - did not find player element in dom.");
+        }
+
+        this.space = new Space(this.entity!!, this.avatarId);
         this.url = this.data;
     }
 
@@ -87,7 +96,18 @@ export class DataspaceComponent extends AbstractComponent {
         if (this.client) {
             this.space!!.simulate(timeDelta / 1000);
             if (time - this.lastRefresh > 300) {
-                this.client!!.refresh(0, 0, 0, 0, 0, 0, 1);
+                //.setAttribute("value", data.name);
+                if (this.playerElement && !this.playerObject) {
+                    this.playerObject = this.playerElement!!.object3D;
+                    if (!this.playerObject) {
+                        console.log("No player object.");
+                    }
+                }
+                if (this.playerObject) {
+
+                    this.client!!.refresh(this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
+                        this.playerObject.quaternion.x, this.playerObject.quaternion.y, this.playerObject.quaternion.z, this.playerObject.quaternion.w);
+                }
                 this.lastRefresh = time;
             }
         }
