@@ -58,8 +58,10 @@ export class DataspaceComponent extends AbstractComponent {
             }
         }
 
-        if (this.url) {
-            this.client = new ClusterClient(this.url!!, this.avatarId, 0, 0, 0, 0, 0, 0, 0, "<a-sphere></a-sphere>");
+        if (this.url && this.playerObject) {
+            console.log(this.playerObject.position.y);
+            this.client = new ClusterClient(this.url!!, this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
+                this.playerObject.quaternion.x, this.playerObject.quaternion.y, this.playerObject.quaternion.z, this.playerObject.quaternion.w, "<a-sphere></a-sphere>");
             this.client.onReceive = (serverUrl: string, type: string, message: string[]) => {
                 //console.log(message);
                 if (type === Encode.ADDED) {
@@ -104,9 +106,10 @@ export class DataspaceComponent extends AbstractComponent {
             this.space!!.simulate(timeDelta / 1000);
             if (time - this.lastRefresh > 200) {
                 if (this.playerObject) {
-
-                    this.client!!.refresh(this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
-                        this.playerObject.quaternion.x, this.playerObject.quaternion.y, this.playerObject.quaternion.z, this.playerObject.quaternion.w);
+                    if (this.client.clusterConfiguration) {
+                        this.client!!.refresh(this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
+                            this.playerObject.quaternion.x, this.playerObject.quaternion.y, this.playerObject.quaternion.z, this.playerObject.quaternion.w);
+                    }
                 }
                 this.lastRefresh = time;
             }
