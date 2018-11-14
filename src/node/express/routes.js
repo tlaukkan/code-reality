@@ -1,4 +1,4 @@
-module.exports = function (app, db) {
+module.exports = function (app/*, db*/) {
     /*app.get('/', function(request, response) {
       console.log(request.user);
       response.sendFile('/static/index.html');
