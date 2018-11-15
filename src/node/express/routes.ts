@@ -1,15 +1,6 @@
-module.exports = function (app/*, db*/) {
-    /*app.get('/', function(request, response) {
-      console.log(request.user);
-      response.sendFile('/static/index.html');
-    });
+import {Express} from "express";
 
-    app.get('/getDreams', function (request, response) {
-        db.all('SELECT * from Dreams', function (err, rows) {
-            response.send(JSON.stringify(rows));
-        });
-    });*/
-
+module.exports = function (app: Express) {
     app.get('/api/users/current', function (request, response) {
         console.log('/api/users/current: ' + JSON.stringify(request.user));
         if (request.user) {

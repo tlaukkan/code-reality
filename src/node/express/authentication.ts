@@ -1,7 +1,11 @@
-const passport = require('passport');
-const Strategy = require('passport-facebook').Strategy;
+import {Express} from "express";
+import {IConfig} from "config";
 
-module.exports = function (app, config) {
+import passport from "passport";
+import passportFacebook from "passport-facebook";
+const Strategy = passportFacebook.Strategy;
+
+module.exports = function (app: Express, config: IConfig) {
 
     app.use(passport.initialize());
     app.use(passport.session());
@@ -12,8 +16,8 @@ module.exports = function (app, config) {
         callbackURL: config.get('Facebook.callbackUrl'),
         profileFields: ['id', 'name', 'displayName', 'emails']
     }, (accessToken, refreshToken, profile, cb) => {
-        if (profile.emails.length >= 1) {
-            profile.email = profile.emails[0].value;
+        if (profile.emails && profile.emails.length >= 1) {
+            (profile as any).email = profile.emails[0].value;
         }
         console.log(profile);
         return cb(null, profile);
