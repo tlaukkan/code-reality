@@ -3,6 +3,7 @@ import {IConfig} from "config";
 
 import passport from "passport";
 import passportFacebook from "passport-facebook";
+import {User} from "../model/User";
 const Strategy = passportFacebook.Strategy;
 
 module.exports = function (app: Express, config: IConfig) {
@@ -16,11 +17,14 @@ module.exports = function (app: Express, config: IConfig) {
         callbackURL: config.get('Facebook.callbackUrl'),
         profileFields: ['id', 'name', 'displayName', 'emails']
     }, (accessToken, refreshToken, profile, cb) => {
+        let user: User;
         if (profile.emails && profile.emails.length >= 1) {
-            (profile as any).email = profile.emails[0].value;
+            user = new User(profile.emails[0].value, profile.displayName);
+        } else {
+            user = new User("", "anonymous");
         }
-        console.log(profile);
-        return cb(null, profile);
+        console.log(JSON.stringify(user));
+        return cb(null, user);
     }));
 
     passport.serializeUser(function (user, cb) {
