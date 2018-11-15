@@ -14,6 +14,7 @@ export class DataspaceComponent extends AbstractComponent {
     private url: string | undefined = undefined;
     private space: Space | undefined = undefined;
     private lastRefresh: number = 0;
+    private idToken: string | undefined;
 
     constructor() {
         super(
@@ -32,6 +33,16 @@ export class DataspaceComponent extends AbstractComponent {
 
         this.space = new Space(this.entity!!, this.avatarId);
         this.url = this.data;
+
+        fetch('/api/users/current/id-token')
+            .then((response) => {
+                response.text().then((data) => {
+                    console.log(data);
+                    this.idToken = data;
+                });
+            }).catch((err) => {
+            console.error(err);
+        });
     }
 
     update(data: any, oldData: any): void {
@@ -59,7 +70,7 @@ export class DataspaceComponent extends AbstractComponent {
         }
 
         if (this.url && this.playerObject) {
-            console.log(this.playerObject.position.y);
+
             this.client = new ClusterClient(this.url!!, this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
                 this.playerObject.quaternion.x, this.playerObject.quaternion.y, this.playerObject.quaternion.z, this.playerObject.quaternion.w, "<a-sphere></a-sphere>");
             this.client.onReceive = (serverUrl: string, type: string, message: string[]) => {

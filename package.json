@@ -12,6 +12,7 @@
     "test:browser": "karma start karma.config.js",
     "test": "npm run test:node && npm run test:browser",
     "build:browser": "webpack --display-modules",
+    "build:browser:watch": "webpack --watch",
     "build:lib": "tsc"
   },
   "repository": {
