@@ -7,7 +7,7 @@ import config = require('config');
 //require('./express/web-socket.ts')(app);
 
 require('./express/session.ts')(app);
-require('./express/authentication.ts')(app, config);
+//require('./express/authentication.ts')(app, config);
 require('./express/routes.ts')(app);
 
 app.use(express.static('dist'));

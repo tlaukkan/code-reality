@@ -1,7 +1,7 @@
 import {Entity} from "aframe";
 import {Actuator} from "./Actuator";
 
-export class Space {
+export class DynamicSpace {
 
     root: Entity;
     avatarId: string;
