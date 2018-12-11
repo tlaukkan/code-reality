@@ -6,6 +6,7 @@ import {Spring} from "./Spring";
 export class Actuator {
 
     id: string;
+    serverUrl: string;
     description: string;
     root: Entity;
     entity: Entity;
@@ -15,20 +16,17 @@ export class Actuator {
     lastUpdateTime: number = 0;
     averageUpdateInterval: number = 0.200;
 
-    constructor(root: Entity, id: string, description: string) {
+    constructor(root: Entity, serverUrl: string, id: string, description: string) {
         this.root = root;
+        this.serverUrl = serverUrl;
         this.id = id;
         this.description = description;
         this.entity = createElement(description) as Entity;
+        this.entity.setAttribute("did", id);
+        this.entity.setAttribute("server", serverUrl);
     }
 
     added(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
-        //this.entity.setAttribute("position", x + " " + y + " " + z);
-        this.entity.object3D.position.x = x;
-        this.entity.object3D.position.y = y;
-        this.entity.object3D.position.z = z;
-        this.entity.object3D.rotation.setFromQuaternion(new Quaternion(rx, ry, rz, rw));
-
         this.root.appendChild(this.entity);
 
         this.springOne.currentPosition.x = x;
@@ -110,10 +108,14 @@ export class Actuator {
         this.springTwo.targetOrientation.w = this.springOne.currentOrientation.w;
 
         this.springTwo.simulate(t);
-        this.entity.object3D.position.x = this.springTwo.currentPosition.x;
-        this.entity.object3D.position.y = this.springTwo.currentPosition.y;
-        this.entity.object3D.position.z = this.springTwo.currentPosition.z;
-        this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
+
+        if (this.entity.object3D) {
+            // Update location only after 3d presentation is ready.
+            this.entity.object3D.position.x = this.springTwo.currentPosition.x;
+            this.entity.object3D.position.y = this.springTwo.currentPosition.y;
+            this.entity.object3D.position.z = this.springTwo.currentPosition.z;
+            this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
+        }
     }
 
 }

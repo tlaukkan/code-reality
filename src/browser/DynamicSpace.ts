@@ -35,7 +35,7 @@ export class DynamicSpace {
         }
         const actuators = this.actuatorsMap.get(serverUrl);
         if (!actuators) { return; }
-        const actuator = new Actuator(this.root, id, description);
+        const actuator = new Actuator(this.root, serverUrl, id, description);
         actuators!!.set(index, actuator);
         actuator.added(x, y, z, rx, ry, rz, rw);
     }
