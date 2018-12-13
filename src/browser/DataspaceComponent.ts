@@ -5,7 +5,8 @@ import {DynamicSpace} from "./DynamicSpace";
 import {Object3D} from "three";
 import {Entity} from "aframe";
 import {StaticSpace} from "./StaticSpace";
-import {StateEventDetail} from "./model/StateEventDetail";
+import {EntityStateEventDetail} from "./model/EntityStateEventDetail";
+import {Events} from "./model/Events";
 
 export class DataspaceComponent extends AbstractComponent {
 
@@ -28,22 +29,23 @@ export class DataspaceComponent extends AbstractComponent {
         );
     }
 
+
     init(): void {
         console.log(this.name + " init: " + JSON.stringify(this.data));
         this.playerElement = document.getElementById("player") as Entity;
         if (!this.playerElement) {
             console.log("dataspace - did not find player element in dom.");
         } else {
-            this.playerElement.addEventListener("entitystatebegin", ((e: CustomEvent) => {
+            this.playerElement.addEventListener(Events.ENTITY_STATE_BEGIN, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
                     console.log(e.detail);
-                    this.client.act(this.avatarId, "state-begin", (e.detail as StateEventDetail).state);
+                    this.client.act(this.avatarId, Events.ENTITY_STATE_BEGIN, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
-            this.playerElement.addEventListener("entitystateend", ((e: CustomEvent) => {
+            this.playerElement.addEventListener(Events.ENTITY_STATE_END, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
                     console.log(e.detail);
-                    this.client.act(this.avatarId, "state-end", (e.detail as StateEventDetail).state);
+                    this.client.act(this.avatarId, Events.ENTITY_STATE_END, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
         }

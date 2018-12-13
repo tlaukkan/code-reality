@@ -1,10 +1,13 @@
 import {AbstractComponent} from "../../AFrame";
 import {AnimationClip, AnimationMixer, LoopOnce, LoopPingPong, LoopRepeat, Event, AnimationAction} from "three";
-import {AnimationEventDetail} from "./AnimateEventDetail";
+import {AnimationEventDetail} from "../../model/AnimateEventDetail";
 import {AnimationLoopStyle} from "./AnimationLoopStyle";
-import {AnimationEndEventDetail} from "./AnimateEndEventDetail";
+import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";
+import {AnimationFinishedEventDetails} from "../../model/AnimationFinishedEventDetail";
+import {Events} from "../../model/Events";
 
 export class AnimatorComponent extends AbstractComponent {
+
 
     mixer: AnimationMixer | undefined;
     clips: Map<string, AnimationClip> = new Map<string, AnimationClip>();
@@ -17,34 +20,27 @@ export class AnimatorComponent extends AbstractComponent {
             false);
     }
 
+
     init(): void {
         console.log(this.name + " init: " + JSON.stringify(this.data));
-
-        /*var loader = new GLTFLoader();
-        loader.load( 'https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb', ( gltf: GLTF ) => {
-            const model = gltf.scene;
-            console.log(gltf.animations);
-            this.entity!!.setObject3D("mesh", model);
-            console.log("model-loaded");
-            //scene.add(model);
-        })*/
 
         this.entity!!.addEventListener("model-loaded", ((e: CustomEvent) => {
             console.log("model-loaded");
             this.initAnimation();
         }) as any);
 
-        this.entity!!.addEventListener("animate-begin", ((e: CustomEvent) => {
+        this.entity!!.addEventListener(Events.EVENT_ANIMATE_BEGIN, ((e: CustomEvent) => {
             const detail = e.detail as AnimationEventDetail;
             this.beginAnimation(detail.clipName, detail.style, detail.repetitions);
         }) as any);
 
-        this.entity!!.addEventListener("animate-end", ((e: CustomEvent) => {
+        this.entity!!.addEventListener(Events.EVENT_ANIMATE_END, ((e: CustomEvent) => {
             const detail = e.detail as AnimationEndEventDetail;
             this.endAnimation(detail.clipName);
         }) as any);
 
     }
+
 
     private initAnimation() {
         const mesh = this.entity!!.getObject3D('mesh');
@@ -65,11 +61,15 @@ export class AnimatorComponent extends AbstractComponent {
             this.clips.set(clip.name.toLocaleLowerCase(), clip);
         });
         this.actions.clear();
-        this.entity!!.dispatchEvent(new CustomEvent('animate-begin', {detail: new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 1)}));
+        this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_ANIMATE_BEGIN,
+            {detail: new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 1)}));
     }
 
+
     private onAnimationFinished(clipName: string) {
-        this.entity!!.dispatchEvent(new CustomEvent('animation-finished', {detail: new AnimationEndEventDetail(clipName)}));
+        this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_ANIMATION_FINISHED,
+            {detail: new AnimationFinishedEventDetails(clipName)}));
+
         this.actions.delete(clipName);
     }
 
@@ -107,7 +107,8 @@ export class AnimatorComponent extends AbstractComponent {
         }
         this.actions.get(clipName)!!.stop();
         this.actions.delete(clipName);
-        this.entity!!.dispatchEvent(new CustomEvent('animation-finished', {detail: new AnimationEndEventDetail(clipName)}));
+        this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_ANIMATION_FINISHED,
+            {detail: new AnimationFinishedEventDetails(clipName)}));
     }
 
     update(data: any, oldData: any): void {

@@ -1,7 +1,8 @@
 import {AbstractComponent} from "../../AFrame";
 import {Raycaster, Vector3, Plane, Object3D} from "three";
 import {CollidableCrawler} from "./CollideableCrawler";
-import {StateEventDetail} from "../../model/StateEventDetail";
+import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
+import {Events} from "../../model/Events";
 
 export class ArcadeControlsComponent extends AbstractComponent {
 
@@ -122,9 +123,9 @@ export class ArcadeControlsComponent extends AbstractComponent {
 
     entityStateChange(state: string, enabled: boolean) {
         if (enabled) {
-            this.entity!!.dispatchEvent(new CustomEvent("entitystatebegin", { detail: new StateEventDetail(state) }));
+            this.entity!!.dispatchEvent(new CustomEvent(Events.ENTITY_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
         } else {
-            this.entity!!.dispatchEvent(new CustomEvent("entitystateend", { detail: new StateEventDetail(state) }));
+            this.entity!!.dispatchEvent(new CustomEvent(Events.ENTITY_STATE_END, { detail: new EntityStateEventDetail(state) }));
         }
         console.log(state + ":" + enabled);
     }
