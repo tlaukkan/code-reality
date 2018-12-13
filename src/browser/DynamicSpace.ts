@@ -75,7 +75,7 @@ export class DynamicSpace {
         actuator!!.described(description);
     }
 
-    acted(serverUrl: string, index: number, action: string) : void {
+    acted(serverUrl: string, index: number, action: string, description: string) : void {
         if (index == this.avatarIndex) {
             return;
         }
@@ -83,7 +83,7 @@ export class DynamicSpace {
         if (!actuators) { return; }
         const actuator = actuators.get(index);
         if (!actuator) { return; }
-        actuator!!.acted(action);
+        actuator!!.acted(action, description);
     }
 
     simulate(t: number) {

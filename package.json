@@ -70,7 +70,7 @@
     "@types/node": "^10.12.7",
     "@types/passport": "^0.4.7",
     "@types/passport-facebook": "^2.1.8",
-    "@types/three": "^0.92.24",
+    "@types/three": "^0.93.12",
     "@types/uuid": "^3.4.4",
     "@types/websocket": "0.0.40",
     "body-parser": "^1.18.3",

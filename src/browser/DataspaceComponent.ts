@@ -5,6 +5,7 @@ import {DynamicSpace} from "./DynamicSpace";
 import {Object3D} from "three";
 import {Entity} from "aframe";
 import {StaticSpace} from "./StaticSpace";
+import {StateEventDetail} from "./model/StateEventDetail";
 
 export class DataspaceComponent extends AbstractComponent {
 
@@ -32,6 +33,19 @@ export class DataspaceComponent extends AbstractComponent {
         this.playerElement = document.getElementById("player") as Entity;
         if (!this.playerElement) {
             console.log("dataspace - did not find player element in dom.");
+        } else {
+            this.playerElement.addEventListener("entitystatebegin", ((e: CustomEvent) => {
+                if (this.client && this.client.clusterConfiguration) {
+                    console.log(e.detail);
+                    this.client.act(this.avatarId, "state-begin", (e.detail as StateEventDetail).state);
+                }
+            }) as any);
+            this.playerElement.addEventListener("entitystateend", ((e: CustomEvent) => {
+                if (this.client && this.client.clusterConfiguration) {
+                    console.log(e.detail);
+                    this.client.act(this.avatarId, "state-end", (e.detail as StateEventDetail).state);
+                }
+            }) as any);
         }
 
         this.dynamicSpace = new DynamicSpace(this.entity!!, this.avatarId);
@@ -97,7 +111,7 @@ export class DataspaceComponent extends AbstractComponent {
                 }
                 if (type === Encode.ACTED) {
                     const m = Decode.acted(message);
-                    this.dynamicSpace!!.acted(serverUrl, m[0], m[1]);
+                    this.dynamicSpace!!.acted(serverUrl, m[0], m[1], m[2]);
                 }
             };
             this.client.onStoredRootEntityReceived = (serverUrl, sid, entityXml) => {

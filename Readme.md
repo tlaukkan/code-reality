@@ -2,6 +2,17 @@
 npm run dev:node
 npm run dev:browser
 
+# Dom Events
+
+# Animation actions / states
+
+entity:state:begin:flying
+entity:state:
+
+# Asset URLs
+
+https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb
+
 # Access control
 
 ## Generate RSA key pair like:

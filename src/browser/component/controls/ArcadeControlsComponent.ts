@@ -1,8 +1,9 @@
 import {AbstractComponent} from "../../AFrame";
 import {Raycaster, Vector3, Plane, Object3D} from "three";
 import {CollidableCrawler} from "./CollideableCrawler";
+import {StateEventDetail} from "../../model/StateEventDetail";
 
-export class ArcadeControls extends AbstractComponent {
+export class ArcadeControlsComponent extends AbstractComponent {
 
     movementSpeed: number = 0;
     height: number = 0;
@@ -97,11 +98,35 @@ export class ArcadeControls extends AbstractComponent {
 
         window.addEventListener('keydown', (e) => {
             this.onKeyDown(e.key);
+
         });
 
         window.addEventListener('keyup', (e) => {
             this.onKeyUp(e.key);
         });
+    }
+
+    setJumping(state: boolean) {
+        if (this.jumping !== state) {
+            this.jumping = state;
+            this.entityStateChange("jumping", this.jumping);
+        }
+    }
+
+    setAirborne(state: boolean) {
+        if (this.airborne !== state) {
+            this.airborne = state;
+            this.entityStateChange("airborne", this.airborne);
+        }
+    }
+
+    entityStateChange(state: string, enabled: boolean) {
+        if (enabled) {
+            this.entity!!.dispatchEvent(new CustomEvent("entitystatebegin", { detail: new StateEventDetail(state) }));
+        } else {
+            this.entity!!.dispatchEvent(new CustomEvent("entitystateend", { detail: new StateEventDetail(state) }));
+        }
+        console.log(state + ":" + enabled);
     }
 
     update(data: any, oldData: any): void {
@@ -131,11 +156,37 @@ export class ArcadeControls extends AbstractComponent {
     }
 
     onKeyDown(key: string) {
-        this.pressed.set(key, this.time)
+        if (!this.pressed.has(key)) {
+            if (key == this.backwardKey) {
+                this.entityStateChange("backward", true);
+            }
+            if (key == this.forwardKey) {
+                this.entityStateChange("forward", true);
+            }
+            if (key == this.leftKey) {
+                this.entityStateChange("left", true);
+            }
+            if (key == this.rightKey) {
+                this.entityStateChange("right", true);
+            }
+        }
+        this.pressed.set(key, this.time);
     }
 
     onKeyUp(key: string) {
         if (this.pressed.has(key)) {
+            if (key == this.backwardKey) {
+                this.entityStateChange("backward", false);
+            }
+            if (key == this.forwardKey) {
+                this.entityStateChange("forward", false);
+            }
+            if (key == this.leftKey) {
+                this.entityStateChange("left", false);
+            }
+            if (key == this.rightKey) {
+                this.entityStateChange("right", false);
+            }
             this.pressed.delete(key)
         }
     }
@@ -202,7 +253,7 @@ export class ArcadeControls extends AbstractComponent {
         var distanceToNearestBelow = this.findDistanceToNearest(this.yAxisNegative, collidables);
 
         if (this.pressed.has(this.jumpKey) && !this.jumping && !this.airborne) {
-            this.jumping = true;
+            this.setJumping(true);
             this.yVelocity = this.jumpStartSpeed
         }
 
@@ -213,18 +264,18 @@ export class ArcadeControls extends AbstractComponent {
             let distanceFromBottom = distanceToNearestBelow - this.height / 2;
             if (Math.abs(freeDropDelta) > Math.abs(distanceFromBottom) || Math.abs(distanceFromBottom) < 0.1) {
                 delta = -distanceFromBottom;
-                this.airborne = false
+                this.setAirborne(false);
             } else {
                 if (distanceFromBottom && distanceFromBottom < 0) {
                     delta = -freeDropDelta;
                 } else {
                     delta = freeDropDelta;
                 }
-                this.airborne = true
+                this.setAirborne(true);
             }
         } else {
-            delta = freeDropDelta
-            this.airborne = true
+            delta = freeDropDelta;
+            this.setAirborne(true);
         }
 
         if (this.airborne) {
@@ -234,7 +285,7 @@ export class ArcadeControls extends AbstractComponent {
         }
 
         if (this.yVelocity < 0) {
-            this.jumping = false;
+            this.setJumping(false);
         }
 
         this.centerOfMassPosition.y = this.centerOfMassPosition.y + delta;

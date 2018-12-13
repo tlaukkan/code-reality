@@ -92,8 +92,8 @@ export class Actuator {
 
     }
 
-    acted(action: string) : void {
-
+    acted(action: string, description: string) : void {
+        console.log(action + ":" + description);
     }
 
     simulate(t: number) {

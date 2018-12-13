@@ -26,6 +26,7 @@
 <a-scene light="defaultLightsEnabled: false" storage="dimension: infinity" dataspace="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-dataspace@0.0.18/defaul-configuration.json">
     <a-assets>
         <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
+        <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
     </a-assets>
 
     <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.4"></a-entity>
@@ -39,6 +40,9 @@
     <a-box color="#8EA604" position="0 -0.25 -7" scale="2 2 2" ></a-box>
     <a-box color="#8EA604" position="0 0.5 -10" scale="4 0.5 4" ></a-box>
     <a-entity gltf-model="#tree" position="-1 1 -10" scale="0.01 0.01 0.01"></a-entity>
+
+    <a-entity gltf-model="#robot" position="1 1 -10" scale="0.3 0.3 0.3" animator></a-entity>
+
 
 
     <a-sphere position="2 0 -3" scale="1 1 1" color="#FFFFFF" identity></a-sphere>
