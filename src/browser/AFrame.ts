@@ -1,6 +1,6 @@
 import {ComponentConstructor, Entity} from "aframe";
 
-interface Component {
+export interface Component {
 
     /**
      * Component name.

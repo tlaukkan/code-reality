@@ -1,10 +1,11 @@
 import {CompositeComponent} from "../CompositeComponent";
 import {AnimationController} from "../../controllers/animation/AnimationController";
 
-export class AnimatorComponent extends CompositeComponent {
+export class AvatarComponent extends CompositeComponent {
+
 
     constructor() {
-        super("animator", {}, false);
+        super("avatar", {}, false);
     }
 
     init(): void {
