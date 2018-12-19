@@ -62,7 +62,7 @@ export class AnimatorComponent extends AbstractComponent {
         });
         this.actions.clear();
         this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_ANIMATE_BEGIN,
-            {detail: new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 1)}));
+            {detail: new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 0)}));
     }
 
 

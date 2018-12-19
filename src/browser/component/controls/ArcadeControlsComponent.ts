@@ -123,9 +123,9 @@ export class ArcadeControlsComponent extends AbstractComponent {
 
     entityStateChange(state: string, enabled: boolean) {
         if (enabled) {
-            this.entity!!.dispatchEvent(new CustomEvent(Events.ENTITY_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
+            this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
         } else {
-            this.entity!!.dispatchEvent(new CustomEvent(Events.ENTITY_STATE_END, { detail: new EntityStateEventDetail(state) }));
+            this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
         }
         console.log(state + ":" + enabled);
     }

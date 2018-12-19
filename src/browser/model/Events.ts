@@ -6,8 +6,8 @@ export class Events {
 
     static EVENT_ANIMATION_FINISHED = 'animation-finished';
 
-    static ENTITY_STATE_BEGIN = "entity-state-begin";
+    static EVENT_STATE_BEGIN = 'state-begin';
 
-    static ENTITY_STATE_END = "entity-state-end";
+    static EVENT_STATE_END = 'state-end';
 
 }

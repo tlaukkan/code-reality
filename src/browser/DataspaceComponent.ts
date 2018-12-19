@@ -36,16 +36,16 @@ export class DataspaceComponent extends AbstractComponent {
         if (!this.playerElement) {
             console.log("dataspace - did not find player element in dom.");
         } else {
-            this.playerElement.addEventListener(Events.ENTITY_STATE_BEGIN, ((e: CustomEvent) => {
+            this.playerElement.addEventListener(Events.EVENT_STATE_BEGIN, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
                     console.log(e.detail);
-                    this.client.act(this.avatarId, Events.ENTITY_STATE_BEGIN, (e.detail as EntityStateEventDetail).state);
+                    this.client.act(this.avatarId, Events.EVENT_STATE_BEGIN, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
-            this.playerElement.addEventListener(Events.ENTITY_STATE_END, ((e: CustomEvent) => {
+            this.playerElement.addEventListener(Events.EVENT_STATE_END, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
                     console.log(e.detail);
-                    this.client.act(this.avatarId, Events.ENTITY_STATE_END, (e.detail as EntityStateEventDetail).state);
+                    this.client.act(this.avatarId, Events.EVENT_STATE_END, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
         }
