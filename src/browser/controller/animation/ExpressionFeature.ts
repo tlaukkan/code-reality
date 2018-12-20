@@ -1,4 +1,4 @@
-import {Controller} from "../../component/Controller";
+import {ComponentController} from "../../component/ComponentController";
 import {AnimationAction, AnimationClip, AnimationMixer, Event, LoopOnce, LoopPingPong, LoopRepeat} from "three";
 import {AnimationEventDetail} from "../../model/AnimateEventDetail";
 import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";
@@ -13,7 +13,7 @@ export class ExpressionFeature extends AbstractFeature {
 
     expressions: Set<string> = new Set();
 
-    constructor(controller: Controller, entity: Entity) {
+    constructor(controller: ComponentController, entity: Entity) {
         super("expression-controller", controller, entity);
     }
 

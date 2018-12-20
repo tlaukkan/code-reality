@@ -1,4 +1,4 @@
-import {Controller} from "../../component/Controller";
+import {ComponentController} from "../../component/ComponentController";
 import {AnimationAction, AnimationClip, AnimationMixer, Event, LoopOnce, LoopPingPong, LoopRepeat} from "three";
 import {AnimationEventDetail} from "../../model/AnimateEventDetail";
 import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";
@@ -14,7 +14,7 @@ export class AnimationFeature extends AbstractFeature {
     clips: Map<string, AnimationClip> = new Map<string, AnimationClip>();
     actions: Map<string, AnimationAction> = new Map<string, AnimationAction>();
 
-    constructor(controller: Controller, entity: Entity) {
+    constructor(controller: ComponentController, entity: Entity) {
         super("animation-controller", controller, entity);
     }
 

@@ -1,4 +1,4 @@
-import {AbstractController} from "../AbstractController";
+import {AbstractComponentController} from "../AbstractComponentController";
 import {ClusterClient, Decode, Encode} from "@tlaukkan/aframe-dataspace";
 import uuid = require("uuid");
 import {DynamicSpace} from "./DynamicSpace";
@@ -8,7 +8,7 @@ import {StaticSpace} from "./StaticSpace";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
 
-export class DataspaceController extends AbstractController {
+export class DataspaceController extends AbstractComponentController {
 
     private avatarId = uuid.v4();
     private playerElement: Entity | null = null;
@@ -31,7 +31,7 @@ export class DataspaceController extends AbstractController {
     private directionQuaternion = new Quaternion();
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("dataspace", component, {type: 'string', default: '?'}, false, entity, data);
+        super("dataspace", {type: 'string', default: '?'}, false, component, entity, data);
     }
 
 

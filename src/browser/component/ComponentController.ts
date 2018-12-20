@@ -3,7 +3,7 @@ import {Entity, Component} from "AFrame";
 /**
  * Interface for component controllers.
  */
-export interface Controller {
+export interface ComponentController {
 
     /**
      * Component name.

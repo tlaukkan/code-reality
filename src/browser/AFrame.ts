@@ -1,9 +1,9 @@
 import {Entity, Component} from "aframe";
-import {Controller} from "./component/Controller";
+import {ComponentController} from "./component/ComponentController";
 
-interface NewController { (component: Component, entity: Entity, data: any): Controller }
+interface NewController { (component: Component, entity: Entity, data: any): ComponentController }
 
-export function registerAFrameComponent(newController: NewController) {
+export function registerComponentController(newController: NewController) {
     if (typeof AFRAME !== 'undefined') {
         const controllerPrototype = newController({} as any, {} as any, {} as any);
         AFRAME.registerComponent(controllerPrototype.componentName, {

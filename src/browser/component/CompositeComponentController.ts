@@ -1,13 +1,13 @@
 import {AbstractFeature} from "../controller/AbstractFeature";
 import {Entity, Component} from "aframe";
-import {AbstractController} from "./AbstractController";
+import {AbstractComponentController} from "./AbstractComponentController";
 
-export class FeatureCompositeController extends AbstractController {
+export class CompositeComponentController extends AbstractComponentController {
 
     features: Array<AbstractFeature> = [];
 
-    constructor(componentName: string, component: Component, schema: any, multiple: boolean, entity: Entity, data: any) {
-        super(componentName, component, schema, multiple, entity, data);
+    constructor(componentName: string, schema: any, multiple: boolean, component: Component, entity: Entity, data: any) {
+        super(componentName, schema, multiple, component, entity, data);
     }
 
     init(): void {

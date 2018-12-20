@@ -1,13 +1,13 @@
-import {FeatureCompositeController} from "../FeatureCompositeController";
+import {CompositeComponentController} from "../CompositeComponentController";
 import {AnimationFeature} from "../../controller/animation/AnimationFeature";
 import {ExpressionFeature} from "../../controller/animation/ExpressionFeature";
 import {Component, Entity} from "aframe";
 
-export class AvatarController extends FeatureCompositeController {
+export class AvatarController extends CompositeComponentController {
 
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("avatar", component, {}, false, entity, data);
+        super("avatar", {}, false, component, entity, data);
     }
 
     init(): void {

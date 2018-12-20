@@ -1,17 +1,17 @@
-import {registerAFrameComponent} from "../../AFrame";
+import {registerComponentController} from "../../AFrame";
 import {Box3, Vector3} from "three";
 import {Component, Entity} from "AFrame";
-import {AbstractController} from "../AbstractController";
+import {AbstractComponentController} from "../AbstractComponentController";
 
-export class LabelController extends AbstractController {
+export class LabelController extends AbstractComponentController {
 
     labelElement: Element | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("label", component, {
+        super("label", {
             text: {type: 'string', default: '?'},
             height: {type: 'number', default: 1.2}
-        }, false, entity, data);
+        }, false, component, entity, data);
     }
 
     init(): void {

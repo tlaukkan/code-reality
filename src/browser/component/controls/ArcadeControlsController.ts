@@ -1,11 +1,11 @@
-import {AbstractController} from "../AbstractController";
+import {AbstractComponentController} from "../AbstractComponentController";
 import {Raycaster, Vector3, Plane, Object3D} from "three";
 import {CollidableCrawler} from "./CollideableCrawler";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
 import {Component, Entity} from "aframe";
 
-export class ArcadeControlsController extends AbstractController {
+export class ArcadeControlsController extends AbstractComponentController {
 
     movementSpeed: number = 0;
     height: number = 0;
@@ -37,7 +37,7 @@ export class ArcadeControlsController extends AbstractController {
     xzDeltaOppositeDirection: Vector3 = new Vector3(0, 0, 0);
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("arcade-controls", component, {
+        super("arcade-controls", {
             movementSpeed: {type: 'number', default: 2},
             height: {type: 'number', default: 2},
             width: {type: 'number', default: 0.5},
@@ -47,7 +47,7 @@ export class ArcadeControlsController extends AbstractController {
             leftKey: {type: 'string', default: 'a'},
             rightKey: {type: 'string', default: 'd'},
             jumpKey: {type: 'string', default: ' '}
-        }, false, entity, data);
+        }, false, component, entity, data);
     }
 
     init(): void {

@@ -1,10 +1,10 @@
-import {Controller} from "./Controller";
+import {ComponentController} from "./ComponentController";
 import {Component, Entity} from "AFrame";
 
 /**
  * Abstract base class for component implementations.
  */
-export abstract class AbstractController implements Controller {
+export abstract class AbstractComponentController implements ComponentController {
     readonly componentName: string;
     readonly schema: any;
     readonly multiple: boolean;
@@ -12,7 +12,7 @@ export abstract class AbstractController implements Controller {
     data: any;
     readonly component: Component;
 
-    protected constructor(componentName: string, component: Component, schema: any, multiple: boolean, entity: Entity, data: any) {
+    constructor(componentName: string, schema: any, multiple: boolean, component: Component, entity: Entity, data: any) {
         this.componentName = componentName;
         this.schema = schema;
         this.multiple = multiple;
