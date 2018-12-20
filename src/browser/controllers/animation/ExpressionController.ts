@@ -37,7 +37,7 @@ export class ExpressionController extends AbstractController {
         });*/
         this.addEventListener(Events.EVENT_STATE_BEGIN, (detail: EntityStateEventDetail) => {
             if (detail.state === "moving") {
-                this.dispatchEvent(Events.EVENT_ANIMATE_BEGIN, new AnimationEventDetail("walking", AnimationLoopStyle.LOOP_REPEAT, 10));
+                this.dispatchEvent(Events.EVENT_ANIMATE_BEGIN, new AnimationEventDetail("walking", AnimationLoopStyle.LOOP_REPEAT, -1));
             }
         });
         this.addEventListener(Events.EVENT_STATE_END, (detail: EntityStateEventDetail) => {

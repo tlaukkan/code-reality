@@ -157,11 +157,12 @@ export class Actuator {
         this.currentOrientation.z = this.springTwo.currentOrientation.z;
         this.currentOrientation.w = this.springTwo.currentOrientation.w;
 
-        const rotation = this.targetOrientation.multiply(this.currentOrientation.inverse());
-        const orientationDelta = 2 * Math.acos(rotation.w);
+        const dot = this.targetOrientation.dot(this.currentOrientation);
+        const orientationDelta = Math.acos(2 * dot * dot - 1);
+        //console.log(orientationDelta);
 
         //const orientationDelta = ((this.springOne.targetOrientation) as any).angleTo(this.springTwo.currentOrientation) as number;
-        const moving = positionDelta > 0.1;
+        const moving = positionDelta > 0.1 || orientationDelta > 0.2;
         //console.log(positionDelta);
 
         if (!this.moving && moving) {

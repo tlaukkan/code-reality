@@ -95,7 +95,9 @@ export class AnimationController extends AbstractController {
             if (style == AnimationLoopStyle.ONCE) {
                 action.setLoop(LoopOnce, repetitions);
             } else if (style == AnimationLoopStyle.LOOP_REPEAT) {
-                action.setLoop(LoopRepeat, repetitions);
+                if (repetitions > -1) {
+                    action.setLoop(LoopRepeat, repetitions);
+                }
             } else {
                 action.setLoop(LoopPingPong, repetitions);
             }
