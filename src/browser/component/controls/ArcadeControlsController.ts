@@ -1,11 +1,11 @@
-import {AbstractComponent} from "../AbstractComponent";
+import {AbstractController} from "../AbstractController";
 import {Raycaster, Vector3, Plane, Object3D} from "three";
 import {CollidableCrawler} from "./CollideableCrawler";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
-import {Entity} from "aframe";
+import {Component, Entity} from "aframe";
 
-export class ArcadeControlsComponent extends AbstractComponent {
+export class ArcadeControlsController extends AbstractController {
 
     movementSpeed: number = 0;
     height: number = 0;
@@ -36,29 +36,22 @@ export class ArcadeControlsComponent extends AbstractComponent {
     xzDeltaDirection: Vector3 = new Vector3(0, 0, 0);
     xzDeltaOppositeDirection: Vector3 = new Vector3(0, 0, 0);
 
-    constructor(entity: Entity, data: any, state: any) {
-        super(
-            "arcade-controls",
-            {
-                movementSpeed: {type: 'number', default: 2},
-                height: {type: 'number', default: 2},
-                width: {type: 'number', default: 0.5},
-                jumpStartSpeed: {type: 'number', default: 5.0},
-                forwardKey: {type: 'string', default: 'w'},
-                backwardKey: {type: 'string', default: 's'},
-                leftKey: {type: 'string', default: 'a'},
-                rightKey: {type: 'string', default: 'd'},
-                jumpKey: {type: 'string', default: ' '}
-            },
-            false,
-            entity,
-            data,
-            state
-        );
+    constructor(component: Component, entity: Entity, data: any) {
+        super("arcade-controls", component, {
+            movementSpeed: {type: 'number', default: 2},
+            height: {type: 'number', default: 2},
+            width: {type: 'number', default: 0.5},
+            jumpStartSpeed: {type: 'number', default: 5.0},
+            forwardKey: {type: 'string', default: 'w'},
+            backwardKey: {type: 'string', default: 's'},
+            leftKey: {type: 'string', default: 'a'},
+            rightKey: {type: 'string', default: 'd'},
+            jumpKey: {type: 'string', default: ' '}
+        }, false, entity, data);
     }
 
     init(): void {
-        console.log(this.name + " init");
+        console.log(this.componentName + " init");
 
         // Configuration
         this.movementSpeed = this.data.movementSpeed;
@@ -135,19 +128,19 @@ export class ArcadeControlsComponent extends AbstractComponent {
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.name + " update");
+        console.log(this.componentName + " update");
     }
 
     remove(): void {
-        console.log(this.name + " remove");
+        console.log(this.componentName + " remove");
     }
 
     pause(): void {
-        console.log(this.name + " pause");
+        console.log(this.componentName + " pause");
     }
 
     play(): void {
-        console.log(this.name + " play");
+        console.log(this.componentName + " play");
     }
 
     tick(time: number, timeDelta: number): void {

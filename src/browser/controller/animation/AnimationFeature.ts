@@ -1,4 +1,4 @@
-import {Component} from "../../component/Component";
+import {Controller} from "../../component/Controller";
 import {AnimationAction, AnimationClip, AnimationMixer, Event, LoopOnce, LoopPingPong, LoopRepeat} from "three";
 import {AnimationEventDetail} from "../../model/AnimateEventDetail";
 import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";
@@ -6,16 +6,16 @@ import {AnimationFinishedEventDetails} from "../../model/AnimationFinishedEventD
 import {Events} from "../../model/Events";
 import {AnimationLoopStyle} from "./AnimationLoopStyle";
 import {Entity} from "AFrame";
-import {AbstractController} from "../AbstractController";
+import {AbstractFeature} from "../AbstractFeature";
 
-export class AnimationController extends AbstractController {
+export class AnimationFeature extends AbstractFeature {
 
     mixer: AnimationMixer | undefined;
     clips: Map<string, AnimationClip> = new Map<string, AnimationClip>();
     actions: Map<string, AnimationAction> = new Map<string, AnimationAction>();
 
-    constructor(component: Component, entity: Entity) {
-        super("animation-controller", component, entity);
+    constructor(controller: Controller, entity: Entity) {
+        super("animation-controller", controller, entity);
     }
 
     init(): void {

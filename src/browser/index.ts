@@ -1,18 +1,18 @@
 import {registerAFrameComponent} from "./AFrame";
-import {LabelComponent} from "./component/label/LabelComponent";
-import {IdentityComponent} from "./component/identity/IdentityComponent";
-import {DataspaceComponent} from "./component/space/DataspaceComponent";
-import {ArcadeControlsComponent} from "./component/controls/ArcadeControlsComponent";
-import {AnimatorComponent} from "./component/animation/AnimatorComponent";
-import {AvatarComponent} from "./component/avatar/AvatarComponent";
-import {Entity} from "aframe";
+import {LabelController} from "./component/label/LabelController";
+import {IdentityController} from "./component/identity/IdentityController";
+import {DataspaceController} from "./component/space/DataspaceController";
+import {ArcadeControlsController} from "./component/controls/ArcadeControlsController";
+import {AnimatorController} from "./component/animation/AnimatorController";
+import {AvatarController} from "./component/avatar/AvatarController";
+import {Component, Entity} from "aframe";
 
-registerAFrameComponent((entity: Entity, data: any, state: any) => new DataspaceComponent(entity, data, state));
-registerAFrameComponent((entity: Entity, data: any, state: any) => new IdentityComponent(entity, data, state));
-registerAFrameComponent((entity: Entity, data: any, state: any) => new LabelComponent(entity, data, state));
-registerAFrameComponent((entity: Entity, data: any, state: any) => new ArcadeControlsComponent(entity, data, state));
-registerAFrameComponent((entity: Entity, data: any, state: any) => new AnimatorComponent(entity, data, state));
-registerAFrameComponent((entity: Entity, data: any, state: any) => new AvatarComponent(entity, data, state));
+registerAFrameComponent((component: Component, entity: Entity, data: any) => new DataspaceController(component, entity, data));
+registerAFrameComponent((component: Component, entity: Entity, data: any) => new IdentityController(component, entity, data));
+registerAFrameComponent((component: Component, entity: Entity, data: any) => new LabelController(component, entity, data));
+registerAFrameComponent((component: Component, entity: Entity, data: any) => new ArcadeControlsController(component, entity, data));
+registerAFrameComponent((component: Component, entity: Entity, data: any) => new AnimatorController(component, entity, data));
+registerAFrameComponent((component: Component, entity: Entity, data: any) => new AvatarController(component, entity, data));
 
 
 

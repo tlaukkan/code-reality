@@ -1,14 +1,14 @@
-import {Entity} from "AFrame";
+import {Entity, Component} from "AFrame";
 
 /**
- * Interface for components.
+ * Interface for component controllers.
  */
-export interface Component {
+export interface Controller {
 
     /**
      * Component name.
      */
-    readonly name: string;
+    readonly componentName: string;
 
     /**
      * Component schema.
@@ -29,7 +29,7 @@ export interface Component {
     /**
      * The state, this of component definition functions.
      */
-    readonly state: any;
+    readonly component: Component;
 
     /**
      * Called once when component is attached. Generally for initial setup.

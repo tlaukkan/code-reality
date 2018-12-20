@@ -1,14 +1,14 @@
-import {AbstractComponent} from "../AbstractComponent";
+import {AbstractController} from "../AbstractController";
 import {ClusterClient, Decode, Encode} from "@tlaukkan/aframe-dataspace";
 import uuid = require("uuid");
 import {DynamicSpace} from "./DynamicSpace";
 import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
-import {Entity} from "AFrame";
+import {Component, Entity} from "AFrame";
 import {StaticSpace} from "./StaticSpace";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
 
-export class DataspaceComponent extends AbstractComponent {
+export class DataspaceController extends AbstractController {
 
     private avatarId = uuid.v4();
     private playerElement: Entity | null = null;
@@ -30,20 +30,13 @@ export class DataspaceComponent extends AbstractComponent {
     private directionMatrix = new Matrix4();
     private directionQuaternion = new Quaternion();
 
-    constructor(entity: Entity, data: any, state: any) {
-        super(
-            "dataspace",
-            {type: 'string', default: '?'},
-            false,
-            entity,
-            data,
-            state
-        );
+    constructor(component: Component, entity: Entity, data: any) {
+        super("dataspace", component, {type: 'string', default: '?'}, false, entity, data);
     }
 
 
     init(): void {
-        console.log(this.name + " init: " + JSON.stringify(this.data));
+        console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.playerElement = document.getElementById("player") as Entity;
         if (!this.playerElement) {
             console.log("dataspace - did not find player element in dom.");
@@ -78,22 +71,22 @@ export class DataspaceComponent extends AbstractComponent {
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.name + " update");
+        console.log(this.componentName + " update");
     }
 
     remove(): void {
-        console.log(this.name + " remove");
+        console.log(this.componentName + " remove");
     }
 
     pause(): void {
-        console.log(this.name + " pause");
+        console.log(this.componentName + " pause");
         if (this.client) {
             this.client.close();
         }
     }
 
     play(): void {
-        console.log(this.name + " play");
+        console.log(this.componentName + " play");
         if (this.playerElement && !this.playerObject) {
             this.playerObject = this.playerElement!!.object3D;
             let cameraElement = this.playerElement!!.querySelector('[camera]') as Entity;

@@ -1,15 +1,15 @@
 import {Entity} from "AFrame";
-import {Component} from "../component/Component";
+import {Controller} from "../component/Controller";
 
-export abstract class AbstractController {
+export abstract class AbstractFeature {
     name: string;
     entity: Entity;
-    component: Component;
+    controller: Controller;
 
-    constructor(name: string, component: Component, entity: Entity) {
+    constructor(name: string, controller: Controller, entity: Entity) {
         this.name = name;
         this.entity = entity;
-        this.component = component;
+        this.controller = controller;
     }
 
     abstract init(): void;

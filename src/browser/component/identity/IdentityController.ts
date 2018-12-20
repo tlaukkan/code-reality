@@ -1,21 +1,14 @@
 import {registerAFrameComponent} from "../../AFrame";
-import {Entity} from "AFrame";
-import {AbstractComponent} from "../AbstractComponent";
+import {Component, Entity} from "AFrame";
+import {AbstractController} from "../AbstractController";
 
-export class IdentityComponent extends AbstractComponent {
-    constructor(entity: Entity, data: any, state: any) {
-        super(
-            "identity",
-            {}
-            , false,
-            entity,
-            data,
-            state
-        );
+export class IdentityController extends AbstractController {
+    constructor(component: Component, entity: Entity, data: any) {
+        super("identity", component, {}, false, entity, data);
     }
 
     init(): void {
-        console.log(this.name + " init");
+        console.log(this.componentName + " init");
         fetch('/api/users/current')
         .then((response) => {
             response.json().then((data) => {
@@ -28,19 +21,19 @@ export class IdentityComponent extends AbstractComponent {
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.name + " update");
+        console.log(this.componentName + " update");
     }
 
     remove(): void {
-        console.log(this.name + " remove");
+        console.log(this.componentName + " remove");
     }
 
     pause(): void {
-        console.log(this.name + " pause");
+        console.log(this.componentName + " pause");
     }
 
     play(): void {
-        console.log(this.name + " play");
+        console.log(this.componentName + " play");
     }
 
     tick(time: number, timeDelta: number): void {
