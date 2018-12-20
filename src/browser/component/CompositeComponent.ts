@@ -1,7 +1,7 @@
 import {registerAFrameComponent} from "./../AFrame";
-import {AbstractController} from "../controllers/AbstractController";
+import {AbstractController} from "../controller/AbstractController";
 import {Entity} from "aframe";
-import {AbstractComponent} from "../AbstractComponent";
+import {AbstractComponent} from "./AbstractComponent";
 
 export class CompositeComponent extends AbstractComponent {
 

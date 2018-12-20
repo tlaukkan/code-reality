@@ -1,12 +1,12 @@
-import {AbstractComponent} from "./AbstractComponent";
+import {AbstractComponent} from "../AbstractComponent";
 import {ClusterClient, Decode, Encode} from "@tlaukkan/aframe-dataspace";
 import uuid = require("uuid");
 import {DynamicSpace} from "./DynamicSpace";
 import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
-import {Entity} from "aframe";
+import {Entity} from "AFrame";
 import {StaticSpace} from "./StaticSpace";
-import {EntityStateEventDetail} from "./model/EntityStateEventDetail";
-import {Events} from "./model/Events";
+import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
+import {Events} from "../../model/Events";
 
 export class DataspaceComponent extends AbstractComponent {
 

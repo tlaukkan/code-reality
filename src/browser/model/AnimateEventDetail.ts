@@ -1,4 +1,4 @@
-import {AnimationLoopStyle} from "../controllers/animation/AnimationLoopStyle";
+import {AnimationLoopStyle} from "../controller/animation/AnimationLoopStyle";
 
 export class AnimationEventDetail {
 

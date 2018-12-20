@@ -1,5 +1,5 @@
-import {Entity} from "aframe";
-import {createElement} from "./util";
+import {Entity} from "AFrame";
+import {createElement} from "../../util";
 
 export class StaticSpace {
 

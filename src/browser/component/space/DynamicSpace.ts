@@ -1,4 +1,4 @@
-import {Entity} from "aframe";
+import {Entity} from "AFrame";
 import {Actuator} from "./Actuator";
 
 export class DynamicSpace {

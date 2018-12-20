@@ -1,11 +1,11 @@
-import {Component} from "../../Component";
+import {Component} from "../../component/Component";
 import {AnimationAction, AnimationClip, AnimationMixer, Event, LoopOnce, LoopPingPong, LoopRepeat} from "three";
 import {AnimationEventDetail} from "../../model/AnimateEventDetail";
 import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";
 import {AnimationFinishedEventDetails} from "../../model/AnimationFinishedEventDetail";
 import {Events} from "../../model/Events";
 import {AnimationLoopStyle} from "./AnimationLoopStyle";
-import {Entity} from "aframe";
+import {Entity} from "AFrame";
 import {AbstractController} from "../AbstractController";
 
 export class AnimationController extends AbstractController {

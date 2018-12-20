@@ -1,4 +1,4 @@
-import {AbstractComponent} from "../../AbstractComponent";
+import {AbstractComponent} from "../AbstractComponent";
 import {Raycaster, Vector3, Plane, Object3D} from "three";
 import {CollidableCrawler} from "./CollideableCrawler";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";

@@ -1,5 +1,5 @@
 import {CompositeComponent} from "../CompositeComponent";
-import {AnimationController} from "../../controllers/animation/AnimationController";
+import {AnimationController} from "../../controller/animation/AnimationController";
 import {Entity} from "aframe";
 
 export class AnimatorComponent extends CompositeComponent {

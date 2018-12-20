@@ -1,5 +1,5 @@
 import {Component} from "./Component";
-import {Entity} from "aframe";
+import {Entity} from "AFrame";
 
 /**
  * Abstract base class for component implementations.

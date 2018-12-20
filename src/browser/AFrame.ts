@@ -1,5 +1,5 @@
 import {Entity} from "aframe";
-import {Component} from "./Component";
+import {Component} from "./component/Component";
 
 interface NewComponent { (entity: Entity, data: any, state: any): Component }
 

@@ -1,9 +1,9 @@
-import {createElement} from "./util";
-import {Entity} from "aframe";
+import {createElement} from "../../util";
+import {Entity} from "AFrame";
 import {Euler, Quaternion} from "three";
 import {Spring} from "./Spring";
-import {Events} from "./model/Events";
-import {EntityStateEventDetail} from "./model/EntityStateEventDetail";
+import {Events} from "../../model/Events";
+import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 
 export class Actuator {
 

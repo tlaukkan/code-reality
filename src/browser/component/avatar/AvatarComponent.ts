@@ -1,6 +1,6 @@
 import {CompositeComponent} from "../CompositeComponent";
-import {AnimationController} from "../../controllers/animation/AnimationController";
-import {ExpressionController} from "../../controllers/animation/ExpressionController";
+import {AnimationController} from "../../controller/animation/AnimationController";
+import {ExpressionController} from "../../controller/animation/ExpressionController";
 import {Entity} from "aframe";
 
 export class AvatarComponent extends CompositeComponent {

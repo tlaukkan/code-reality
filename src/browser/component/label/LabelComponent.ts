@@ -1,7 +1,7 @@
-import {registerAFrameComponent} from "./AFrame";
+import {registerAFrameComponent} from "../../AFrame";
 import {Box3, Vector3} from "three";
-import {Entity} from "aframe";
-import {AbstractComponent} from "./AbstractComponent";
+import {Entity} from "AFrame";
+import {AbstractComponent} from "../AbstractComponent";
 
 export class LabelComponent extends AbstractComponent {
 
