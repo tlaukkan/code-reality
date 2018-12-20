@@ -164,7 +164,7 @@ export class DataspaceComponent extends AbstractComponent {
     tick(time: number, timeDelta: number): void {
         if (this.client) {
             this.dynamicSpace!!.simulate(timeDelta / 1000);
-            if (time - this.lastRefresh > 200) {
+            if (time - this.lastRefresh > 150) {
                 if (this.playerObject && this.cameraObject) {
                     if (this.client.clusterConfiguration) {
 

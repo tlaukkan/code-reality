@@ -1,6 +1,6 @@
 import {createElement} from "./util";
 import {Entity} from "aframe";
-import {Quaternion} from "three";
+import {Euler, Quaternion} from "three";
 import {Spring} from "./Spring";
 import {Events} from "./model/Events";
 import {EntityStateEventDetail} from "./model/EntityStateEventDetail";
@@ -15,8 +15,12 @@ export class Actuator {
     springOne: Spring = new Spring();
     springTwo: Spring = new Spring();
 
+    targetOrientation: Quaternion = new Quaternion();
+    currentOrientation: Quaternion = new Quaternion();
+
     lastUpdateTime: number = 0;
     averageUpdateInterval: number = 0.200;
+    moving: boolean = false;
 
     constructor(root: Entity, serverUrl: string, id: string, description: string) {
         this.root = root;
@@ -26,6 +30,8 @@ export class Actuator {
         this.entity = createElement(description) as Entity;
         this.entity.setAttribute("did", id);
         this.entity.setAttribute("server", serverUrl);
+        this.springOne.relaxationTime = 0.2;
+        this.springTwo.relaxationTime = 0.2;
     }
 
     added(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
@@ -62,6 +68,10 @@ export class Actuator {
         this.springTwo.targetOrientation.y = ry;
         this.springTwo.targetOrientation.z = rz;
         this.springTwo.targetOrientation.w = rw;
+
+        this.moving = true;
+        this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
+        console.log("start moving");
     }
 
     updated(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
@@ -83,6 +93,9 @@ export class Actuator {
         this.springOne.targetOrientation.y = ry;
         this.springOne.targetOrientation.z = rz;
         this.springOne.targetOrientation.w = rw;
+        if (!this.moving) {
+            this.checkIfMoving();
+        }
     }
 
     removed() : void {
@@ -105,25 +118,61 @@ export class Actuator {
     }
 
     simulate(t: number) {
-        this.springOne.simulate(t);
-        this.springTwo.targetPosition.x = this.springOne.currentPosition.x;
-        this.springTwo.targetPosition.y = this.springOne.currentPosition.y;
-        this.springTwo.targetPosition.z = this.springOne.currentPosition.z;
+        if (this.moving) {
+            this.springOne.simulate(t);
+            this.springTwo.targetPosition.x = this.springOne.currentPosition.x;
+            this.springTwo.targetPosition.y = this.springOne.currentPosition.y;
+            this.springTwo.targetPosition.z = this.springOne.currentPosition.z;
 
-        this.springTwo.targetOrientation.x = this.springOne.currentOrientation.x;
-        this.springTwo.targetOrientation.y = this.springOne.currentOrientation.y;
-        this.springTwo.targetOrientation.z = this.springOne.currentOrientation.z;
-        this.springTwo.targetOrientation.w = this.springOne.currentOrientation.w;
+            this.springTwo.targetOrientation.x = this.springOne.currentOrientation.x;
+            this.springTwo.targetOrientation.y = this.springOne.currentOrientation.y;
+            this.springTwo.targetOrientation.z = this.springOne.currentOrientation.z;
+            this.springTwo.targetOrientation.w = this.springOne.currentOrientation.w;
 
-        this.springTwo.simulate(t);
+            this.springTwo.simulate(t);
 
-        if (this.entity.object3D) {
-            // Update location only after 3d presentation is ready.
-            this.entity.object3D.position.x = this.springTwo.currentPosition.x;
-            this.entity.object3D.position.y = this.springTwo.currentPosition.y;
-            this.entity.object3D.position.z = this.springTwo.currentPosition.z;
-            this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
+            if (this.entity.object3D) {
+                // Update location only after 3d presentation is ready.
+                this.entity.object3D.position.x = this.springTwo.currentPosition.x;
+                this.entity.object3D.position.y = this.springTwo.currentPosition.y;
+                this.entity.object3D.position.z = this.springTwo.currentPosition.z;
+                this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
+            }
+
+            this.checkIfMoving();
+
         }
+    }
+
+    checkIfMoving() {
+        const positionDelta = this.springOne.targetPosition.distanceTo(this.springTwo.currentPosition);
+
+        this.targetOrientation.x = this.springOne.targetOrientation.x;
+        this.targetOrientation.y = this.springOne.targetOrientation.y;
+        this.targetOrientation.z = this.springOne.targetOrientation.z;
+        this.targetOrientation.w = this.springOne.targetOrientation.w;
+
+        this.currentOrientation.x = this.springTwo.currentOrientation.x;
+        this.currentOrientation.y = this.springTwo.currentOrientation.y;
+        this.currentOrientation.z = this.springTwo.currentOrientation.z;
+        this.currentOrientation.w = this.springTwo.currentOrientation.w;
+
+        const rotation = this.targetOrientation.multiply(this.currentOrientation.inverse());
+        const orientationDelta = 2 * Math.acos(rotation.w);
+
+        //const orientationDelta = ((this.springOne.targetOrientation) as any).angleTo(this.springTwo.currentOrientation) as number;
+        const moving = positionDelta > 0.1;
+        //console.log(positionDelta);
+
+        if (!this.moving && moving) {
+            this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
+            console.log("start moving");
+        }
+        if (this.moving && !moving) {
+            this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, {detail: new EntityStateEventDetail("moving")}));
+            console.log("end moving");
+        }
+        this.moving = moving;
     }
 
 }

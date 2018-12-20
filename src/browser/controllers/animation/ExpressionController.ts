@@ -11,18 +11,20 @@ import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 
 export class ExpressionController extends AbstractController {
 
+    expressions: Set<string> = new Set();
 
     constructor(component: Component, entity: Entity) {
         super("expression-controller", component, entity);
     }
 
     init(): void {
-        this.addEventListener(Events.EVENT_STATE_BEGIN, (detail: EntityStateEventDetail) => {
+        /*this.addEventListener(Events.EVENT_STATE_BEGIN, (detail: EntityStateEventDetail) => {
             if (detail.state === "forward" ||
                 detail.state === "backward" ||
                 detail.state === "left" ||
                 detail.state === "right") {
                 this.dispatchEvent(Events.EVENT_ANIMATE_BEGIN, new AnimationEventDetail("walking", AnimationLoopStyle.LOOP_REPEAT, 10));
+                this.expressions.add("walking");
             }
         });
         this.addEventListener(Events.EVENT_STATE_END, (detail: EntityStateEventDetail) => {
@@ -30,6 +32,16 @@ export class ExpressionController extends AbstractController {
                 detail.state === "backward" ||
                 detail.state === "left" ||
                 detail.state === "right") {
+                this.dispatchEvent(Events.EVENT_ANIMATE_END, new AnimationEventDetail("walking", AnimationLoopStyle.LOOP_REPEAT, 10));
+            }
+        });*/
+        this.addEventListener(Events.EVENT_STATE_BEGIN, (detail: EntityStateEventDetail) => {
+            if (detail.state === "moving") {
+                this.dispatchEvent(Events.EVENT_ANIMATE_BEGIN, new AnimationEventDetail("walking", AnimationLoopStyle.LOOP_REPEAT, 10));
+            }
+        });
+        this.addEventListener(Events.EVENT_STATE_END, (detail: EntityStateEventDetail) => {
+            if (detail.state === "moving") {
                 this.dispatchEvent(Events.EVENT_ANIMATE_END, new AnimationEventDetail("walking", AnimationLoopStyle.LOOP_REPEAT, 10));
             }
         });

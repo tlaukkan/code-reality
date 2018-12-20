@@ -19,7 +19,10 @@ export class Spring {
 
         // Calculate distance between current position and target position.
         const totalDistance = this.currentPosition.distanceTo(this.targetPosition);
-        const v = Math.pow(totalDistance / this.relaxationTime, 2);
+        let v = Math.pow(totalDistance / this.relaxationTime, 2);
+        if (v < 0.3) {
+            v = 0.3;
+        }
         const s = v * t;
 
         // Calculate normalized direction vector between current position and target position.
