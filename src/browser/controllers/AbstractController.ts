@@ -1,5 +1,5 @@
 import {Entity} from "aframe";
-import {Component} from "../AFrame";
+import {Component} from "../Component";
 
 export abstract class AbstractController {
     name: string;

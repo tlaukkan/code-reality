@@ -1,4 +1,4 @@
-import {Component} from "../../AFrame";
+import {Component} from "../../Component";
 import {AnimationAction, AnimationClip, AnimationMixer, Event, LoopOnce, LoopPingPong, LoopRepeat} from "three";
 import {AnimationEventDetail} from "../../model/AnimateEventDetail";
 import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";

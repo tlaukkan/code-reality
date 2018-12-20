@@ -1,11 +1,16 @@
-import {AbstractComponent, registerAFrameComponent} from "./AFrame";
+import {registerAFrameComponent} from "./AFrame";
+import {Entity} from "aframe";
+import {AbstractComponent} from "./AbstractComponent";
 
 export class IdentityComponent extends AbstractComponent {
-    constructor() {
+    constructor(entity: Entity, data: any, state: any) {
         super(
             "identity",
             {}
-            , false
+            , false,
+            entity,
+            data,
+            state
         );
     }
 

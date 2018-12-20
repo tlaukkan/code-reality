@@ -1,18 +1,23 @@
-import {AbstractComponent, registerAFrameComponent} from "./AFrame";
+import {registerAFrameComponent} from "./AFrame";
 import {Box3, Vector3} from "three";
+import {Entity} from "aframe";
+import {AbstractComponent} from "./AbstractComponent";
 
 export class LabelComponent extends AbstractComponent {
 
     labelElement: Element | undefined;
 
-    constructor() {
+    constructor(entity: Entity, data: any, state: any) {
         super(
             "label",
             {
                 text: {type: 'string', default: '?'},
                 height: {type: 'number', default: 1.2}
             },
-            false);
+            false,
+            entity,
+            data,
+            state);
     }
 
     init(): void {

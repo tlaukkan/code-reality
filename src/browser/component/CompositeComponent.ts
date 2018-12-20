@@ -1,14 +1,19 @@
-import {AbstractComponent, registerAFrameComponent} from "./../AFrame";
+import {registerAFrameComponent} from "./../AFrame";
 import {AbstractController} from "../controllers/AbstractController";
+import {Entity} from "aframe";
+import {AbstractComponent} from "../AbstractComponent";
 
 export class CompositeComponent extends AbstractComponent {
 
     controllers: Array<AbstractController> = [];
 
-    constructor(name: string, schema: any, multiple: boolean) {
+    constructor(name: string, schema: any, multiple: boolean, entity: Entity, data: any, state: any) {
         super(name,
             schema,
-            multiple);
+            multiple,
+            entity,
+            data,
+            state);
     }
 
     init(): void {

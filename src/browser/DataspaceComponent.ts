@@ -1,4 +1,4 @@
-import {AbstractComponent} from "./AFrame";
+import {AbstractComponent} from "./AbstractComponent";
 import {ClusterClient, Decode, Encode} from "@tlaukkan/aframe-dataspace";
 import uuid = require("uuid");
 import {DynamicSpace} from "./DynamicSpace";
@@ -30,11 +30,14 @@ export class DataspaceComponent extends AbstractComponent {
     private directionMatrix = new Matrix4();
     private directionQuaternion = new Quaternion();
 
-    constructor() {
+    constructor(entity: Entity, data: any, state: any) {
         super(
             "dataspace",
             {type: 'string', default: '?'},
-            false
+            false,
+            entity,
+            data,
+            state
         );
     }
 

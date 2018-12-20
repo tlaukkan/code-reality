@@ -1,8 +1,9 @@
-import {AbstractComponent} from "../../AFrame";
+import {AbstractComponent} from "../../AbstractComponent";
 import {Raycaster, Vector3, Plane, Object3D} from "three";
 import {CollidableCrawler} from "./CollideableCrawler";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
+import {Entity} from "aframe";
 
 export class ArcadeControlsComponent extends AbstractComponent {
 
@@ -35,7 +36,7 @@ export class ArcadeControlsComponent extends AbstractComponent {
     xzDeltaDirection: Vector3 = new Vector3(0, 0, 0);
     xzDeltaOppositeDirection: Vector3 = new Vector3(0, 0, 0);
 
-    constructor() {
+    constructor(entity: Entity, data: any, state: any) {
         super(
             "arcade-controls",
             {
@@ -48,8 +49,11 @@ export class ArcadeControlsComponent extends AbstractComponent {
                 leftKey: {type: 'string', default: 'a'},
                 rightKey: {type: 'string', default: 'd'},
                 jumpKey: {type: 'string', default: ' '}
-            }
-            , false
+            },
+            false,
+            entity,
+            data,
+            state
         );
     }
 
