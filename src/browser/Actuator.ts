@@ -2,6 +2,8 @@ import {createElement} from "./util";
 import {Entity} from "aframe";
 import {Quaternion} from "three";
 import {Spring} from "./Spring";
+import {Events} from "./model/Events";
+import {EntityStateEventDetail} from "./model/EntityStateEventDetail";
 
 export class Actuator {
 
@@ -94,6 +96,12 @@ export class Actuator {
 
     acted(action: string, description: string) : void {
         console.log(action + ":" + description);
+        if (action === 'state-begin') {
+            this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail(description)}));
+        }
+        if (action === 'state-end') {
+            this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, {detail: new EntityStateEventDetail(description)}));
+        }
     }
 
     simulate(t: number) {
