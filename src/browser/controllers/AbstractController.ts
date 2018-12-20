@@ -23,4 +23,14 @@ export abstract class AbstractController {
     abstract play(): void;
 
     abstract tick(time: number, timeDelta: number): void;
+
+    addEventListener(type: string, listener: ((detail: any) => void)) {
+        this.entity.addEventListener(type, ((e: CustomEvent) => {
+            listener(e.detail);
+        }) as any);
+    }
+
+    dispatchEvent(eventType: string, detail: any) {
+        this.entity.dispatchEvent(new CustomEvent(eventType, { detail: detail } ));
+    }
 }

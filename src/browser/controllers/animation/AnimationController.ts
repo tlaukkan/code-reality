@@ -19,18 +19,15 @@ export class AnimationController extends AbstractController {
     }
 
     init(): void {
-        this.entity.addEventListener("model-loaded", ((e: CustomEvent) => {
-            console.log("model-loaded");
+        this.addEventListener(Events.EVENT_MODEL_LOADED, () => {
             this.initAnimation();
-        }) as any);
-        this.entity.addEventListener(Events.EVENT_ANIMATE_BEGIN, ((e: CustomEvent) => {
-            const detail = e.detail as AnimationEventDetail;
+        });
+        this.addEventListener(Events.EVENT_ANIMATE_BEGIN, (detail: AnimationEventDetail) => {
             this.beginAnimation(detail.clipName, detail.style, detail.repetitions);
-        }) as any);
-        this.entity.addEventListener(Events.EVENT_ANIMATE_END, ((e: CustomEvent) => {
-            const detail = e.detail as AnimationEndEventDetail;
+        });
+        this.addEventListener(Events.EVENT_ANIMATE_END, (detail: AnimationEndEventDetail) => {
             this.endAnimation(detail.clipName);
-        }) as any);
+        });
     }
 
     update(data: any, oldData: any): void {
@@ -70,14 +67,12 @@ export class AnimationController extends AbstractController {
             this.clips.set(clip.name.toLocaleLowerCase(), clip);
         });
         this.actions.clear();
-        this.entity.dispatchEvent(new CustomEvent(Events.EVENT_ANIMATE_BEGIN,
-            {detail: new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 0)}));
+        this.dispatchEvent(Events.EVENT_ANIMATE_BEGIN, new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 0));
     }
 
 
     private onAnimationFinished(clipName: string) {
-        this.entity.dispatchEvent(new CustomEvent(Events.EVENT_ANIMATION_FINISHED,
-            {detail: new AnimationFinishedEventDetails(clipName)}));
+        this.dispatchEvent(Events.EVENT_ANIMATION_FINISHED, new AnimationFinishedEventDetails(clipName));
 
         this.actions.delete(clipName);
     }
@@ -116,8 +111,7 @@ export class AnimationController extends AbstractController {
         }
         this.actions.get(clipName)!!.stop();
         this.actions.delete(clipName);
-        this.entity.dispatchEvent(new CustomEvent(Events.EVENT_ANIMATION_FINISHED,
-            {detail: new AnimationFinishedEventDetails(clipName)}));
+        this.dispatchEvent(Events.EVENT_ANIMATION_FINISHED, new AnimationFinishedEventDetails(clipName));
     }
 
 }
