@@ -1,7 +1,7 @@
 import {ClusterClient, Decode, Encode} from "@tlaukkan/aframe-dataspace";
 import uuid = require("uuid");
 import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
-import {Entity, System} from "AFrame";
+import {Entity, Scene, System} from "AFrame";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
 import {DynamicSpace} from "./DynamicSpace";
@@ -35,11 +35,11 @@ export class SpaceSystemController extends AbstractSystemController {
     private directionMatrix = new Matrix4();
     private directionQuaternion = new Quaternion();
 
-    constructor(system: System, entity: Entity, data: any) {
-        super("dataspace", {type: 'string', default: '?'}, false, system, entity, data);
+    constructor(system: System, scene: Scene, data: any) {
+        super("dataspace", {type: 'string', default: '?'}, false, system, scene, data);
 
-        this.dynamicSpace = new DynamicSpace(this.entity!!, this.avatarId);
-        this.staticSpace = new StaticSpace(this.entity!!);
+        this.dynamicSpace = new DynamicSpace(this.scene!!, this.avatarId);
+        this.staticSpace = new StaticSpace(this.scene!!);
         this.clusterUrl = this.data;
 
         fetch('/api/users/current/id-token')
@@ -54,7 +54,7 @@ export class SpaceSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        console.log(this.systemName + " init: " + JSON.stringify(this.data));
+        console.log(this.systemName + " init");
 
     }
 

@@ -1,14 +1,14 @@
-import {Component, Entity, System} from "AFrame";
+import {Component, Entity, Scene, System} from "AFrame";
 import {AbstractSystemController} from "./AbstractSystemController";
 
 export class ExampleSystemController extends AbstractSystemController {
 
-    constructor(system: System, entity: Entity, data: any) {
-        super("example-system", {type: 'string', default: '?'}, false, system, entity, data);
+    constructor(system: System, scene: Scene, data: any) {
+        super("example-system", {type: 'string', default: '?'}, false, system, scene, data);
     }
 
     init(): void {
-        console.log(this.systemName + " init: " + JSON.stringify(this.data) + " entity: " + this.entity);
+        console.log(this.systemName + " init: " + JSON.stringify(this.data) + " entity: " + this.scene);
     }
 
     pause(): void {

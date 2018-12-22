@@ -1,9 +1,9 @@
-import {Entity, Component, System} from "aframe";
+import {Entity, Component, System, Scene} from "aframe";
 import {ComponentController} from "./component/ComponentController";
 import {SystemController} from "./system/SystemController";
 
 interface NewController { (component: Component, entity: Entity, data: any): ComponentController }
-interface NewSystemController { (system: System, entity: Entity, data: any): SystemController }
+interface NewSystemController { (system: System, scene: Scene, data: any): SystemController }
 
 export function registerComponentController(newController: NewController) {
     if (typeof AFRAME !== 'undefined') {

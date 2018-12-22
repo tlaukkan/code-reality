@@ -1,5 +1,5 @@
 import {SystemController} from "./SystemController";
-import {Entity, System} from "AFrame";
+import {Entity, Scene, System} from "AFrame";
 
 /**
  * Abstract base class for system controller implementations.
@@ -8,16 +8,16 @@ export abstract class AbstractSystemController implements SystemController {
     readonly systemName: string;
     readonly schema: any;
     readonly multiple: boolean;
-    readonly entity: Entity;
+    readonly scene: Scene;
     data: any;
     readonly system: System;
 
     constructor(systemName: string, schema: any, multiple: boolean, system: System
-                , entity: Entity, data: any) {
+                , entity: Scene, data: any) {
         this.systemName = systemName;
         this.schema = schema;
         this.multiple = multiple;
-        this.entity = entity;
+        this.scene = entity;
         this.data = data;
         this.system = system;
     }
@@ -29,4 +29,13 @@ export abstract class AbstractSystemController implements SystemController {
     abstract play(): void;
 
     abstract tick(time: number, timeDelta: number): void;
+
+    getSystemController<C extends SystemController>(systemName: string): C {
+        const system = this.scene.systems[systemName];
+        if (!system) {
+            throw new Error("System is not registered to scene: " + system);
+        }
+
+        return (system as any).controller;
+    }
 }

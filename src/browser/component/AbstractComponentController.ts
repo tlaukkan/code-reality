@@ -1,5 +1,6 @@
 import {ComponentController} from "./ComponentController";
 import {Component, Entity} from "AFrame";
+import {SystemController} from "../system/SystemController";
 
 /**
  * Abstract base class for component implementations.
@@ -36,4 +37,26 @@ export abstract class AbstractComponentController implements ComponentController
     abstract play(): void;
 
     abstract tick(time: number, timeDelta: number): void;
+
+    getSystemController<C extends SystemController>(systemName: string): C {
+        if (!this.entity.sceneEl) {
+            throw new Error("Scene is undefined.");
+        }
+
+        const system = this.entity.sceneEl.systems[systemName];
+        if (!system) {
+            throw new Error("System is not registered to scene: " + system);
+        }
+
+        return (system as any).controller;
+    }
+
+    getComponentController<C extends ComponentController>(componentName: string): C {
+        const component = this.entity.components[componentName];
+        if (!component) {
+            throw new Error("Component is not registered to entity: " + component);
+        }
+
+        return (component as any).controller;
+    }
 }

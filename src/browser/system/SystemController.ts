@@ -1,4 +1,4 @@
-import {Entity, System} from "AFrame";
+import {Entity, Scene, System} from "AFrame";
 
 /**
  * Interface for system controllers.
@@ -21,7 +21,7 @@ export interface SystemController {
     /**
      * The entity (HTML element)
      */
-    readonly entity: Entity;
+    readonly scene: Scene;
     /**
      * The properties data.
      */

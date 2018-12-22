@@ -1,13 +1,13 @@
 import {AbstractFeature} from "../feature/AbstractFeature";
-import {Entity, System} from "aframe";
+import {Entity, Scene, System} from "aframe";
 import {AbstractSystemController} from "./AbstractSystemController";
 
 export class CompositeSystemController extends AbstractSystemController {
 
     features: Array<AbstractFeature> = [];
 
-    constructor(systemName: string, schema: any, multiple: boolean, system: System, entity: Entity, data: any) {
-        super(systemName, schema, multiple, system, entity, data);
+    constructor(systemName: string, schema: any, multiple: boolean, system: System, scene: Scene, data: any) {
+        super(systemName, schema, multiple, system, scene, data);
     }
 
     init(): void {
