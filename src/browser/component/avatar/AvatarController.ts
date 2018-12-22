@@ -1,6 +1,6 @@
 import {CompositeComponentController} from "../CompositeComponentController";
-import {AnimationFeature} from "../../controller/animation/AnimationFeature";
-import {ExpressionFeature} from "../../controller/animation/ExpressionFeature";
+import {AnimationFeature} from "../../feature/animation/AnimationFeature";
+import {ExpressionFeature} from "../../feature/animation/ExpressionFeature";
 import {Component, Entity} from "aframe";
 
 export class AvatarController extends CompositeComponentController {
@@ -11,8 +11,8 @@ export class AvatarController extends CompositeComponentController {
     }
 
     init(): void {
-        this.addController(new ExpressionFeature(this, this.entity!!));
-        this.addController(new AnimationFeature(this, this.entity!!));
+        this.addFeature(new ExpressionFeature(this, this.entity!!));
+        this.addFeature(new AnimationFeature(this, this.entity!!));
         super.init();
     }
 

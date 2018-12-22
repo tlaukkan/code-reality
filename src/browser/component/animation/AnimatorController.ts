@@ -1,5 +1,5 @@
 import {CompositeComponentController} from "../CompositeComponentController";
-import {AnimationFeature} from "../../controller/animation/AnimationFeature";
+import {AnimationFeature} from "../../feature/animation/AnimationFeature";
 import {Component, Entity} from "aframe";
 
 export class AnimatorController extends CompositeComponentController {
@@ -9,7 +9,7 @@ export class AnimatorController extends CompositeComponentController {
     }
 
     init(): void {
-        this.addController(new AnimationFeature(this, this.entity!!));
+        this.addFeature(new AnimationFeature(this, this.entity!!));
         super.init();
     }
 

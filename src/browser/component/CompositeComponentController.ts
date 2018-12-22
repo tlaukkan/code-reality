@@ -1,4 +1,4 @@
-import {AbstractFeature} from "../controller/AbstractFeature";
+import {AbstractFeature} from "../feature/AbstractFeature";
 import {Entity, Component} from "aframe";
 import {AbstractComponentController} from "./AbstractComponentController";
 
@@ -52,8 +52,8 @@ export class CompositeComponentController extends AbstractComponentController {
         });
     }
 
-    addController(controller: AbstractFeature) {
-        this.features.push(controller);
+    addFeature(feature: AbstractFeature) {
+        this.features.push(feature);
     }
 
 }
