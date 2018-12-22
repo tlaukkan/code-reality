@@ -16,6 +16,10 @@ export class AvatarController extends CompositeComponentController {
         super.init();
     }
 
+    tick(time: number, timeDelta: number): void {
+        super.tick(time, timeDelta);
+    }
+
 }
 
 

@@ -71,7 +71,21 @@ export class Actuator {
 
         this.moving = true;
         this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
-        console.log("start moving");
+        console.log(this.entity.tagName + ":" + "start moving");
+
+        /*this.entity.object3D.position.x = this.springTwo.currentPosition.x;
+        this.entity.object3D.position.y = this.springTwo.currentPosition.y;
+        this.entity.object3D.position.z = this.springTwo.currentPosition.z;
+        this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
+
+        if (this.entity.tagName != "A-DODECAHEDRON") {
+            console.log(this.entity.tagName + ":" + JSON.stringify(this.entity.object3D.position));
+        }*/
+
+        //this.moving = true;
+        //this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
+        //console.log("start moving");
+        //this.simulate(1);
     }
 
     updated(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
@@ -119,7 +133,9 @@ export class Actuator {
 
     simulate(t: number) {
         if (this.moving) {
+
             this.springOne.simulate(t);
+
             this.springTwo.targetPosition.x = this.springOne.currentPosition.x;
             this.springTwo.targetPosition.y = this.springOne.currentPosition.y;
             this.springTwo.targetPosition.z = this.springOne.currentPosition.z;
@@ -136,6 +152,9 @@ export class Actuator {
                 this.entity.object3D.position.x = this.springTwo.currentPosition.x;
                 this.entity.object3D.position.y = this.springTwo.currentPosition.y;
                 this.entity.object3D.position.z = this.springTwo.currentPosition.z;
+                /*if (this.entity.tagName != "A-DODECAHEDRON") {
+                    console.log(this.entity.tagName + ":" + t + ":" + JSON.stringify(this.entity.object3D.position));
+                }*/
                 this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
             }
 
@@ -167,11 +186,11 @@ export class Actuator {
 
         if (!this.moving && moving) {
             this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
-            console.log("start moving");
+            console.log(this.entity.tagName + ":" + "start moving");
         }
         if (this.moving && !moving) {
             this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, {detail: new EntityStateEventDetail("moving")}));
-            console.log("end moving");
+            console.log(this.entity.tagName + ":" + "end moving");
         }
         this.moving = moving;
     }

@@ -13,8 +13,8 @@ export class Spring {
 
 
     simulate(t: number) {
-        if (t > 0.1) {
-            t = 0.1;
+        if (t > 0.04) {
+            t = 0.04;
         }
 
         // Calculate distance between current position and target position.
@@ -23,7 +23,10 @@ export class Spring {
         if (v < 0.3) {
             v = 0.3;
         }
-        const s = v * t;
+        let s = v * t;
+        if (s > totalDistance * 0.5) {
+            s = totalDistance * 0.5;
+        }
 
         // Calculate normalized direction vector between current position and target position.
         this.temporary.copy(this.targetPosition);
