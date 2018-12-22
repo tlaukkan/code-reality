@@ -118,7 +118,6 @@ export class Actuator {
 
     removed() : void {
         this.scene.removeChild(this.entity);
-        this.stateSystemController.removeStates(this.entity);
     }
 
     described(description: string) : void {

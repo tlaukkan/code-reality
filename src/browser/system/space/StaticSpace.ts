@@ -1,5 +1,7 @@
 import {Entity, Scene} from "AFrame";
 import {createElement} from "../../util";
+import {StateSystemController} from "../state/StateSystemController";
+import {getSystemController} from "../../AFrame";
 
 export class StaticSpace {
 
@@ -60,6 +62,10 @@ export class StaticSpace {
             console.log("Element to be removed not found sid: " + sid);
             return;
         }
+        if (element.parentElement) {
+            element.parentElement.removeChild(element);
+        }
+        (getSystemController(this.scene, "state-system") as StateSystemController).removeStates(element);
     }
 
     getElement(sid: string) : Entity | undefined {

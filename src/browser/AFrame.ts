@@ -45,6 +45,10 @@ export function getSystemController<C extends SystemController>(scene: Scene, sy
     if (!scene) {
         throw new Error("Scene is undefined.");
     }
+    if (!scene.systems) {
+        throw new Error("Scene systems is undefined.");
+    }
+
 
     const system = scene.systems[systemName];
     if (!system) {
