@@ -45,6 +45,7 @@ export class StateSystemController extends AbstractSystemController {
 
     removeStates(entity: Entity): void {
         this.states.delete(entity);
+        console.log(entity.tagName + " removed states.");
     }
 
 }

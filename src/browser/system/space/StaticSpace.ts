@@ -1,12 +1,12 @@
-import {Entity} from "AFrame";
+import {Entity, Scene} from "AFrame";
 import {createElement} from "../../util";
 
 export class StaticSpace {
 
-    root: Element;
+    scene: Scene;
 
-    constructor(root: Element) {
-        this.root = root;
+    constructor(scene: Scene) {
+        this.scene = scene;
     }
 
     connected(serverUrl: string) {
@@ -27,12 +27,12 @@ export class StaticSpace {
         const existingElement = this.getElement(sid);
         if (existingElement) {
             // Remove old element as it is being replaced.
-            this.root.removeChild(existingElement);
+            this.scene.removeChild(existingElement);
         }
 
         const newElement = createElement(entityXml);
         newElement.setAttribute("server", serverUrl);
-        this.root.appendChild(newElement);
+        this.scene.appendChild(newElement);
     }
 
     setChildEntity(serverUrl: string, parentSid: string, sid: string, entityXml: string) {

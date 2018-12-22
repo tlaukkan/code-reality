@@ -1,16 +1,18 @@
 import {createElement} from "../../util";
-import {Entity} from "AFrame";
+import {Entity, Scene} from "AFrame";
 import {Euler, Quaternion} from "three";
 import {Spring} from "./Spring";
 import {Events} from "../../model/Events";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
+import {StateSystemController} from "../state/StateSystemController";
+import {getSystemController} from "../../AFrame";
 
 export class Actuator {
 
     id: string;
     serverUrl: string;
     description: string;
-    root: Entity;
+    scene: Scene;
     entity: Entity;
     springOne: Spring = new Spring();
     springTwo: Spring = new Spring();
@@ -21,9 +23,10 @@ export class Actuator {
     lastUpdateTime: number = 0;
     averageUpdateInterval: number = 0.200;
     moving: boolean = false;
+    stateSystemController: StateSystemController;
 
-    constructor(root: Entity, serverUrl: string, id: string, description: string) {
-        this.root = root;
+    constructor(scene: Scene, serverUrl: string, id: string, description: string) {
+        this.scene = scene;
         this.serverUrl = serverUrl;
         this.id = id;
         this.description = description;
@@ -32,10 +35,11 @@ export class Actuator {
         this.entity.setAttribute("server", serverUrl);
         this.springOne.relaxationTime = 0.2;
         this.springTwo.relaxationTime = 0.2;
+        this.stateSystemController = getSystemController(this.scene, "state-system");
     }
 
     added(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
-        this.root.appendChild(this.entity);
+        this.scene.appendChild(this.entity);
 
         this.springOne.currentPosition.x = x;
         this.springOne.currentPosition.y = y;
@@ -113,7 +117,8 @@ export class Actuator {
     }
 
     removed() : void {
-        this.root.removeChild(this.entity);
+        this.scene.removeChild(this.entity);
+        this.stateSystemController.removeStates(this.entity);
     }
 
     described(description: string) : void {

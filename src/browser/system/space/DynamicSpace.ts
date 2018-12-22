@@ -1,16 +1,16 @@
-import {Entity} from "AFrame";
+import {Entity, Scene} from "AFrame";
 import {Actuator} from "./Actuator";
 
 export class DynamicSpace {
 
-    root: Entity;
+    scene: Scene;
     avatarId: string;
     avatarIndex: number = -1;
     actuatorsMap: Map<string, Map<number, Actuator>> = new Map<string, Map<number, Actuator>>();
 
-    constructor(root: Entity, avatarId: string) {
+    constructor(scene: Scene, avatarId: string) {
         this.avatarId = avatarId;
-        this.root = root;
+        this.scene = scene;
     }
 
     connected(serverUrl: string) {
@@ -35,7 +35,7 @@ export class DynamicSpace {
         }
         const actuators = this.actuatorsMap.get(serverUrl);
         if (!actuators) { return; }
-        const actuator = new Actuator(this.root, serverUrl, id, description);
+        const actuator = new Actuator(this.scene, serverUrl, id, description);
         actuators!!.set(index, actuator);
         actuator.added(x, y, z, rx, ry, rz, rw);
     }

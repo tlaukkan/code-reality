@@ -40,3 +40,16 @@ export function registerSystemController(newController: NewSystemController) {
         });
     }
 }
+
+export function getSystemController<C extends SystemController>(scene: Scene, systemName: string): C {
+    if (!scene) {
+        throw new Error("Scene is undefined.");
+    }
+
+    const system = scene.systems[systemName];
+    if (!system) {
+        throw new Error("System is not registered to scene: " + system);
+    }
+
+    return (system as any).controller;
+}
