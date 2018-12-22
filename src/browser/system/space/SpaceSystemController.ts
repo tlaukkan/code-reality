@@ -4,8 +4,8 @@ import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
 import {Entity, System} from "AFrame";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
-import {DynamicSpace} from "../../component/space/DynamicSpace";
-import {StaticSpace} from "../../component/space/StaticSpace";
+import {DynamicSpace} from "./DynamicSpace";
+import {StaticSpace} from "./StaticSpace";
 import {AbstractSystemController} from "../AbstractSystemController";
 
 export class SpaceSystemController extends AbstractSystemController {
