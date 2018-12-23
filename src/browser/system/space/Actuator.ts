@@ -20,6 +20,7 @@ export class Actuator {
     springOne: Spring = new Spring();
     springTwo: Spring = new Spring();
     lastPosition: Vector3 = new Vector3();
+    facingDirection: Vector3 = new Vector3( 0, 0, -1 );
 
     targetOrientation: Quaternion = new Quaternion();
     currentOrientation: Quaternion = new Quaternion();
@@ -165,8 +166,6 @@ export class Actuator {
 
             this.springTwo.simulate(t);
 
-            this.movementState.distanceDelta = Math.abs(this.lastPosition.distanceTo(this.springTwo.currentPosition));
-            this.movementState.timeDeltaSeconds = t;
 
             if (this.entity.object3D) {
                 // Update location only after 3d presentation is ready.
@@ -177,6 +176,17 @@ export class Actuator {
                     console.log(this.entity.tagName + ":" + t + ":" + JSON.stringify(this.entity.object3D.position));
                 }*/
                 this.entity.object3D.rotation.setFromQuaternion(this.springTwo.currentOrientation);
+
+                this.movementState.distanceDelta = Math.abs(this.lastPosition.distanceTo(this.springTwo.currentPosition));
+                this.movementState.timeDeltaSeconds = t;
+
+                const movementDirection = this.lastPosition.sub(this.springTwo.currentPosition);
+                this.facingDirection.x = 0;
+                this.facingDirection.y = 0;
+                this.facingDirection.z = 1;
+                this.facingDirection = this.facingDirection.applyQuaternion( this.entity.object3D.quaternion );
+
+                this.movementState.facing = movementDirection.angleTo(this.facingDirection) > Math.PI / 2 ? 1 : -1;
             }
 
             this.checkIfMoving();

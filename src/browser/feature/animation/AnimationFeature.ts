@@ -57,9 +57,8 @@ export class AnimationFeature extends AbstractFeature {
 
                 const walkingAnimationNormalSpeed = 1.9; // 1 m/s
                 const entityActualSpeed = this.movementState.distanceDelta / this.movementState.timeDeltaSeconds;
-                const timeScale = entityActualSpeed / walkingAnimationNormalSpeed;
+                const timeScale = this.movementState.facing * entityActualSpeed / walkingAnimationNormalSpeed;
 
-                console.log("entity walking time scale: " + timeScale);
                 walkingAction.setEffectiveTimeScale(timeScale);
             }
             this.mixer.update(timeDelta / 1000);
