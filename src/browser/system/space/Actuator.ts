@@ -183,10 +183,10 @@ export class Actuator {
                 const movementDirection = this.lastPosition.sub(this.springTwo.currentPosition);
                 this.facingDirection.x = 0;
                 this.facingDirection.y = 0;
-                this.facingDirection.z = 1;
+                this.facingDirection.z = -1;
                 this.facingDirection = this.facingDirection.applyQuaternion( this.entity.object3D.quaternion );
 
-                this.movementState.facing = movementDirection.angleTo(this.facingDirection) > Math.PI / 2 ? 1 : -1;
+                this.movementState.facing = movementDirection.angleTo(this.facingDirection) < Math.PI / 2 ? 1 : -1;
             }
 
             this.checkIfMoving();
