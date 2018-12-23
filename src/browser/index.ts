@@ -7,7 +7,9 @@ import {AvatarController} from "./component/avatar/AvatarController";
 import {Component, Entity, Scene, System} from "aframe";
 import {ExampleSystemController} from "./system/ExampleSystemController";
 import {SpaceSystemController} from "./system/space/SpaceSystemController";
-import {StateSystemController} from "./system/state/StateSystemController";
+import {registerStateFactory, StateSystemController} from "./system/state/StateSystemController";
+import {States} from "./model/States";
+import {MovementState} from "./model/MovementState";
 
 registerSystemController((system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new ExampleSystemController(system, scene, data));
@@ -19,4 +21,4 @@ registerComponentController((component: Component, entity: Entity, data: any) =>
 registerComponentController((component: Component, entity: Entity, data: any) => new AnimatorController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new AvatarController(component, entity, data));
 
-
+registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });

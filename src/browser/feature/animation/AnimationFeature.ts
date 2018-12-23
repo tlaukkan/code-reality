@@ -7,15 +7,23 @@ import {Events} from "../../model/Events";
 import {AnimationLoopStyle} from "./AnimationLoopStyle";
 import {Entity} from "AFrame";
 import {AbstractFeature} from "../AbstractFeature";
+import {StateSystemController} from "../../system/state/StateSystemController";
+import {getSystemController} from "../../AFrame";
+import {MovementState} from "../../model/MovementState";
+import {States} from "../../model/States";
 
 export class AnimationFeature extends AbstractFeature {
 
     mixer: AnimationMixer | undefined;
     clips: Map<string, AnimationClip> = new Map<string, AnimationClip>();
     actions: Map<string, AnimationAction> = new Map<string, AnimationAction>();
+    stateSystemController: StateSystemController;
+    movementState: MovementState;
 
     constructor(controller: ComponentController, entity: Entity) {
         super("animation-controller", controller, entity);
+        this.stateSystemController = controller.getSystemController("state-system");
+        this.movementState = this.stateSystemController.getState(this.entity, States.STATE_MOVEMENT);
     }
 
     init(): void {
@@ -44,6 +52,16 @@ export class AnimationFeature extends AbstractFeature {
 
     tick(time: number, timeDelta: number): void {
         if (this.mixer) {
+            if (this.actions.has("walking")) {
+                const walkingAction = this.actions.get("walking")!!;
+
+                const walkingAnimationNormalSpeed = 1.9; // 1 m/s
+                const entityActualSpeed = this.movementState.distanceDelta / this.movementState.timeDeltaSeconds;
+                const timeScale = entityActualSpeed / walkingAnimationNormalSpeed;
+
+                console.log("entity walking time scale: " + timeScale);
+                walkingAction.setEffectiveTimeScale(timeScale);
+            }
             this.mixer.update(timeDelta / 1000);
         }
     }

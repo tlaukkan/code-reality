@@ -1,11 +1,13 @@
 import {createElement} from "../../util";
 import {Entity, Scene} from "AFrame";
-import {Euler, Quaternion} from "three";
+import {Euler, Quaternion, Vector3} from "three";
 import {Spring} from "./Spring";
 import {Events} from "../../model/Events";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {StateSystemController} from "../state/StateSystemController";
 import {getSystemController} from "../../AFrame";
+import {States} from "../../model/States";
+import {MovementState} from "../../model/MovementState";
 
 export class Actuator {
 
@@ -14,8 +16,10 @@ export class Actuator {
     description: string;
     scene: Scene;
     entity: Entity;
+
     springOne: Spring = new Spring();
     springTwo: Spring = new Spring();
+    lastPosition: Vector3 = new Vector3();
 
     targetOrientation: Quaternion = new Quaternion();
     currentOrientation: Quaternion = new Quaternion();
@@ -23,7 +27,9 @@ export class Actuator {
     lastUpdateTime: number = 0;
     averageUpdateInterval: number = 0.200;
     moving: boolean = false;
+
     stateSystemController: StateSystemController;
+    movementState: MovementState;
 
     constructor(scene: Scene, serverUrl: string, id: string, description: string) {
         this.scene = scene;
@@ -36,6 +42,7 @@ export class Actuator {
         this.springOne.relaxationTime = 0.2;
         this.springTwo.relaxationTime = 0.2;
         this.stateSystemController = getSystemController(this.scene, "state-system");
+        this.movementState = this.stateSystemController.getState(this.entity, States.STATE_MOVEMENT);
     }
 
     added(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
@@ -72,6 +79,10 @@ export class Actuator {
         this.springTwo.targetOrientation.y = ry;
         this.springTwo.targetOrientation.z = rz;
         this.springTwo.targetOrientation.w = rw;
+
+        this.lastPosition.x = this.springTwo.currentPosition.x;
+        this.lastPosition.y = this.springTwo.currentPosition.y;
+        this.lastPosition.z = this.springTwo.currentPosition.z;
 
         this.moving = true;
         this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
@@ -137,6 +148,9 @@ export class Actuator {
 
     simulate(t: number) {
         if (this.moving) {
+            this.lastPosition.x = this.springTwo.currentPosition.x;
+            this.lastPosition.y = this.springTwo.currentPosition.y;
+            this.lastPosition.z = this.springTwo.currentPosition.z;
 
             this.springOne.simulate(t);
 
@@ -150,6 +164,9 @@ export class Actuator {
             this.springTwo.targetOrientation.w = this.springOne.currentOrientation.w;
 
             this.springTwo.simulate(t);
+
+            this.movementState.distanceDelta = Math.abs(this.lastPosition.distanceTo(this.springTwo.currentPosition));
+            this.movementState.timeDeltaSeconds = t;
 
             if (this.entity.object3D) {
                 // Update location only after 3d presentation is ready.

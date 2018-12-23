@@ -1,9 +1,15 @@
 import {Component, Entity, Scene, System} from "AFrame";
 import {AbstractSystemController} from "../AbstractSystemController";
 
+const factories: Map<string, () => any> = new Map();
+
+export function registerStateFactory<T>(state: string, factory: () => T) {
+    factories.set(state, factory);
+}
+
+
 export class StateSystemController extends AbstractSystemController {
 
-    private factories: Map<string, () => any> = new Map();
     private states: Map<Entity, Map<string, any>> = new Map();
 
     constructor(system: System, scene: Scene, data: any) {
@@ -25,12 +31,8 @@ export class StateSystemController extends AbstractSystemController {
     tick(time: number, timeDelta: number): void {
     }
 
-    registerStateFactory<T>(state: string, factory: () => T) {
-        this.factories.set(state, factory);
-    }
-
     getState<T>(entity: Entity, state: string): T {
-        if (!this.factories.has(state)) {
+        if (!factories.has(state)) {
             throw new Error("Unknown state type: " + state);
         }
         if (!this.states.has(entity)) {
@@ -38,7 +40,7 @@ export class StateSystemController extends AbstractSystemController {
         }
         const entityStates = this.states.get(entity)!!;
         if (!entityStates.has(state)) {
-            entityStates.set(state, this.factories.get(state)!!());
+            entityStates.set(state, factories.get(state)!!());
             console.log(entity.tagName + " added state: " + state);
         }
         return entityStates.get(state)!!;
@@ -56,7 +58,5 @@ export class StateSystemController extends AbstractSystemController {
         console.log(entity.tagName + " removed state: " + state);
     }
 
-
 }
-
 

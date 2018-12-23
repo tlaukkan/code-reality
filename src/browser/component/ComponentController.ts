@@ -1,4 +1,5 @@
-import {Entity, Component} from "AFrame";
+import {Component, Entity} from "AFrame";
+import {SystemController} from "../system/SystemController";
 
 /**
  * Interface for component controllers.
@@ -64,4 +65,8 @@ export interface ComponentController {
      * Called on each scene tick.
      */
     tick(time: number, timeDelta: number): void;
+
+    getSystemController<C extends SystemController>(systemName: string): C;
+
+    getComponentController<C extends ComponentController>(componentName: string): C;
 }
