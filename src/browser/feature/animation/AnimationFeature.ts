@@ -82,6 +82,7 @@ export class AnimationFeature extends AbstractFeature {
         this.clips.clear();
         clips.forEach(clip => {
             this.clips.set(clip.name.toLocaleLowerCase(), clip);
+            console.log(clip.name);
         });
         this.actions.clear();
         this.dispatchEvent(Events.EVENT_ANIMATE_BEGIN, new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 0));
@@ -101,14 +102,11 @@ export class AnimationFeature extends AbstractFeature {
         if (!this.clips.has(clipName)) {
             return;
         }
-        if (this.actions.has(clipName)) {
-            return;
-        }
 
         const clip = this.clips.get(clipName);
 
         if (clip) {
-            const action = this.mixer!!.clipAction(clip);
+            const action = this.actions.has(clipName) ? this.actions.get(clipName)!! : this.mixer!!.clipAction(clip);
             if (style == AnimationLoopStyle.ONCE) {
                 action.setLoop(LoopOnce, repetitions);
             } else if (style == AnimationLoopStyle.LOOP_REPEAT) {
@@ -119,6 +117,8 @@ export class AnimationFeature extends AbstractFeature {
                 action.setLoop(LoopPingPong, repetitions);
             }
 
+            action.reset();
+            action.fadeIn(0.25);
             action.play();
             this.actions.set(clipName, action);
         }
@@ -128,9 +128,16 @@ export class AnimationFeature extends AbstractFeature {
         if (!this.actions.has(clipName)) {
             return;
         }
-        this.actions.get(clipName)!!.stop();
-        this.actions.delete(clipName);
+        const action = this.actions.get(clipName)!!;
+
+        action.fadeOut(0.25);
         this.dispatchEvent(Events.EVENT_ANIMATION_FINISHED, new AnimationFinishedEventDetails(clipName));
+
+        setTimeout(() => {
+            if (this.actions.has(clipName) && this.actions.get(clipName)!!.weight == 0) {
+                action.stop();
+            }
+        }, 1000);
     }
 
 }
