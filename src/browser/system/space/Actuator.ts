@@ -28,6 +28,7 @@ export class Actuator {
     lastUpdateTime: number = 0;
     averageUpdateInterval: number = 0.200;
     moving: boolean = false;
+    turning: boolean = false;
 
     stateSystemController: StateSystemController;
     movementState: MovementState;
@@ -86,6 +87,7 @@ export class Actuator {
         this.lastPosition.z = this.springTwo.currentPosition.z;
 
         this.moving = true;
+        this.turning = true;
         this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
         console.log(this.entity.tagName + ":" + "start moving");
 
@@ -148,7 +150,7 @@ export class Actuator {
     }
 
     simulate(t: number) {
-        if (this.moving) {
+        if (this.moving || this.turning) {
             this.lastPosition.x = this.springTwo.currentPosition.x;
             this.lastPosition.y = this.springTwo.currentPosition.y;
             this.lastPosition.z = this.springTwo.currentPosition.z;
@@ -212,7 +214,8 @@ export class Actuator {
         //console.log(orientationDelta);
 
         //const orientationDelta = ((this.springOne.targetOrientation) as any).angleTo(this.springTwo.currentOrientation) as number;
-        const moving = positionDelta > 0.1 || orientationDelta > 0.2;
+        const moving = positionDelta > 0.1;
+        const turning = orientationDelta > 0.2;
         //console.log(positionDelta);
 
         if (!this.moving && moving) {
@@ -224,6 +227,7 @@ export class Actuator {
             console.log(this.entity.tagName + ":" + "end moving");
         }
         this.moving = moving;
+        this.turning = turning;
     }
 
 }
