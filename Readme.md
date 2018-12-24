@@ -2,9 +2,9 @@
 
 This is work in progress...
 
-a-frame-reality is browser side framework for building networked XR experiences with A-Frame.
+aframe-reality is browser side framework for building networked extended reality experiences with A-Frame.
 
-a-frame-dataspace is the server side framework providing both dynamic and static scene synchronization between browsers.
+aframe-dataspace servers provide a shared space to store and transmit scene data between browsers.
 
 ## Run
 
