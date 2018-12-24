@@ -1,21 +1,35 @@
-# Run
-npm run dev:node
-npm run dev:browser
+# A-Reality Readme
 
-# Dom Events
+This is work in progress...
 
-# Animation actions / states
+a-frame-reality is browser side framework for building networked XR experiences with A-Frame.
 
-entity:state:begin:flying
-entity:state:
+a-frame-dataspace is the server side framework providing both dynamic and static scene synchronization between browsers.
 
-# Asset URLs
+## Run
 
-https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb
+### Development mode
 
-# Access control
+To run the node http server in development mode you need to run locally the
+following commands in separate terminals:
 
-## Generate RSA key pair like:
+1) npm run dev:node
+2) npm run dev:browser
+
+Browse to: http://localhost:3001/
+
+## Access control
+
+### Authentication
+
+Currently implemented authentication method is facebook authentication with express passport.
+
+### Authorization
+
+Authorization to rest and web socket services are transmitted with JWT token. 
+The trusted issuer public keys are listed in dataspace cluster configuration.
+
+### Public test environment JWT signer RSA key pair:
 
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApl9jOIkv7+MQpc3Y1UTz
