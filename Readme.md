@@ -1,10 +1,17 @@
-# A-Reality Readme
+# A-Frame Reality Readme
 
 This is work in progress...
 
-aframe-reality is browser side framework for building networked extended reality experiences with A-Frame.
+aframe-reality framework enables building networked extended reality (XR) experiences with A-Frame.
 
 aframe-dataspace servers provide a shared space to store and transmit scene data between browsers.
+
+## Browser support
+
+Tested browsers (latest versions):
+
+1) Windows chrome
+2) Windows firefox
 
 ## Run
 
