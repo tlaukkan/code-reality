@@ -10,8 +10,8 @@ aframe-dataspace servers provide a shared space to store and transmit scene data
 
 Tested browsers (latest versions):
 
-1) Windows chrome
-2) Windows firefox
+1) Windows Chrome
+2) Windows Firefox
 
 ## Run
 
