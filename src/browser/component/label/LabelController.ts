@@ -15,7 +15,7 @@ export class LabelController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
 
         //const object = this.entity!!.getObject3D('mesh');
         //const bbox = new Box3().setFromObject(object);
@@ -33,26 +33,26 @@ export class LabelController extends AbstractComponentController {
         this.labelElement.setAttribute("billboard", "");
         this.labelElement.setAttribute("align", "center");
         this.labelElement.setAttribute("font", "kelsonsans");
-        this.labelElement.setAttribute("scale", "0.1 0.1");
+        this.labelElement.setAttribute("scale", "0.5 0.5");
         this.labelElement.setAttribute("wrap-count", "30");
         this.labelElement.setAttribute("position", x.toFixed(2) + " " + y.toFixed(2) + " " + z.toFixed(2));
         this.entity!!.appendChild(this.labelElement);
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.componentName + " update: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " update: " + JSON.stringify(this.data));
     }
 
     remove(): void {
-        console.log(this.componentName + " remove");
+        //console.log(this.componentName + " remove");
     }
 
     pause(): void {
-        console.log(this.componentName + " pause");
+        //console.log(this.componentName + " pause");
     }
 
     play(): void {
-        console.log(this.componentName + " play");
+        //console.log(this.componentName + " play");
     }
 
     tick(time: number, timeDelta: number): void {

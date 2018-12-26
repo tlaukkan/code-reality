@@ -29,6 +29,7 @@ export class Actuator {
     averageUpdateInterval: number = 0.200;
     moving: boolean = false;
     turning: boolean = false;
+    firstSimulate: boolean = true;
 
     stateSystemController: StateSystemController;
     movementState: MovementState;
@@ -86,10 +87,10 @@ export class Actuator {
         this.lastPosition.y = this.springTwo.currentPosition.y;
         this.lastPosition.z = this.springTwo.currentPosition.z;
 
-        this.moving = true;
-        this.turning = true;
-        this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
-        console.log(this.entity.tagName + ":" + "start moving");
+        //this.moving = true;
+        //this.turning = true;
+        //this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
+        //console.log(this.entity.tagName + ":" + "start moving");
 
         /*this.entity.object3D.position.x = this.springTwo.currentPosition.x;
         this.entity.object3D.position.y = this.springTwo.currentPosition.y;
@@ -140,7 +141,7 @@ export class Actuator {
     }
 
     acted(action: string, description: string) : void {
-        console.log(action + ":" + description);
+        //console.log(action + ":" + description);
         if (action === 'state-begin') {
             this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail(description)}));
         }
@@ -150,7 +151,8 @@ export class Actuator {
     }
 
     simulate(t: number) {
-        if (this.moving || this.turning) {
+        if (this.moving || this.turning || this.firstSimulate) {
+            this.firstSimulate = false;
             this.lastPosition.x = this.springTwo.currentPosition.x;
             this.lastPosition.y = this.springTwo.currentPosition.y;
             this.lastPosition.z = this.springTwo.currentPosition.z;
@@ -220,11 +222,11 @@ export class Actuator {
 
         if (!this.moving && moving) {
             this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail("moving")}));
-            console.log(this.entity.tagName + ":" + "start moving");
+            //console.log(this.entity.tagName + ":" + "start moving");
         }
         if (this.moving && !moving) {
             this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, {detail: new EntityStateEventDetail("moving")}));
-            console.log(this.entity.tagName + ":" + "end moving");
+            //console.log(this.entity.tagName + ":" + "end moving");
         }
         this.moving = moving;
         this.turning = turning;

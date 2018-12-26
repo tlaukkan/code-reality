@@ -51,7 +51,7 @@ export class ArcadeControlsController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
 
         // Configuration
         this.movementSpeed = this.data.movementSpeed;
@@ -124,23 +124,23 @@ export class ArcadeControlsController extends AbstractComponentController {
         } else {
             this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
         }
-        console.log(state + ":" + enabled);
+        //console.log(state + ":" + enabled);
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.componentName + " update");
+        //console.log(this.componentName + " update");
     }
 
     remove(): void {
-        console.log(this.componentName + " remove");
+        //console.log(this.componentName + " remove");
     }
 
     pause(): void {
-        console.log(this.componentName + " pause");
+        //console.log(this.componentName + " pause");
     }
 
     play(): void {
-        console.log(this.componentName + " play");
+        //console.log(this.componentName + " play");
     }
 
     tick(time: number, timeDelta: number): void {

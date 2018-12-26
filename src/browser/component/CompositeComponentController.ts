@@ -11,7 +11,7 @@ export class CompositeComponentController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.features.forEach(controller => {
             controller.init();
         });
@@ -19,28 +19,28 @@ export class CompositeComponentController extends AbstractComponentController {
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.componentName + " update: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " update: " + JSON.stringify(this.data));
         this.features.forEach(controller => {
             controller.update(data, oldData);
         });
     }
 
     remove(): void {
-        console.log(this.componentName + " remove");
+        //console.log(this.componentName + " remove");
         this.features.forEach(controller => {
             controller.remove();
         });
     }
 
     pause(): void {
-        console.log(this.componentName + " pause");
+        //console.log(this.componentName + " pause");
         this.features.forEach(controller => {
             controller.pause();
         });
     }
 
     play(): void {
-        console.log(this.componentName + " play");
+        //console.log(this.componentName + " play");
         this.features.forEach(controller => {
             controller.play();
         });

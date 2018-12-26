@@ -8,11 +8,11 @@ export class IdentityController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
         fetch('/api/users/current')
         .then((response) => {
             response.json().then((data) => {
-                console.log(data);
+                //console.log(data);
                 this.entity!!.setAttribute("label", "text:" + data.name + "; height:1.2;");
             });
         }).catch((err) => {
@@ -21,19 +21,19 @@ export class IdentityController extends AbstractComponentController {
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.componentName + " update");
+        //console.log(this.componentName + " update");
     }
 
     remove(): void {
-        console.log(this.componentName + " remove");
+        //console.log(this.componentName + " remove");
     }
 
     pause(): void {
-        console.log(this.componentName + " pause");
+        //console.log(this.componentName + " pause");
     }
 
     play(): void {
-        console.log(this.componentName + " play");
+        //console.log(this.componentName + " play");
     }
 
     tick(time: number, timeDelta: number): void {

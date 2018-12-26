@@ -45,7 +45,7 @@ export class SpaceSystemController extends AbstractSystemController {
         fetch('/api/users/current/id-token')
             .then((response) => {
                 response.text().then((data) => {
-                    console.log(data);
+                    //console.log(data);
                     this.idToken = data;
                 });
             }).catch((err) => {
@@ -109,13 +109,13 @@ export class SpaceSystemController extends AbstractSystemController {
         } else {
             this.playerElement.addEventListener(Events.EVENT_STATE_BEGIN, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
-                    console.log(e.detail);
+                    //console.log(e.detail);
                     this.client.act(this.avatarId, Events.EVENT_STATE_BEGIN, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
             this.playerElement.addEventListener(Events.EVENT_STATE_END, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
-                    console.log(e.detail);
+                    //console.log(e.detail);
                     this.client.act(this.avatarId, Events.EVENT_STATE_END, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);

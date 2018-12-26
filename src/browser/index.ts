@@ -22,3 +22,14 @@ registerComponentController((component: Component, entity: Entity, data: any) =>
 registerComponentController((component: Component, entity: Entity, data: any) => new AvatarController(component, entity, data));
 
 registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });
+
+// Set terrain function.
+(window as any).TINY_TERRAIN.heightFunctions.set('custom', (x: number, y: number) => {
+    const d = Math.sqrt(x*x + y*y);
+    return 20 + 20 * ( -1 + 1 / (1 + d * d / 500));
+});
+
+// Fix facebook bug adding hash to url
+if (window.location.hash && window.location.hash == '#_=_') {
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+}

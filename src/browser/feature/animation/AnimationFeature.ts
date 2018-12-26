@@ -82,7 +82,6 @@ export class AnimationFeature extends AbstractFeature {
         this.clips.clear();
         clips.forEach(clip => {
             this.clips.set(clip.name.toLocaleLowerCase(), clip);
-            console.log(clip.name);
         });
         this.actions.clear();
         this.dispatchEvent(Events.EVENT_ANIMATE_BEGIN, new AnimationEventDetail("dance", AnimationLoopStyle.LOOP_REPEAT, 0));
