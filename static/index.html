@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<a-scene light="defaultLightsEnabled: false" example-system="test" state-system="" dataspace="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-dataspace@0.0.18/defaul-configuration.json">
+<a-scene light="defaultLightsEnabled: false" example-system="test" state-system="" interface="" dataspace="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-dataspace@0.0.18/defaul-configuration.json">
     <a-assets>
         <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
         <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
@@ -37,7 +37,7 @@
     <a-sphere position="2 0 -3" scale="1 1 1" color="#FFFFFF" identity></a-sphere>
 
     <!-- Interface -->
-    <a-entity id="player" position="0 2 0" arcade-controls="jumpStartSpeed: 5;">
+    <a-entity id="player" position="0 2 0" arcade-controls="jumpStartSpeed: 5;" interface=""">
         <a-entity camera look-controls position="0 1.6 0"></a-entity>
         <!--<a-entity id="leftHand" hand-controls="left"></a-entity>
         <a-entity id="rightHand" hand-controls="right"></a-entity>-->

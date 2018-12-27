@@ -10,11 +10,15 @@ import {SpaceSystemController} from "./system/space/SpaceSystemController";
 import {registerStateFactory, StateSystemController} from "./system/state/StateSystemController";
 import {States} from "./model/States";
 import {MovementState} from "./model/MovementState";
+import {InterfaceSystemController} from "./system/interface/InterfaceSystemController";
+import {InterfaceController} from "./system/interface/InterfaceController";
 
+registerSystemController((system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new ExampleSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data));
 
+registerComponentController((component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new IdentityController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new LabelController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new ArcadeControlsController(component, entity, data));

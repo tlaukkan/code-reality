@@ -1,5 +1,5 @@
 import {ComponentController} from "./ComponentController";
-import {Component, Entity} from "AFrame";
+import {Component, Entity, Scene} from "AFrame";
 import {SystemController} from "../system/SystemController";
 
 /**
@@ -10,6 +10,7 @@ export abstract class AbstractComponentController implements ComponentController
     readonly schema: any;
     readonly multiple: boolean;
     readonly entity: Entity;
+    readonly scene: Scene;
     data: any;
     readonly component: Component;
 
@@ -18,6 +19,12 @@ export abstract class AbstractComponentController implements ComponentController
         this.schema = schema;
         this.multiple = multiple;
         this.entity = entity;
+        if (entity) {
+            this.scene = entity.sceneEl!;
+        } else {
+            // This is prototype
+            this.scene = undefined as any;
+        }
         this.data = data;
         this.component = component;
     }
