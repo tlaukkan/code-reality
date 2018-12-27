@@ -5,6 +5,7 @@ import {InterfaceController} from "./InterfaceController";
 export class InterfaceSystemController extends AbstractSystemController {
 
     private interfaceEntity: Entity | undefined;
+    private cameraEntity: Entity | undefined;
     private interfaceController: InterfaceController | undefined;
 
     constructor(system: System, scene: Scene, data: any) {
@@ -26,9 +27,15 @@ export class InterfaceSystemController extends AbstractSystemController {
     tick(time: number, timeDelta: number): void {
     }
 
-
     setInterfaceEntity(interfaceEntity: Entity) {
         this.interfaceEntity = interfaceEntity;
+        console.log("interface entity set.");
+        this.cameraEntity = this.interfaceEntity!!.querySelector('[camera]') as Entity;
+        if (!this.cameraEntity) {
+            console.error("No camera was found under interface entity.");
+        } else {
+            console.log("camera entity set.");
+        }
     }
 
     setInterfaceController(interfaceController: InterfaceController) {

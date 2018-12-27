@@ -16,12 +16,12 @@ export class InterfaceController extends AbstractComponentController {
             return;
         }
         this.interfaceSystemController = getSystemController(this.entity.sceneEl!!, "interface");
-        this.interfaceSystemController.setInterfaceController(this);
-        this.interfaceSystemController.setInterfaceEntity(this.entity);
     }
 
     init(): void {
         console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        this.interfaceSystemController.setInterfaceController(this);
+        this.interfaceSystemController.setInterfaceEntity(this.entity);
     }
 
     update(data: any, oldData: any): void {
