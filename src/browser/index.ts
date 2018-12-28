@@ -1,7 +1,7 @@
 import {registerComponentController, registerSystemController} from "./AFrame";
 import {LabelController} from "./component/label/LabelController";
 import {IdentityController} from "./component/identity/IdentityController";
-import {ArcadeControlsController} from "./component/controls/ArcadeControlsController";
+import {KeyboardAndMouseControls} from "./system/interface/device/KeyboardAndMouseControls";
 import {AnimatorController} from "./component/animation/AnimatorController";
 import {AvatarController} from "./component/avatar/AvatarController";
 import {Component, Entity, Scene, System} from "aframe";
@@ -12,6 +12,7 @@ import {States} from "./model/States";
 import {MovementState} from "./model/MovementState";
 import {InterfaceSystemController} from "./system/interface/InterfaceSystemController";
 import {InterfaceController} from "./system/interface/InterfaceController";
+import {MovementTool} from "./system/interface/tool/MovementTool";
 
 registerSystemController((system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data));
@@ -19,9 +20,13 @@ registerSystemController((system: System, scene: Scene, data: any) => new Exampl
 registerSystemController((system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data));
 
 registerComponentController((component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data));
+registerComponentController((component: Component, entity: Entity, data: any) => new KeyboardAndMouseControls(component, entity, data));
+registerComponentController((component: Component, entity: Entity, data: any) => new MovementTool(component, entity, data));
+
+
+
 registerComponentController((component: Component, entity: Entity, data: any) => new IdentityController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new LabelController(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new ArcadeControlsController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new AnimatorController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new AvatarController(component, entity, data));
 

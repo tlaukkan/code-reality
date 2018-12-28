@@ -1,0 +1,6 @@
+export enum ToolSlot {
+    PRIMARY_HEAD,
+    SECONDARY_HEAD,
+    PRIMARY_HAND,
+    SECONDARY_HAND
+}

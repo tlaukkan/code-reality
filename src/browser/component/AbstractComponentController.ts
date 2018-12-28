@@ -1,6 +1,8 @@
 import {ComponentController} from "./ComponentController";
 import {Component, Entity, Scene} from "AFrame";
 import {SystemController} from "../system/SystemController";
+import {InterfaceSystemController} from "../system/interface/InterfaceSystemController";
+import {getSystemController} from "../AFrame";
 
 /**
  * Abstract base class for component implementations.
@@ -13,6 +15,8 @@ export abstract class AbstractComponentController implements ComponentController
     readonly scene: Scene;
     data: any;
     readonly component: Component;
+
+    protected interfaceSystemController: InterfaceSystemController;
 
     constructor(componentName: string, schema: any, multiple: boolean, component: Component, entity: Entity, data: any) {
         this.componentName = componentName;
@@ -27,6 +31,14 @@ export abstract class AbstractComponentController implements ComponentController
         }
         this.data = data;
         this.component = component;
+
+        if (!component) {
+            // This is prototype not actual system instance.
+            this.interfaceSystemController = {} as any;
+            return;
+        }
+
+        this.interfaceSystemController = getSystemController(this.entity.sceneEl!!, "interface");
     }
 
     setData(data: any): void {

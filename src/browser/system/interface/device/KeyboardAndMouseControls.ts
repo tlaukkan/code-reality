@@ -1,11 +1,15 @@
-import {AbstractComponentController} from "../AbstractComponentController";
-import {Raycaster, Vector3, Plane, Object3D} from "three";
-import {CollidableCrawler} from "./CollideableCrawler";
-import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
-import {Events} from "../../model/Events";
-import {Component, Entity} from "aframe";
+import {AbstractComponentController} from "../../../component/AbstractComponentController";
+import {Object3D, Plane, Raycaster, Vector3} from "three";
+import {CollidableCrawler} from "../tool/CollideableCrawler";
+import {EntityStateEventDetail} from "../../../model/EntityStateEventDetail";
+import {Events} from "../../../model/Events";
+import {Component, Entity} from "AFrame";
+import {DeviceSlot} from "../model/DeviceSlot";
+import {Device} from "../Device";
+import {ToolSlot} from "../model/ToolSlot";
+import {Button} from "../model/Button";
 
-export class ArcadeControlsController extends AbstractComponentController {
+export class KeyboardAndMouseControls extends AbstractComponentController implements Device {
 
     movementSpeed: number = 0;
     height: number = 0;
@@ -37,7 +41,7 @@ export class ArcadeControlsController extends AbstractComponentController {
     xzDeltaOppositeDirection: Vector3 = new Vector3(0, 0, 0);
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("arcade-controls", {
+        super("keyboard-and-mouse-controls", {
             movementSpeed: {type: 'number', default: 2},
             height: {type: 'number', default: 2},
             width: {type: 'number', default: 0.5},
@@ -48,6 +52,12 @@ export class ArcadeControlsController extends AbstractComponentController {
             rightKey: {type: 'string', default: 'd'},
             jumpKey: {type: 'string', default: ' '}
         }, false, component, entity, data);
+
+
+        if (!component) {
+            return;
+        }
+        this.interfaceSystemController.setDevice(DeviceSlot.KEYBOARD_AND_MOUSE, this);
     }
 
     init(): void {
@@ -94,14 +104,30 @@ export class ArcadeControlsController extends AbstractComponentController {
         this.xzDeltaDirection = new Vector3(0, 0, 0);
         this.xzDeltaOppositeDirection = new Vector3(0, 0, 0);
 
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
             this.onKeyDown(e.key);
-
         });
 
-        window.addEventListener('keyup', (e) => {
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
             this.onKeyUp(e.key);
         });
+
+        (this.entity.sceneEl!! as any).addEventListener('mousedown', (e: MouseEvent) => {
+            console.log('mousedown: ' + e.button );
+        });
+
+        (this.entity.sceneEl!! as any).addEventListener('mouseup', (e: MouseEvent) => {
+            console.log('mouseup: ' + e.button );
+        });
+
+        (this.entity.sceneEl!! as any).addEventListener('click', (e: MouseEvent) => {
+            console.log('mouse click ' + e.button);
+        });
+
+        (this.entity.sceneEl!! as any).addEventListener('wheel', (e: WheelEvent) => {
+            console.log('wheel: x=' + e.deltaX + ', y=' + e.deltaY + ', z=' + e.deltaZ);
+        });
+
     }
 
     setJumping(state: boolean) {
@@ -144,17 +170,32 @@ export class ArcadeControlsController extends AbstractComponentController {
     }
 
     tick(time: number, timeDelta: number): void {
-        this.collediableCrawler!!.crawl();
+        /*this.collediableCrawler!!.crawl();
 
         this.time = time;
 
         let collidables = this.collediableCrawler!!.collideables();
         this.updateXZ(timeDelta, collidables);
-        this.updateY(timeDelta, collidables);
+        this.updateY(timeDelta, collidables);*/
     }
 
     onKeyDown(key: string) {
-        if (!this.pressed.has(key)) {
+        if (key == this.backwardKey) {
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.DOWN);
+        }
+        if (key == this.forwardKey) {
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.UP);
+        }
+        if (key == this.leftKey) {
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.LEFT);
+        }
+        if (key == this.rightKey) {
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.RIGHT);
+        }
+        if (key == this.jumpKey) {
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.TRIGGER);
+        }
+        /*if (!this.pressed.has(key)) {
             if (key == this.backwardKey) {
                 this.entityStateChange("backward", true);
             }
@@ -168,11 +209,26 @@ export class ArcadeControlsController extends AbstractComponentController {
                 this.entityStateChange("right", true);
             }
         }
-        this.pressed.set(key, this.time);
+        this.pressed.set(key, this.time);*/
     }
 
     onKeyUp(key: string) {
-        if (this.pressed.has(key)) {
+        if (key == this.backwardKey) {
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.DOWN);
+        }
+        if (key == this.forwardKey) {
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.UP);
+        }
+        if (key == this.leftKey) {
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.LEFT);
+        }
+        if (key == this.rightKey) {
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.RIGHT);
+        }
+        if (key == this.jumpKey) {
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.TRIGGER);
+        }
+        /*if (this.pressed.has(key)) {
             if (key == this.backwardKey) {
                 this.entityStateChange("backward", false);
             }
@@ -186,7 +242,7 @@ export class ArcadeControlsController extends AbstractComponentController {
                 this.entityStateChange("right", false);
             }
             this.pressed.delete(key)
-        }
+        }*/
     }
 
     /*onTick(time: number, timeDelta: number) {

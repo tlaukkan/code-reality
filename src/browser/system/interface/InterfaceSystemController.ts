@@ -1,12 +1,20 @@
 import {Component, Entity, Scene, System} from "AFrame";
 import {AbstractSystemController} from "../AbstractSystemController";
 import {InterfaceController} from "./InterfaceController";
+import {DeviceSlot} from "./model/DeviceSlot";
+import {Device} from "./Device";
+import {ToolSlot} from "./model/ToolSlot";
+import {Tool} from "./Tool";
+import {Button} from "./model/Button";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
     private interfaceEntity: Entity | undefined;
     private cameraEntity: Entity | undefined;
     private interfaceController: InterfaceController | undefined;
+
+    private devices: Map<DeviceSlot, Device> = new Map();
+    private tools: Map<ToolSlot, Tool> = new Map();
 
     constructor(system: System, scene: Scene, data: any) {
         super("interface", {}, false, system, scene, data);
@@ -32,14 +40,44 @@ export class InterfaceSystemController extends AbstractSystemController {
         console.log("interface entity set.");
         this.cameraEntity = this.interfaceEntity!!.querySelector('[camera]') as Entity;
         if (!this.cameraEntity) {
-            console.error("No camera was found under interface entity.");
+            console.error("interface did not find camera under interface entity.");
         } else {
-            console.log("camera entity set.");
+            console.log("interface camera entity set.");
         }
     }
 
     setInterfaceController(interfaceController: InterfaceController) {
         this.interfaceController = interfaceController;
+    }
+
+    setDevice(slot: DeviceSlot, device: Device) {
+        if (this.devices.has(slot)) {
+            console.log("interface already has controls at: " + DeviceSlot[slot]);
+        } else {
+            this.devices.set(slot, device);
+            console.log("interface controls " + device.componentName + " set at: " + DeviceSlot[slot]);
+        }
+    }
+
+    setTool(slot: ToolSlot, tool: Tool) {
+        if (this.tools.has(slot)) {
+            console.log("interface already has tool at: " + ToolSlot[slot]);
+        } else {
+            this.tools.set(slot, tool);
+            console.log("interface tool " + tool.componentName + " set at: " + ToolSlot[slot]);
+        }
+    }
+
+    buttonUp(device: Device, toolSlot: ToolSlot,  button: Button) {
+        if (this.tools.has(toolSlot)) {
+            this.tools.get(toolSlot)!!.buttonUp(device, toolSlot, button);
+        }
+    }
+
+    buttonDown(device: Device, toolSlot: ToolSlot, button: Button) {
+        if (this.tools.has(toolSlot)) {
+            this.tools.get(toolSlot)!!.buttonDown(device, toolSlot, button);
+        }
     }
 }
 

@@ -1,12 +1,9 @@
 import {Component, Entity} from "AFrame";
 import {AbstractComponentController} from "../../component/AbstractComponentController";
 import {getSystemController} from "../../AFrame";
-import {InterfaceSystemController} from "./InterfaceSystemController";
 
 export class InterfaceController extends AbstractComponentController {
 
-
-    private interfaceSystemController: InterfaceSystemController;
 
     constructor(component: Component, entity: Entity, data: any) {
         super("interface", {}, false, component, entity, data);
@@ -15,13 +12,12 @@ export class InterfaceController extends AbstractComponentController {
             this.interfaceSystemController = {} as any;
             return;
         }
-        this.interfaceSystemController = getSystemController(this.entity.sceneEl!!, "interface");
-    }
-
-    init(): void {
         console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.interfaceSystemController.setInterfaceController(this);
         this.interfaceSystemController.setInterfaceEntity(this.entity);
+    }
+
+    init(): void {
     }
 
     update(data: any, oldData: any): void {
