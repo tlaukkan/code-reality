@@ -34,11 +34,16 @@ export class MovementToolController extends AbstractComponentController implemen
     yVelocity: number = 0;
     pressed: Map<Button, number> = new Map();
 
+
     centerOfMassPosition: Vector3 = new Vector3(0, 0, 0);
+
+    controllerDirection: Vector3 = new Vector3(0, 0, 0);
     cameraDirection: Vector3 = new Vector3(0, 0, 0);
-    xzDirection: Vector3 = new Vector3(0, 0, 0);
-    xzDeltaDirection: Vector3 = new Vector3(0, 0, 0);
-    xzDeltaOppositeDirection: Vector3 = new Vector3(0, 0, 0);
+
+    xzCameraDirection: Vector3 = new Vector3(0, 0, 0);
+    xDirection: Vector3 = new Vector3(0, 0, 0);
+    zDirection: Vector3 = new Vector3(0, 0, 0);
+    direction: Vector3 = new Vector3(0, 0, 0);
 
     constructor(component: Component, entity: Entity, data: any) {
         super("movement-tool", {
@@ -86,9 +91,9 @@ export class MovementToolController extends AbstractComponentController implemen
         this.centerOfMassPosition.z = this.entity!!.object3D.position.z;
 
         this.cameraDirection = new Vector3(0, 0, 0);
-        this.xzDirection = new Vector3(0, 0, 0);
-        this.xzDeltaDirection = new Vector3(0, 0, 0);
-        this.xzDeltaOppositeDirection = new Vector3(0, 0, 0);
+        this.xzCameraDirection = new Vector3(0, 0, 0);
+        this.xDirection = new Vector3(0, 0, 0);
+        this.zDirection = new Vector3(0, 0, 0);
 
     }
 
@@ -112,24 +117,15 @@ export class MovementToolController extends AbstractComponentController implemen
         } else {
             this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
         }
-        //console.log(state + ":" + enabled);
     }
 
-    update(data: any, oldData: any): void {
-        //console.log(this.componentName + " update");
-    }
+    update(data: any, oldData: any): void {}
 
-    remove(): void {
-        //console.log(this.componentName + " remove");
-    }
+    remove(): void {}
 
-    pause(): void {
-        //console.log(this.componentName + " pause");
-    }
+    pause(): void {}
 
-    play(): void {
-        //console.log(this.componentName + " play");
-    }
+    play(): void {}
 
     tick(time: number, timeDelta: number): void {
         this.collediableCrawler!!.crawl();
@@ -146,15 +142,19 @@ export class MovementToolController extends AbstractComponentController implemen
         if (!this.pressed.has(button)) {
             if (button == this.backwardKey) {
                 this.entityStateChange("backward", true);
+                this.controllerDirection.x = -1;
             }
             if (button == this.forwardKey) {
                 this.entityStateChange("forward", true);
+                this.controllerDirection.x = 1;
             }
             if (button == this.leftKey) {
                 this.entityStateChange("left", true);
+                this.controllerDirection.z = -1;
             }
             if (button == this.rightKey) {
                 this.entityStateChange("right", true);
+                this.controllerDirection.z = 1;
             }
         }
         this.pressed.set(button, this.time);
@@ -164,15 +164,19 @@ export class MovementToolController extends AbstractComponentController implemen
         if (this.pressed.has(button)) {
             if (button == this.backwardKey) {
                 this.entityStateChange("backward", false);
+                this.controllerDirection.x = 0;
             }
             if (button == this.forwardKey) {
                 this.entityStateChange("forward", false);
+                this.controllerDirection.x = 0;
             }
             if (button == this.leftKey) {
                 this.entityStateChange("left", false);
+                this.controllerDirection.z = 0;
             }
             if (button == this.rightKey) {
                 this.entityStateChange("right", false);
+                this.controllerDirection.z = 0;
             }
             this.pressed.delete(button)
         }
@@ -181,47 +185,28 @@ export class MovementToolController extends AbstractComponentController implemen
     updateXZ(timeDelta: number, collidables: Array<Object3D>) {
         let position = this.entity!!.object3D.position;
 
-        let forward = this.pressed.has(this.forwardKey);
-        let backward = this.pressed.has(this.backwardKey);
-        let left = this.pressed.has(this.leftKey);
-        let right = this.pressed.has(this.rightKey);
-
-        if (forward || backward || left || right) {
+        if (this.controllerDirection.x != 0 || this.controllerDirection.z != 0) {
             let delta = this.movementSpeed * timeDelta / 1000.0;
             this.computeXZDirectionFromCamera();
             this.centerOfMassPosition.x = this.entity!!.object3D.position.x;
             this.centerOfMassPosition.z = this.entity!!.object3D.position.z;
-            this.xzDeltaDirection.copy(this.xzDirection);
-            this.xzDeltaOppositeDirection.copy(this.xzDirection);
-            this.xzDeltaOppositeDirection.multiplyScalar(-1);
-            if (forward) {
-                if (!this.testCollision(this.xzDeltaDirection, collidables)) {
-                    position.x += this.xzDeltaDirection.x * delta;
-                    position.z += this.xzDeltaDirection.z * delta;
-                }
+
+            this.xDirection.copy(this.xzCameraDirection);
+
+            this.zDirection.copy(this.xzCameraDirection);
+            this.zDirection.cross(this.yAxisPositive);
+
+            this.xDirection.multiplyScalar(this.controllerDirection.x * delta);
+            this.zDirection.multiplyScalar(this.controllerDirection.z * delta);
+
+            this.direction.copy(this.xDirection);
+            this.direction.add(this.zDirection);
+
+            if (!this.testCollision(this.direction, collidables)) {
+                position.x += this.direction.x;
+                position.z += this.direction.z;
             }
-            if (backward) {
-                if (!this.testCollision(this.xzDeltaOppositeDirection, collidables)) {
-                    position.x += this.xzDeltaOppositeDirection.x * delta;
-                    position.z += this.xzDeltaOppositeDirection.z * delta;
-                }
-            }
-            if (left || right) {
-                this.xzDeltaDirection.cross(this.yAxisPositive);
-                this.xzDeltaOppositeDirection.cross(this.yAxisPositive);
-                if (right) {
-                    if (!this.testCollision(this.xzDeltaDirection, collidables)) {
-                        position.x += this.xzDeltaDirection.x * delta;
-                        position.z += this.xzDeltaDirection.z * delta;
-                    }
-                }
-                if (left) {
-                    if (!this.testCollision(this.xzDeltaOppositeDirection, collidables)) {
-                        position.x += this.xzDeltaOppositeDirection.x * delta;
-                        position.z += this.xzDeltaOppositeDirection.z * delta;
-                    }
-                }
-            }
+
         }
     }
 
@@ -274,8 +259,8 @@ export class MovementToolController extends AbstractComponentController implemen
     computeXZDirectionFromCamera() {
         this.interfaceSystemController.cameraEntity!!.object3D.getWorldDirection(this.cameraDirection);
         this.cameraDirection.multiplyScalar(-1);
-        this.xzPlane.projectPoint(this.cameraDirection, this.xzDirection);
-        this.xzDirection.normalize();
+        this.xzPlane.projectPoint(this.cameraDirection, this.xzCameraDirection);
+        this.xzCameraDirection.normalize();
     }
 
     findDistanceToNearest(rayDirection: Vector3, objects: Array<Object3D>) {
