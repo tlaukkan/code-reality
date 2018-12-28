@@ -1,7 +1,7 @@
 import {registerComponentController, registerSystemController} from "./AFrame";
 import {LabelController} from "./component/label/LabelController";
 import {IdentityController} from "./component/identity/IdentityController";
-import {KeyboardAndMouseControls} from "./system/interface/device/KeyboardAndMouseControls";
+import {KeyboardAndMouseController} from "./system/interface/device/KeyboardAndMouseController";
 import {AnimatorController} from "./component/animation/AnimatorController";
 import {AvatarController} from "./component/avatar/AvatarController";
 import {Component, Entity, Scene, System} from "aframe";
@@ -20,7 +20,7 @@ registerSystemController((system: System, scene: Scene, data: any) => new Exampl
 registerSystemController((system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data));
 
 registerComponentController((component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new KeyboardAndMouseControls(component, entity, data));
+registerComponentController((component: Component, entity: Entity, data: any) => new KeyboardAndMouseController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new MovementTool(component, entity, data));
 
 

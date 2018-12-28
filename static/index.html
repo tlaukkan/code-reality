@@ -37,12 +37,15 @@
     <a-sphere position="2 0 -3" scale="1 1 1" color="#FFFFFF" identity></a-sphere>
 
     <!-- Interface -->
-    <a-entity id="player" position="0 2 0" keyboard-and-mouse-controls="jumpStartSpeed: 5;" movement-tool="jumpStartSpeed: 5;" interface="">
+    <a-entity id="player" position="0 2 0" movement-tool="jumpStartSpeed: 5;" interface="">
         <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0"></a-entity>
-        <!--<a-entity id="leftHand" hand-controls="left"></a-entity>
-        <a-entity id="rightHand" hand-controls="right"></a-entity>-->
+
+        <a-entity keyboard-and-mouse=""></a-entity>
         <a-entity vive-controls="hand: left"></a-entity>
         <a-entity vive-controls="hand: right"></a-entity>
+
+        <!--<a-entity id="leftHand" hand-controls="left"></a-entity>
+        <a-entity id="rightHand" hand-controls="right"></a-entity>-->
         <!--<a-entity tracked-controls="controller: 0; idPrefix: OpenVR">
             <a-sphere radius="0.04" material="transparent: true; opacity: 0.3; color: #517ecb; emissive: #fff; emissiveIntensity: 0.4"></a-sphere>
         </a-entity>
