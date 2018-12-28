@@ -23,6 +23,7 @@ export class KeyboardAndMouseController extends AbstractComponentController impl
     }
 
     init(): void {
+        console.log(this.componentName + " init");
 
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             this.onKeyDown(e.key);

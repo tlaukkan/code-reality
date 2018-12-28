@@ -9,7 +9,7 @@ import {Tool} from "../Tool";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
 
-export class MovementTool extends AbstractComponentController implements Tool {
+export class MovementToolController extends AbstractComponentController implements Tool {
 
     movementSpeed: number = 0;
     height: number = 0;
@@ -185,6 +185,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
         let backward = this.pressed.has(this.backwardKey);
         let left = this.pressed.has(this.leftKey);
         let right = this.pressed.has(this.rightKey);
+
         if (forward || backward || left || right) {
             let delta = this.movementSpeed * timeDelta / 1000.0;
             this.computeXZDirectionFromCamera();
@@ -271,7 +272,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
     }
 
     computeXZDirectionFromCamera() {
-        document.querySelector('[camera]').object3D.getWorldDirection(this.cameraDirection);
+        this.interfaceSystemController.cameraEntity!!.object3D.getWorldDirection(this.cameraDirection);
         this.cameraDirection.multiplyScalar(-1);
         this.xzPlane.projectPoint(this.cameraDirection, this.xzDirection);
         this.xzDirection.normalize();

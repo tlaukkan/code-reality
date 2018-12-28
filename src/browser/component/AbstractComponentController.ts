@@ -78,4 +78,14 @@ export abstract class AbstractComponentController implements ComponentController
 
         return (component as any).controller;
     }
+
+    addEventListener(type: string, listener: ((detail: any) => void)) {
+        this.entity.addEventListener(type, ((e: CustomEvent) => {
+            listener(e.detail);
+        }) as any);
+    }
+
+    dispatchEvent(eventType: string, detail: any) {
+        this.entity.dispatchEvent(new CustomEvent(eventType, { detail: detail } ));
+    }
 }

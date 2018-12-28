@@ -9,8 +9,9 @@ import {Button} from "./model/Button";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
-    private interfaceEntity: Entity | undefined;
-    private cameraEntity: Entity | undefined;
+    public interfaceEntity: Entity | undefined;
+    public cameraEntity: Entity | undefined;
+
     private interfaceController: InterfaceController | undefined;
 
     private devices: Map<DeviceSlot, Device> = new Map();
@@ -57,6 +58,10 @@ export class InterfaceSystemController extends AbstractSystemController {
             this.devices.set(slot, device);
             console.log("interface controls " + device.componentName + " set at: " + DeviceSlot[slot]);
         }
+    }
+
+    getDevice(slot: DeviceSlot): Device | undefined {
+        return this.devices.get(slot);
     }
 
     setTool(slot: ToolSlot, tool: Tool) {

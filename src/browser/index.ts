@@ -12,7 +12,8 @@ import {States} from "./model/States";
 import {MovementState} from "./model/MovementState";
 import {InterfaceSystemController} from "./system/interface/InterfaceSystemController";
 import {InterfaceController} from "./system/interface/InterfaceController";
-import {MovementTool} from "./system/interface/tool/MovementTool";
+import {MovementToolController} from "./system/interface/tool/MovementToolController";
+import {ViveController} from "./system/interface/device/ViveController";
 
 registerSystemController((system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data));
@@ -21,7 +22,8 @@ registerSystemController((system: System, scene: Scene, data: any) => new SpaceS
 
 registerComponentController((component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data));
 registerComponentController((component: Component, entity: Entity, data: any) => new KeyboardAndMouseController(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new MovementTool(component, entity, data));
+registerComponentController((component: Component, entity: Entity, data: any) => new ViveController(component, entity, data));
+registerComponentController((component: Component, entity: Entity, data: any) => new MovementToolController(component, entity, data));
 
 
 
