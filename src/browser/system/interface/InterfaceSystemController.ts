@@ -6,6 +6,7 @@ import {Device} from "./Device";
 import {ToolSlot} from "./model/ToolSlot";
 import {Tool} from "./Tool";
 import {Button} from "./model/Button";
+import {Stick} from "./model/Stick";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
@@ -85,9 +86,9 @@ export class InterfaceSystemController extends AbstractSystemController {
         }
     }
 
-    stickTwist(device: Device, toolSlot: ToolSlot, x: number, y: number) {
+    stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number) {
         if (this.tools.has(toolSlot)) {
-            this.tools.get(toolSlot)!!.stickTwist(device, toolSlot, x, y);
+            this.tools.get(toolSlot)!!.stickTwist(device, toolSlot, stick, x, y);
         }
     }
 

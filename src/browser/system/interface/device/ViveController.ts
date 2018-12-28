@@ -4,6 +4,7 @@ import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
+import {Stick} from "../model/Stick";
 
 export class ViveController extends AbstractComponentController implements Device {
 
@@ -68,7 +69,11 @@ export class ViveController extends AbstractComponentController implements Devic
         this.addEventListener("axismove", (detail:  any) => {
             const axis: Array<number> = detail.axis;
             console.log(this.toolSlot + " axismove " + axis);
-            this.interfaceSystemController.stickTwist(this, this.toolSlot, axis[1], axis[0]);
+            if (this.deviceSlot == DeviceSlot.PRIMARY_HAND) {
+                this.interfaceSystemController.stickTwist(this, ToolSlot.SECONDARY, Stick.ROTATE, axis[1], axis[0]);
+            } else {
+                this.interfaceSystemController.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, axis[1], axis[0]);
+            }
         });
         /*this.addEventListener("trackpadchanged", (detail: any) => {
             console.log("trackpadchanged " + JSON.stringify(detail));

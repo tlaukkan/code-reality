@@ -2,10 +2,11 @@ import {ComponentController} from "../../component/ComponentController";
 import {Device} from "./Device";
 import {ToolSlot} from "./model/ToolSlot";
 import {Button} from "./model/Button";
+import {Stick} from "./model/Stick";
 
 export interface Tool extends ComponentController{
 
     buttonUp(device: Device, toolSlot: ToolSlot,  button: Button): void;
     buttonDown(device: Device, toolSlot: ToolSlot, button: Button): void;
-    stickTwist(device: Device, toolSlot: ToolSlot, x: number, y: number): void;
+    stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number): void;
 }

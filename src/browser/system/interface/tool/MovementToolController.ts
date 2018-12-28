@@ -8,10 +8,12 @@ import {Device} from "../Device";
 import {Tool} from "../Tool";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
+import {Stick} from "../model/Stick";
 
 export class MovementToolController extends AbstractComponentController implements Tool {
 
     movementSpeed: number = 0;
+    rotationSpeed: number = 0;
     height: number = 0;
     width: number = 0;
     jumpStartSpeed: number = 0;
@@ -34,10 +36,10 @@ export class MovementToolController extends AbstractComponentController implemen
     yVelocity: number = 0;
     pressed: Map<Button, number> = new Map();
 
-
     centerOfMassPosition: Vector3 = new Vector3(0, 0, 0);
 
-    controllerDirection: Vector3 = new Vector3(0, 0, 0);
+    stickTranslation: Vector3 = new Vector3(0, 0, 0);
+    stickRotation: Vector3 = new Vector3(0, 0, 0);
     cameraDirection: Vector3 = new Vector3(0, 0, 0);
 
     xzCameraDirection: Vector3 = new Vector3(0, 0, 0);
@@ -47,7 +49,8 @@ export class MovementToolController extends AbstractComponentController implemen
 
     constructor(component: Component, entity: Entity, data: any) {
         super("movement-tool", {
-            movementSpeed: {type: 'number', default: 2},
+            movementSpeed: {type: 'number', default: 2}, // Meters per second
+            rotationSpeed: {type: 'number', default: 1}, // Radians per second
             height: {type: 'number', default: 2},
             width: {type: 'number', default: 0.5},
             jumpStartSpeed: {type: 'number', default: 5.0}
@@ -63,6 +66,8 @@ export class MovementToolController extends AbstractComponentController implemen
 
         // Configuration
         this.movementSpeed = this.data.movementSpeed;
+        this.rotationSpeed = this.data.rotationSpeed;
+
         this.height = this.data.height;
         this.width = this.data.width;
         this.jumpStartSpeed = this.data.jumpStartSpeed;
@@ -139,6 +144,10 @@ export class MovementToolController extends AbstractComponentController implemen
         let collidables = this.collediableCrawler!!.collideables();
         this.updateXZ(timeDelta, collidables);
         this.updateY(timeDelta, collidables);
+        if (this.stickRotation.x != 0 || this.stickRotation.y != 0 || this.stickRotation.z != 0) {
+            let delta = this.rotationSpeed * timeDelta / 1000.0;
+            this.entity!!.object3D.rotation.y -= this.stickRotation.y * delta;
+        }
     }
 
 
@@ -146,19 +155,19 @@ export class MovementToolController extends AbstractComponentController implemen
         if (!this.pressed.has(button)) {
             if (button == this.backwardKey) {
                 this.entityStateChange("backward", true);
-                this.controllerDirection.x = -1;
+                this.stickTranslation.x = -1;
             }
             if (button == this.forwardKey) {
                 this.entityStateChange("forward", true);
-                this.controllerDirection.x = 1;
+                this.stickTranslation.x = 1;
             }
             if (button == this.leftKey) {
                 this.entityStateChange("left", true);
-                this.controllerDirection.z = -1;
+                this.stickTranslation.z = -1;
             }
             if (button == this.rightKey) {
                 this.entityStateChange("right", true);
-                this.controllerDirection.z = 1;
+                this.stickTranslation.z = 1;
             }
         }
         this.pressed.set(button, this.time);
@@ -168,33 +177,39 @@ export class MovementToolController extends AbstractComponentController implemen
         if (this.pressed.has(button)) {
             if (button == this.backwardKey) {
                 this.entityStateChange("backward", false);
-                this.controllerDirection.x = 0;
+                this.stickTranslation.x = 0;
             }
             if (button == this.forwardKey) {
                 this.entityStateChange("forward", false);
-                this.controllerDirection.x = 0;
+                this.stickTranslation.x = 0;
             }
             if (button == this.leftKey) {
                 this.entityStateChange("left", false);
-                this.controllerDirection.z = 0;
+                this.stickTranslation.z = 0;
             }
             if (button == this.rightKey) {
                 this.entityStateChange("right", false);
-                this.controllerDirection.z = 0;
+                this.stickTranslation.z = 0;
             }
             this.pressed.delete(button)
         }
     }
 
-    stickTwist(device: Device, toolSlot: ToolSlot, x: number, y: number): void {
-        this.controllerDirection.x = 2 * x;
-        this.controllerDirection.z = 2 * y;
+    stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number): void {
+        if (stick == Stick.TRANSLATE) {
+            this.stickTranslation.x = 1.5 * x;
+            this.stickTranslation.z = 1.5 * y;
+        }
+        if (stick == Stick.ROTATE) {
+            this.stickRotation.x = 1.0 * x;
+            this.stickRotation.y = 1.0 * y;
+        }
     }
 
     updateXZ(timeDelta: number, collidables: Array<Object3D>) {
         let position = this.entity!!.object3D.position;
 
-        if (this.controllerDirection.x != 0 || this.controllerDirection.z != 0) {
+        if (this.stickTranslation.x != 0 || this.stickTranslation.z != 0) {
             let delta = this.movementSpeed * timeDelta / 1000.0;
             this.computeXZDirectionFromCamera();
             this.centerOfMassPosition.x = this.entity!!.object3D.position.x;
@@ -205,8 +220,8 @@ export class MovementToolController extends AbstractComponentController implemen
             this.zDirection.copy(this.xzCameraDirection);
             this.zDirection.cross(this.yAxisPositive);
 
-            this.xDirection.multiplyScalar(this.controllerDirection.x * delta);
-            this.zDirection.multiplyScalar(this.controllerDirection.z * delta);
+            this.xDirection.multiplyScalar(this.stickTranslation.x * delta);
+            this.zDirection.multiplyScalar(this.stickTranslation.z * delta);
 
             this.direction.copy(this.xDirection);
             this.direction.add(this.zDirection);
