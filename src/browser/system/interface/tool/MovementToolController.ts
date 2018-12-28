@@ -73,7 +73,7 @@ export class MovementToolController extends AbstractComponentController implemen
         this.jumpStartSpeed = this.data.jumpStartSpeed;
 
         // Utility objects
-        this.collediableCrawler = new CollidableCrawler(this.entity!!.object3D, this.entity!!.sceneEl!!.object3D);
+        this.collediableCrawler = new CollidableCrawler(this.interfaceSystemController.interfaceEntity!!.object3D, this.interfaceSystemController.interfaceEntity!!.sceneEl!!.object3D);
         this.raycaster = new Raycaster();
 
         // Constants
@@ -91,9 +91,9 @@ export class MovementToolController extends AbstractComponentController implemen
 
         // Reused vector variables.
         this.centerOfMassPosition = new Vector3(0, 0, 0); // Center of mass for collision checks
-        this.centerOfMassPosition.x = this.entity!!.object3D.position.x;
-        this.centerOfMassPosition.y = this.entity!!.object3D.position.y + this.height / 2;
-        this.centerOfMassPosition.z = this.entity!!.object3D.position.z;
+        this.centerOfMassPosition.x = this.interfaceSystemController.interfaceEntity!!!!.object3D.position.x;
+        this.centerOfMassPosition.y = this.interfaceSystemController.interfaceEntity!!!!.object3D.position.y + this.height / 2;
+        this.centerOfMassPosition.z = this.interfaceSystemController.interfaceEntity!!!!.object3D.position.z;
 
         this.cameraDirection = new Vector3(0, 0, 0);
         this.xzCameraDirection = new Vector3(0, 0, 0);
@@ -118,9 +118,9 @@ export class MovementToolController extends AbstractComponentController implemen
 
     entityStateChange(state: string, enabled: boolean) {
         if (enabled) {
-            this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
+            this.interfaceSystemController.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
         } else {
-            this.entity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
+            this.interfaceSystemController.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
         }
     }
 
@@ -146,7 +146,7 @@ export class MovementToolController extends AbstractComponentController implemen
         this.updateY(timeDelta, collidables);
         if (this.stickRotation.x != 0 || this.stickRotation.y != 0 || this.stickRotation.z != 0) {
             let delta = this.rotationSpeed * timeDelta / 1000.0;
-            this.entity!!.object3D.rotation.y -= this.stickRotation.y * delta;
+            this.interfaceSystemController.interfaceEntity!!.object3D.rotation.y -= this.stickRotation.y * delta;
         }
     }
 
@@ -207,13 +207,13 @@ export class MovementToolController extends AbstractComponentController implemen
     }
 
     updateXZ(timeDelta: number, collidables: Array<Object3D>) {
-        let position = this.entity!!.object3D.position;
+        let position = this.interfaceSystemController.interfaceEntity!!.object3D.position;
 
         if (this.stickTranslation.x != 0 || this.stickTranslation.z != 0) {
             let delta = this.movementSpeed * timeDelta / 1000.0;
             this.computeXZDirectionFromCamera();
-            this.centerOfMassPosition.x = this.entity!!.object3D.position.x;
-            this.centerOfMassPosition.z = this.entity!!.object3D.position.z;
+            this.centerOfMassPosition.x = this.interfaceSystemController.interfaceEntity!!.object3D.position.x;
+            this.centerOfMassPosition.z = this.interfaceSystemController.interfaceEntity!!.object3D.position.z;
 
             this.xDirection.copy(this.xzCameraDirection);
 
@@ -235,7 +235,7 @@ export class MovementToolController extends AbstractComponentController implemen
     }
 
     updateY(timeDelta: number, collidables: Array<Object3D>) {
-        let position = this.entity!!.object3D.position;
+        let position = this.interfaceSystemController.interfaceEntity!!.object3D.position;
 
         var distanceToNearestBelow = this.findDistanceToNearest(this.yAxisNegative, collidables);
 

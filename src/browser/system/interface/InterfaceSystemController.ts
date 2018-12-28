@@ -20,6 +20,23 @@ export class InterfaceSystemController extends AbstractSystemController {
 
     constructor(system: System, scene: Scene, data: any) {
         super("interface", {}, false, system, scene, data);
+
+        if (!system) {
+            return; // This is prototype
+        }
+
+        this.interfaceEntity = this.scene!!.querySelector('[interface]') as Entity;
+        if (!this.interfaceEntity) {
+            console.error("interface did not find interface entity.");
+        } else {
+            console.log("interface entity set.");
+            this.cameraEntity = this.interfaceEntity!!.querySelector('[camera]') as Entity;
+            if (!this.cameraEntity) {
+                console.error("interface did not find camera under interface entity.");
+            } else {
+                console.log("interface camera entity set.");
+            }
+        }
     }
 
     init(): void {
@@ -35,17 +52,6 @@ export class InterfaceSystemController extends AbstractSystemController {
     }
 
     tick(time: number, timeDelta: number): void {
-    }
-
-    setInterfaceEntity(interfaceEntity: Entity) {
-        this.interfaceEntity = interfaceEntity;
-        console.log("interface entity set.");
-        this.cameraEntity = this.interfaceEntity!!.querySelector('[camera]') as Entity;
-        if (!this.cameraEntity) {
-            console.error("interface did not find camera under interface entity.");
-        } else {
-            console.log("interface camera entity set.");
-        }
     }
 
     setInterfaceController(interfaceController: InterfaceController) {

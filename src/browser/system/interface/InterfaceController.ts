@@ -14,7 +14,6 @@ export class InterfaceController extends AbstractComponentController {
         }
         console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.interfaceSystemController.setInterfaceController(this);
-        this.interfaceSystemController.setInterfaceEntity(this.entity);
     }
 
     init(): void {
