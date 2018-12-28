@@ -21,29 +21,29 @@ export class ViveController extends AbstractComponentController implements Devic
         console.log(this.componentName + " init");
 
         this.addEventListener("triggerup", (detail: any) => {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.TRIGGER);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.TRIGGER);
             console.log("triggerup " + detail);
         });
         this.addEventListener("triggerdown", (detail: any) => {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.TRIGGER);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.TRIGGER);
             console.log("triggerdown " + detail);
         });
 
         this.addEventListener("gripup", (detail: any) => {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.GRIP);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.GRIP);
             console.log("gripup " + detail);
         });
         this.addEventListener("gripdown", (detail: any) => {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.GRIP);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.GRIP);
             console.log("gripdown " + detail);
         });
 
         this.addEventListener("menuup", (detail: any) => {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.MENU);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.MENU);
             console.log("menuup " + detail);
         });
         this.addEventListener("menudown", (detail: any) => {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.MENU);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.MENU);
             console.log("menudown " + detail);
         });
 
@@ -56,8 +56,10 @@ export class ViveController extends AbstractComponentController implements Devic
         });
         */
 
-        this.addEventListener("axismove", (detail: any) => {
-            console.log("axismove " + JSON.stringify(detail));
+        this.addEventListener("axismove", (detail:  any) => {
+            const axis: Array<number> = detail.axis;
+            console.log("axismove " + axis);
+            this.interfaceSystemController.stickTwist(this, ToolSlot.SECONDARY, axis[1], axis[0]);
         });
         this.addEventListener("trackpadchanged", (detail: any) => {
             console.log("trackpadchanged " + JSON.stringify(detail));

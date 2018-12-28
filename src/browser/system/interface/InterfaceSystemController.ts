@@ -84,6 +84,13 @@ export class InterfaceSystemController extends AbstractSystemController {
             this.tools.get(toolSlot)!!.buttonDown(device, toolSlot, button);
         }
     }
+
+    stickTwist(device: Device, toolSlot: ToolSlot, x: number, y: number) {
+        if (this.tools.has(toolSlot)) {
+            this.tools.get(toolSlot)!!.stickTwist(device, toolSlot, x, y);
+        }
+    }
+
 }
 
 

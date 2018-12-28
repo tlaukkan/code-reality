@@ -36,26 +36,26 @@ export class KeyboardAndMouseController extends AbstractComponentController impl
         (this.entity.sceneEl!! as any).addEventListener('mousedown', (e: MouseEvent) => {
             console.log('mousedown: ' + e.button );
             if (e.button == 0) {
-                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY_HEAD, Button.TRIGGER);
+                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
-                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY_HEAD, Button.MENU);
+                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY, Button.MENU);
             }
             if (e.button == 2) {
-                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY_HEAD, Button.GRIP);
+                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY, Button.GRIP);
             }
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mouseup', (e: MouseEvent) => {
             console.log('mouseup: ' + e.button );
             if (e.button == 0) {
-                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY_HEAD, Button.TRIGGER);
+                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
-                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY_HEAD, Button.MENU);
+                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY, Button.MENU);
             }
             if (e.button == 2) {
-                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY_HEAD, Button.GRIP);
+                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY, Button.GRIP);
             }
         });
 
@@ -86,37 +86,37 @@ export class KeyboardAndMouseController extends AbstractComponentController impl
 
     onKeyDown(key: string) {
         if (key == this.backwardKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.DOWN);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.DOWN);
         }
         if (key == this.forwardKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.UP);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.UP);
         }
         if (key == this.leftKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.LEFT);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.LEFT);
         }
         if (key == this.rightKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.RIGHT);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY_HEAD, Button.TRIGGER);
+            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.TRIGGER);
         }
     }
 
     onKeyUp(key: string) {
         if (key == this.backwardKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.DOWN);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.DOWN);
         }
         if (key == this.forwardKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.UP);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.UP);
         }
         if (key == this.leftKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.LEFT);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.LEFT);
         }
         if (key == this.rightKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.RIGHT);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY_HEAD, Button.TRIGGER);
+            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.TRIGGER);
         }
     }
 

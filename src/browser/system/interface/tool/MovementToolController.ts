@@ -55,7 +55,7 @@ export class MovementToolController extends AbstractComponentController implemen
         if (!component) {
             return;
         }
-        this.interfaceSystemController.setTool(ToolSlot.SECONDARY_HEAD, this);
+        this.interfaceSystemController.setTool(ToolSlot.SECONDARY, this);
     }
 
     init(): void {
@@ -132,6 +132,10 @@ export class MovementToolController extends AbstractComponentController implemen
 
         this.time = time;
 
+        if (timeDelta > 40) {
+            timeDelta = 40;
+        }
+
         let collidables = this.collediableCrawler!!.collideables();
         this.updateXZ(timeDelta, collidables);
         this.updateY(timeDelta, collidables);
@@ -182,6 +186,11 @@ export class MovementToolController extends AbstractComponentController implemen
         }
     }
 
+    stickTwist(device: Device, toolSlot: ToolSlot, x: number, y: number): void {
+        this.controllerDirection.x = 2 * x;
+        this.controllerDirection.z = 2 * y;
+    }
+
     updateXZ(timeDelta: number, collidables: Array<Object3D>) {
         let position = this.entity!!.object3D.position;
 
@@ -206,8 +215,8 @@ export class MovementToolController extends AbstractComponentController implemen
                 position.x += this.direction.x;
                 position.z += this.direction.z;
             }
-
         }
+
     }
 
     updateY(timeDelta: number, collidables: Array<Object3D>) {
