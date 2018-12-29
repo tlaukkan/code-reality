@@ -16,6 +16,7 @@ import {ExampleController} from "./component/ExampleController";
 import {ExampleSystemController} from "./system/ExampleSystemController";
 import {EntityTool} from "./system/interface/tool/EntityTool";
 import {CollidableController} from "./component/collidable/CollidableController";
+import {QuaternionController} from "./component/quaternion/QuaternionController";
 
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
@@ -36,6 +37,7 @@ registerComponentController(AnimatorController.DEFINITION);
 registerComponentController(AvatarController.DEFINITION);
 registerComponentController(IdentityController.DEFINITION);
 registerComponentController(LabelController.DEFINITION);
+registerComponentController(QuaternionController.DEFINITION);
 
 registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });
 

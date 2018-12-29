@@ -1,6 +1,5 @@
 import {AbstractComponentController} from "../../../component/AbstractComponentController";
 import {Object3D, Plane, Raycaster, Vector3} from "three";
-import {CollidableCrawler} from "./CollideableCrawler";
 import {EntityStateEventDetail} from "../../../model/EntityStateEventDetail";
 import {Events} from "../../../model/Events";
 import {Component, Entity} from "AFrame";
