@@ -1,5 +1,14 @@
 import {AbstractComponentController} from "../../../component/AbstractComponentController";
-import {Geometry, Line, LineBasicMaterial, Object3D, Raycaster, Vector3} from "three";
+import {
+    Geometry,
+    Line,
+    LineBasicMaterial, Mesh,
+    MeshBasicMaterial,
+    Object3D,
+    Raycaster,
+    SphereGeometry, Vector,
+    Vector3
+} from "three";
 import {Component, Entity} from "AFrame";
 import {Device} from "../Device";
 import {Tool} from "../Tool";
@@ -15,15 +24,19 @@ export class EntityTool extends AbstractComponentController implements Tool {
         (component: Component, entity: Entity, data: any) => new EntityTool(component, entity, data)
     );
 
+    readonly pointerMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+
     pressed: Set<Button> = new Set();
     time: number = 0;
 
-    pointerLine = this.constructLaserPointerLine();
+    pointerLine = this.constructPointerLine();
+    pointerCursor = this.constructPointerCursor();
     raycaster: Raycaster;
 
     pointerDevice: Device | undefined;
     pointerPosition: Vector3 = new Vector3(0,0,0);
     pointerDirection: Vector3 = new Vector3(0,0,0);
+    pointerHoverCursorPoint: Vector3 | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -73,18 +86,18 @@ export class EntityTool extends AbstractComponentController implements Tool {
 
     }
 
-    constructLaserPointerLine(): Object3D {
-        var material = new LineBasicMaterial({
-            color: 0xffffff, transparent: true, opacity: 0.5
-        });
-
+    constructPointerLine(): Object3D {
         var geometry = new Geometry();
         geometry.vertices.push(
             new Vector3( 0, 0, -100 ),
             new Vector3( 0, 0, 0 )
         );
 
-        return new Line( geometry, material );
+        return new Line(geometry, this.pointerMaterial);
+    }
+
+    constructPointerCursor(): Object3D {
+        return new Mesh(new SphereGeometry( 0.2, 32, 32 ), this.pointerMaterial );
     }
 
     pointerOn(device: Device) {
@@ -93,6 +106,10 @@ export class EntityTool extends AbstractComponentController implements Tool {
     }
 
     pointerOff(device: Device) {
+        if (this.pointerHoverCursorPoint) {
+            this.removeHoverCursor();
+        }
+
         device.entity.object3D.remove(this.pointerLine);
         this.pointerDevice = undefined;
     }
@@ -105,7 +122,7 @@ export class EntityTool extends AbstractComponentController implements Tool {
 
         this.raycaster!!.near = 0;
         this.raycaster!!.far = 100;
-        this.raycaster!!.set(this.pointerDirection, this.pointerPosition);
+        this.raycaster!!.set(this.pointerPosition, this.pointerDirection);
         var intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables());
 
         //console.log(this.pointerDirection);
@@ -113,12 +130,39 @@ export class EntityTool extends AbstractComponentController implements Tool {
         //console.log(this.interface.getCollidables().length);
 
         if (intersects.length > 0) {
-            console.log("hep");
-            //return intersects[0].distance;
+            if (intersects[0].object === this.pointerCursor) {
+                intersects.splice(0, 1);
+            }
+        }
+
+        if (intersects.length > 0) {
+            if (intersects[0].object === this.pointerCursor) {
+                intersects.splice(0, 1);
+            }
+            const intersectionPoint = intersects[0].point;
+            this.pointerCursor.position.copy(intersectionPoint);
+            if (!this.pointerHoverCursorPoint) {
+                this.addHoverCursor();
+            }
+            this.pointerHoverCursorPoint = intersectionPoint;
+        } else {
+            if (this.pointerHoverCursorPoint) {
+                this.removeHoverCursor();
+            }
         }
 
     }
 
+    private addHoverCursor() {
+        this.scene.object3D.add(this.pointerCursor);
+        console.log("add pointer cursor.");
+    }
+
+    private removeHoverCursor() {
+        this.scene.object3D.remove(this.pointerCursor);
+        console.log("remove pointer cursor.");
+        this.pointerHoverCursorPoint = undefined;
+    }
 }
 
 
