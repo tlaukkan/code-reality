@@ -1,5 +1,6 @@
 import {Component, Entity, Scene, System} from "AFrame";
 import {AbstractSystemController} from "../AbstractSystemController";
+import {SystemControllerDefinition} from "../../AFrame";
 
 const factories: Map<string, () => any> = new Map();
 
@@ -10,10 +11,15 @@ export function registerStateFactory<T>(state: string, factory: () => T) {
 
 export class StateSystemController extends AbstractSystemController {
 
+    public static DEFINITION = new SystemControllerDefinition(
+        "state-system", {},
+        (system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data)
+    );
+
     private states: Map<Entity, Map<string, any>> = new Map();
 
     constructor(system: System, scene: Scene, data: any) {
-        super("state-system", {}, false, system, scene, data);
+        super(system, scene, data);
     }
 
     init(): void {

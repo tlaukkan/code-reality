@@ -17,17 +17,28 @@ export class ComponentControllerDefinition {
     }
 }
 
-interface ConstructComponentController { (component: Component, entity: Entity, data: any): ComponentController }
-interface NewSystemController { (system: System, scene: Scene, data: any): SystemController }
+export class SystemControllerDefinition {
+    readonly systemName: string;
+    readonly schema: any;
+    readonly constructSystemController: ConstructSystemController;
 
-export function registerSystemController(newController: NewSystemController) {
+    constructor(systemName: string, schema: any, constructSystemController: ConstructSystemController) {
+        this.systemName = systemName;
+        this.schema = schema;
+        this.constructSystemController = constructSystemController;
+    }
+}
+
+
+interface ConstructComponentController { (component: Component, entity: Entity, data: any): ComponentController }
+interface ConstructSystemController { (system: System, scene: Scene, data: any): SystemController }
+
+export function registerSystemControllerV2(definition: SystemControllerDefinition) {
     if (typeof AFRAME !== 'undefined') {
-        const controllerPrototype = newController(undefined as any, undefined as any, undefined);
-        AFRAME.registerSystem(controllerPrototype.systemName, {
-            schema: controllerPrototype.schema,
-            multiple: controllerPrototype.multiple,
+        AFRAME.registerSystem(definition.systemName, {
+            schema: definition.schema,
             init: function () {
-                (this as any).controller = newController(this as Component, (this as any)!!.el, this.data);
+                (this as any).controller = definition.constructSystemController(this as Component, (this as any)!!.el, this.data);
                 (this as any).controller.init();
             },
             tick: function (time: number, timeDelta: number) {  (this as any).controller.tick(time, timeDelta); },
@@ -37,8 +48,7 @@ export function registerSystemController(newController: NewSystemController) {
     }
 }
 
-
-export function registerComponentControllerV2(definition: ComponentControllerDefinition) {
+export function registerComponentController(definition: ComponentControllerDefinition) {
     if (typeof AFRAME !== 'undefined') {
         AFRAME.registerComponent(definition.componentName, {
             schema: definition.schema,

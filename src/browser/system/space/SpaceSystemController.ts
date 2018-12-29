@@ -7,8 +7,14 @@ import {Events} from "../../model/Events";
 import {DynamicSpace} from "./DynamicSpace";
 import {StaticSpace} from "./StaticSpace";
 import {AbstractSystemController} from "../AbstractSystemController";
+import {SystemControllerDefinition} from "../../AFrame";
 
 export class SpaceSystemController extends AbstractSystemController {
+
+    public static DEFINITION = new SystemControllerDefinition(
+        "dataspace", {type: 'string', default: '?'},
+        (system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data)
+    );
 
     private readonly clusterUrl: string | undefined = undefined;
     private idToken: string | undefined;
@@ -36,7 +42,7 @@ export class SpaceSystemController extends AbstractSystemController {
     private directionQuaternion = new Quaternion();
 
     constructor(system: System, scene: Scene, data: any) {
-        super("dataspace", {type: 'string', default: '?'}, false, system, scene, data);
+        super(system, scene, data);
 
         this.dynamicSpace = new DynamicSpace(this.scene!!, this.avatarId);
         this.staticSpace = new StaticSpace(this.scene!!);

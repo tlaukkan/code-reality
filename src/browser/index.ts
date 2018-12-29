@@ -1,10 +1,9 @@
-import {registerComponentControllerV2, registerSystemController} from "./AFrame";
+import {registerComponentController, registerSystemControllerV2} from "./AFrame";
 import {LabelController} from "./component/label/LabelController";
 import {IdentityController} from "./component/identity/IdentityController";
 import {KeyboardAndMouseDevice} from "./system/interface/device/KeyboardAndMouseDevice";
 import {AnimatorController} from "./component/animation/AnimatorController";
 import {AvatarController} from "./component/avatar/AvatarController";
-import {Scene, System} from "aframe";
 import {SpaceSystemController} from "./system/space/SpaceSystemController";
 import {registerStateFactory, StateSystemController} from "./system/state/StateSystemController";
 import {States} from "./model/States";
@@ -14,20 +13,22 @@ import {InterfaceController} from "./system/interface/InterfaceController";
 import {MovementTool} from "./system/interface/tool/MovementTool";
 import {ViveControllerDevice} from "./system/interface/device/ViveControllerDevice";
 import {ExampleController} from "./component/ExampleController";
+import {ExampleSystemController} from "./system/ExampleSystemController";
 
-registerSystemController((system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data));
-registerSystemController((system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data));
-registerSystemController((system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data));
+registerSystemControllerV2(ExampleSystemController.DEFINITION);
+registerSystemControllerV2(InterfaceSystemController.DEFINITION);
+registerSystemControllerV2(StateSystemController.DEFINITION);
+registerSystemControllerV2(SpaceSystemController.DEFINITION);
 
-registerComponentControllerV2(ExampleController.DEFINITION);
-registerComponentControllerV2(AnimatorController.DEFINITION);
-registerComponentControllerV2(AvatarController.DEFINITION);
-registerComponentControllerV2(IdentityController.DEFINITION);
-registerComponentControllerV2(LabelController.DEFINITION);
-registerComponentControllerV2(InterfaceController.DEFINITION);
-registerComponentControllerV2(KeyboardAndMouseDevice.DEFINITION);
-registerComponentControllerV2(ViveControllerDevice.DEFINITION);
-registerComponentControllerV2(MovementTool.DEFINITION);
+registerComponentController(ExampleController.DEFINITION);
+registerComponentController(AnimatorController.DEFINITION);
+registerComponentController(AvatarController.DEFINITION);
+registerComponentController(IdentityController.DEFINITION);
+registerComponentController(LabelController.DEFINITION);
+registerComponentController(InterfaceController.DEFINITION);
+registerComponentController(KeyboardAndMouseDevice.DEFINITION);
+registerComponentController(ViveControllerDevice.DEFINITION);
+registerComponentController(MovementTool.DEFINITION);
 
 registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });
 

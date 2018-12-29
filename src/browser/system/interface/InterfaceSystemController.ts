@@ -7,8 +7,15 @@ import {ToolSlot} from "./model/ToolSlot";
 import {Tool} from "./Tool";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
+import {SystemControllerDefinition} from "../../AFrame";
 
 export class InterfaceSystemController extends AbstractSystemController {
+
+    public static DEFINITION = new SystemControllerDefinition(
+        "interface", {},
+        (system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data)
+    );
+
 
     public interfaceEntity: Entity | undefined;
     public cameraEntity: Entity | undefined;
@@ -19,7 +26,7 @@ export class InterfaceSystemController extends AbstractSystemController {
     private tools: Map<ToolSlot, Tool> = new Map();
 
     constructor(system: System, scene: Scene, data: any) {
-        super("interface", {}, false, system, scene, data);
+        super(system, scene, data);
 
         if (!system) {
             return; // This is prototype
