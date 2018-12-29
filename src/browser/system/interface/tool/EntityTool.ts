@@ -107,7 +107,7 @@ export class EntityTool extends AbstractComponentController implements Tool {
 
     pointerOff(device: Device) {
         if (this.pointerHoverCursorPoint) {
-            this.removeHoverCursor();
+            this.removePointerHoverCursor();
         }
 
         device.entity.object3D.remove(this.pointerLine);
@@ -125,10 +125,6 @@ export class EntityTool extends AbstractComponentController implements Tool {
         this.raycaster!!.set(this.pointerPosition, this.pointerDirection);
         var intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables());
 
-        //console.log(this.pointerDirection);
-        //console.log(this.pointerPosition);
-        //console.log(this.interface.getCollidables().length);
-
         if (intersects.length > 0) {
             if (intersects[0].object === this.pointerCursor) {
                 intersects.splice(0, 1);
@@ -142,23 +138,23 @@ export class EntityTool extends AbstractComponentController implements Tool {
             const intersectionPoint = intersects[0].point;
             this.pointerCursor.position.copy(intersectionPoint);
             if (!this.pointerHoverCursorPoint) {
-                this.addHoverCursor();
+                this.addPointerHoverCursor();
             }
             this.pointerHoverCursorPoint = intersectionPoint;
         } else {
             if (this.pointerHoverCursorPoint) {
-                this.removeHoverCursor();
+                this.removePointerHoverCursor();
             }
         }
 
     }
 
-    private addHoverCursor() {
+    private addPointerHoverCursor() {
         this.scene.object3D.add(this.pointerCursor);
         console.log("add pointer cursor.");
     }
 
-    private removeHoverCursor() {
+    private removePointerHoverCursor() {
         this.scene.object3D.remove(this.pointerCursor);
         console.log("remove pointer cursor.");
         this.pointerHoverCursorPoint = undefined;
