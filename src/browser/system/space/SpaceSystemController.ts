@@ -103,7 +103,7 @@ export class SpaceSystemController extends AbstractSystemController {
             return;
         }
 
-        this.playerElement = document.getElementById("player") as Entity;
+        this.playerElement = document.querySelector("[interface]") as Entity;
         this.cameraElement = this.playerElement!!.querySelector('[camera]') as Entity;
 
         if (!this.playerElement) {
