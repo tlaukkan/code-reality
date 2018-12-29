@@ -5,7 +5,7 @@ import {Device} from "../Device";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
 
-export class KeyboardAndMouseController extends AbstractComponentController implements Device {
+export class KeyboardAndMouseDevice extends AbstractComponentController implements Device {
 
     forwardKey: string = 'w';
     backwardKey: string = 's';

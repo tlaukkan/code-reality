@@ -6,7 +6,7 @@ import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 
-export class ViveController extends AbstractComponentController implements Device {
+export class ViveControllerDevice extends AbstractComponentController implements Device {
 
     private deviceSlot: DeviceSlot = DeviceSlot.PRIMARY_HAND;
     private toolSlot: ToolSlot = ToolSlot.PRIMARY;

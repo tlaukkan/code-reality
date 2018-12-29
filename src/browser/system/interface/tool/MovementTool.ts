@@ -10,20 +10,21 @@ import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 
-export class MovementToolController extends AbstractComponentController implements Tool {
+export class MovementTool extends AbstractComponentController implements Tool {
 
     movementSpeed: number = 0;
     rotationSpeed: number = 0;
     height: number = 0;
     width: number = 0;
     jumpStartSpeed: number = 0;
+
     forwardKey: Button = Button.UP;
     backwardKey: Button = Button.DOWN;
     leftKey: Button = Button.LEFT;
     rightKey: Button = Button.RIGHT;
     jumpKey: Button = Button.TRIGGER;
 
-    collediableCrawler: CollidableCrawler | undefined;
+    collidableCrawler: CollidableCrawler | undefined;
     raycaster: Raycaster | undefined;
     yAxisPositive: Vector3 = new Vector3(0, 1, 0);
     yAxisNegative: Vector3 = new Vector3(0, -1, 0);
@@ -73,7 +74,7 @@ export class MovementToolController extends AbstractComponentController implemen
         this.jumpStartSpeed = this.data.jumpStartSpeed;
 
         // Utility objects
-        this.collediableCrawler = new CollidableCrawler(this.interfaceSystemController.interfaceEntity!!.object3D, this.interfaceSystemController.interfaceEntity!!.sceneEl!!.object3D);
+        this.collidableCrawler = new CollidableCrawler(this.interfaceSystemController.interfaceEntity!!.object3D, this.interfaceSystemController.interfaceEntity!!.sceneEl!!.object3D);
         this.raycaster = new Raycaster();
 
         // Constants
@@ -133,7 +134,7 @@ export class MovementToolController extends AbstractComponentController implemen
     play(): void {}
 
     tick(time: number, timeDelta: number): void {
-        this.collediableCrawler!!.crawl();
+        this.collidableCrawler!!.crawl();
 
         this.time = time;
 
@@ -141,7 +142,7 @@ export class MovementToolController extends AbstractComponentController implemen
             timeDelta = 40;
         }
 
-        let collidables = this.collediableCrawler!!.collideables();
+        let collidables = this.collidableCrawler!!.collideables();
         this.updateXZ(timeDelta, collidables);
         this.updateY(timeDelta, collidables);
         if (this.stickRotation.x != 0 || this.stickRotation.y != 0 || this.stickRotation.z != 0) {
