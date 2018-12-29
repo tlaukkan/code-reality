@@ -1,11 +1,10 @@
-import {registerComponentController, registerSystemController} from "./AFrame";
+import {registerComponentControllerV2, registerSystemController} from "./AFrame";
 import {LabelController} from "./component/label/LabelController";
 import {IdentityController} from "./component/identity/IdentityController";
 import {KeyboardAndMouseDevice} from "./system/interface/device/KeyboardAndMouseDevice";
 import {AnimatorController} from "./component/animation/AnimatorController";
 import {AvatarController} from "./component/avatar/AvatarController";
-import {Component, Entity, Scene, System} from "aframe";
-import {ExampleSystemController} from "./system/ExampleSystemController";
+import {Scene, System} from "aframe";
 import {SpaceSystemController} from "./system/space/SpaceSystemController";
 import {registerStateFactory, StateSystemController} from "./system/state/StateSystemController";
 import {States} from "./model/States";
@@ -14,22 +13,21 @@ import {InterfaceSystemController} from "./system/interface/InterfaceSystemContr
 import {InterfaceController} from "./system/interface/InterfaceController";
 import {MovementTool} from "./system/interface/tool/MovementTool";
 import {ViveControllerDevice} from "./system/interface/device/ViveControllerDevice";
+import {ExampleController} from "./component/ExampleController";
 
 registerSystemController((system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data));
 registerSystemController((system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data));
 
-registerComponentController((component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new KeyboardAndMouseDevice(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new ViveControllerDevice(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new MovementTool(component, entity, data));
-
-
-
-registerComponentController((component: Component, entity: Entity, data: any) => new IdentityController(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new LabelController(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new AnimatorController(component, entity, data));
-registerComponentController((component: Component, entity: Entity, data: any) => new AvatarController(component, entity, data));
+registerComponentControllerV2(ExampleController.DEFINITION);
+registerComponentControllerV2(AnimatorController.DEFINITION);
+registerComponentControllerV2(AvatarController.DEFINITION);
+registerComponentControllerV2(IdentityController.DEFINITION);
+registerComponentControllerV2(LabelController.DEFINITION);
+registerComponentControllerV2(InterfaceController.DEFINITION);
+registerComponentControllerV2(KeyboardAndMouseDevice.DEFINITION);
+registerComponentControllerV2(ViveControllerDevice.DEFINITION);
+registerComponentControllerV2(MovementTool.DEFINITION);
 
 registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });
 

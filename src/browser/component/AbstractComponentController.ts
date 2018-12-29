@@ -9,8 +9,6 @@ import {getSystemController} from "../AFrame";
  */
 export abstract class AbstractComponentController implements ComponentController {
     readonly componentName: string;
-    readonly schema: any;
-    readonly multiple: boolean;
     readonly entity: Entity;
     readonly scene: Scene;
     data: any;
@@ -18,10 +16,8 @@ export abstract class AbstractComponentController implements ComponentController
 
     protected interfaceSystemController: InterfaceSystemController;
 
-    constructor(componentName: string, schema: any, multiple: boolean, component: Component, entity: Entity, data: any) {
-        this.componentName = componentName;
-        this.schema = schema;
-        this.multiple = multiple;
+    constructor(component: Component, entity: Entity, data: any) {
+        this.componentName = component.name;
         this.entity = entity;
         if (entity) {
             this.scene = entity.sceneEl!;

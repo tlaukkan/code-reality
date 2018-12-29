@@ -6,8 +6,8 @@ export class CompositeComponentController extends AbstractComponentController {
 
     features: Array<AbstractFeature> = [];
 
-    constructor(componentName: string, schema: any, multiple: boolean, component: Component, entity: Entity, data: any) {
-        super(componentName, schema, multiple, component, entity, data);
+    constructor(component: Component, entity: Entity, data: any) {
+        super(component, entity, data);
     }
 
     init(): void {

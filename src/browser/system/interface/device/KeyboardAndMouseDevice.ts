@@ -4,8 +4,14 @@ import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
+import {ComponentControllerDefinition} from "../../../AFrame";
 
 export class KeyboardAndMouseDevice extends AbstractComponentController implements Device {
+
+    public static DEFINITION = new ComponentControllerDefinition(
+        "keyboard-and-mouse", {}, false,
+        (component: Component, entity: Entity, data: any) => new KeyboardAndMouseDevice(component, entity, data)
+    );
 
     forwardKey: string = 'w';
     backwardKey: string = 's';
@@ -14,11 +20,8 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     jumpKey: string = ' ';
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("keyboard-and-mouse", {}, false, component, entity, data);
+        super(component, entity, data);
 
-        if (!component) {
-            return;
-        }
         this.interfaceSystemController.setDevice(DeviceSlot.KEYBOARD_AND_MOUSE, this);
     }
 

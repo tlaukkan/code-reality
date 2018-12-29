@@ -1,10 +1,16 @@
-import {registerComponentController} from "../../AFrame";
+import {ComponentControllerDefinition} from "../../AFrame";
 import {Component, Entity} from "AFrame";
 import {AbstractComponentController} from "../AbstractComponentController";
 
 export class IdentityController extends AbstractComponentController {
+
+    public static DEFINITION = new ComponentControllerDefinition(
+        "identity", {}, false,
+        (component: Component, entity: Entity, data: any) => new IdentityController(component, entity, data)
+    );
+
     constructor(component: Component, entity: Entity, data: any) {
-        super("identity", {}, false, component, entity, data);
+        super(component, entity, data);
     }
 
     init(): void {

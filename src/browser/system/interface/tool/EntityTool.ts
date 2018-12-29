@@ -9,17 +9,20 @@ import {Tool} from "../Tool";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
+import {ComponentControllerDefinition} from "../../../AFrame";
 
 export class EntityTool extends AbstractComponentController implements Tool {
+
+    public static DEFINITION = new ComponentControllerDefinition(
+        "entity-tool", {}, false,
+        (component: Component, entity: Entity, data: any) => new EntityTool(component, entity, data)
+    );
 
     pressed: Set<Button> = new Set();
     time: number = 0;
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("entity-tool", {}, false, component, entity, data);
-        if (!component) {
-            return;
-        }
+        super(component, entity, data);
         this.interfaceSystemController.setTool(ToolSlot.PRIMARY, this);
     }
 

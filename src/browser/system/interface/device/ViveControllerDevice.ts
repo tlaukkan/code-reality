@@ -5,20 +5,22 @@ import {Device} from "../Device";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
+import {ComponentControllerDefinition} from "../../../AFrame";
 
 export class ViveControllerDevice extends AbstractComponentController implements Device {
+
+    public static DEFINITION = new ComponentControllerDefinition(
+        "vive-controller", {
+            hand: {type: 'string', default: "right"},
+        }, false,
+        (component: Component, entity: Entity, data: any) => new ViveControllerDevice(component, entity, data)
+    );
 
     private deviceSlot: DeviceSlot = DeviceSlot.PRIMARY_HAND;
     private toolSlot: ToolSlot = ToolSlot.PRIMARY;
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("vive-controller", {
-            hand: {type: 'string', default: "right"},
-        }, false, component, entity, data);
-
-        if (!component) {
-            return;
-        }
+        super(component, entity, data);
     }
 
     init(): void {

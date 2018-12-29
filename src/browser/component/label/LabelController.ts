@@ -1,24 +1,25 @@
-import {registerComponentController} from "../../AFrame";
-import {Box3, Vector3} from "three";
+import {ComponentControllerDefinition} from "../../AFrame";
 import {Component, Entity} from "AFrame";
 import {AbstractComponentController} from "../AbstractComponentController";
 
 export class LabelController extends AbstractComponentController {
 
+    public static DEFINITION = new ComponentControllerDefinition(
+        "label", {
+            text: {type: 'string', default: '?'},
+            height: {type: 'number', default: 1.2}
+        }, false,
+        (component: Component, entity: Entity, data: any) => new LabelController(component, entity, data)
+    );
+
     labelElement: Element | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("label", {
-            text: {type: 'string', default: '?'},
-            height: {type: 'number', default: 1.2}
-        }, false, component, entity, data);
+        super(component, entity, data);
     }
 
     init(): void {
         //console.log(this.componentName + " init: " + JSON.stringify(this.data));
-
-        //const object = this.entity!!.getObject3D('mesh');
-        //const bbox = new Box3().setFromObject(object);
 
         const text = this.data['text'];
         const x = 0;

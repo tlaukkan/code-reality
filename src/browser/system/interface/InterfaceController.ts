@@ -1,17 +1,16 @@
 import {Component, Entity} from "AFrame";
 import {AbstractComponentController} from "../../component/AbstractComponentController";
-import {getSystemController} from "../../AFrame";
+import {ComponentControllerDefinition} from "../../AFrame";
 
 export class InterfaceController extends AbstractComponentController {
 
+    public static DEFINITION = new ComponentControllerDefinition(
+        "interface", {}, false,
+        (component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data)
+    );
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("interface", {}, false, component, entity, data);
-        if (!data) {
-            // This is prototype not actual system instance.
-            this.interfaceSystemController = {} as any;
-            return;
-        }
+        super(component, entity, data);
         console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.interfaceSystemController.setInterfaceController(this);
     }

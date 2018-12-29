@@ -9,8 +9,20 @@ import {Tool} from "../Tool";
 import {ToolSlot} from "../model/ToolSlot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
+import {ComponentControllerDefinition} from "../../../AFrame";
 
 export class MovementTool extends AbstractComponentController implements Tool {
+
+    public static DEFINITION = new ComponentControllerDefinition(
+        "movement-tool", {
+            movementSpeed: {type: 'number', default: 2}, // Meters per second
+            rotationSpeed: {type: 'number', default: 1}, // Radians per second
+            height: {type: 'number', default: 2},
+            width: {type: 'number', default: 0.5},
+            jumpStartSpeed: {type: 'number', default: 5.0}
+        }, false,
+        (component: Component, entity: Entity, data: any) => new MovementTool(component, entity, data)
+    );
 
     movementSpeed: number = 0;
     rotationSpeed: number = 0;
@@ -49,16 +61,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
     direction: Vector3 = new Vector3(0, 0, 0);
 
     constructor(component: Component, entity: Entity, data: any) {
-        super("movement-tool", {
-            movementSpeed: {type: 'number', default: 2}, // Meters per second
-            rotationSpeed: {type: 'number', default: 1}, // Radians per second
-            height: {type: 'number', default: 2},
-            width: {type: 'number', default: 0.5},
-            jumpStartSpeed: {type: 'number', default: 5.0}
-        }, false, component, entity, data);
-        if (!component) {
-            return;
-        }
+        super(component, entity, data);
         this.interfaceSystemController.setTool(ToolSlot.SECONDARY, this);
     }
 

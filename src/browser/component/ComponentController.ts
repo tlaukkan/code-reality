@@ -10,15 +10,6 @@ export interface ComponentController {
      * Component name.
      */
     readonly componentName: string;
-
-    /**
-     * Component schema.
-     */
-    readonly schema: any;
-    /**
-     * Whether component requires multiple instancing.
-     */
-    readonly multiple: boolean;
     /**
      * The entity (HTML element)
      */
