@@ -15,6 +15,7 @@ import {ViveControllerDevice} from "./system/interface/device/ViveControllerDevi
 import {ExampleController} from "./component/ExampleController";
 import {ExampleSystemController} from "./system/ExampleSystemController";
 import {EntityTool} from "./system/interface/tool/EntityTool";
+import {CollidableController} from "./component/collidable/CollidableController";
 
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
@@ -30,6 +31,7 @@ registerComponentController(ViveControllerDevice.DEFINITION);
 registerComponentController(KeyboardAndMouseDevice.DEFINITION);
 
 registerComponentController(ExampleController.DEFINITION);
+registerComponentController(CollidableController.DEFINITION);
 registerComponentController(AnimatorController.DEFINITION);
 registerComponentController(AvatarController.DEFINITION);
 registerComponentController(IdentityController.DEFINITION);

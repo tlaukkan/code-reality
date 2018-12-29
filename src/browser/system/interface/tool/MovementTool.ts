@@ -291,7 +291,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
         this.raycaster!!.near = 0;
         this.raycaster!!.far = this.height;
         this.raycaster!!.set(this.centerOfMassPosition, rayDirection);
-        var intersects = this.raycaster!!.intersectObjects(objects);
+        var intersects = this.raycaster!!.intersectObjects(objects, true);
         if (intersects.length > 0) {
             return intersects[0].distance;
         } else {

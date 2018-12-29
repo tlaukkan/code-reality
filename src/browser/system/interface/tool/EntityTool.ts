@@ -123,7 +123,7 @@ export class EntityTool extends AbstractComponentController implements Tool {
         this.raycaster!!.near = 0;
         this.raycaster!!.far = 100;
         this.raycaster!!.set(this.pointerPosition, this.pointerDirection);
-        var intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables());
+        var intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables(), true);
 
         if (intersects.length > 0) {
             if (intersects[0].object === this.pointerCursor) {

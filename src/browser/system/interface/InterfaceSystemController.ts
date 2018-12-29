@@ -8,7 +8,6 @@ import {Tool} from "./Tool";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
 import {SystemControllerDefinition} from "../../AFrame";
-import {CollidableCrawler} from "./tool/CollideableCrawler";
 import {Object3D} from "three";
 
 export class InterfaceSystemController extends AbstractSystemController {
@@ -21,13 +20,13 @@ export class InterfaceSystemController extends AbstractSystemController {
 
     public interfaceEntity: Entity;
     public cameraEntity: Entity;
+    public collidables = new Array<Object3D>();
 
     private interfaceController: InterfaceController | undefined;
 
     private devices: Map<DeviceSlot, Device> = new Map();
     private tools: Map<ToolSlot, Tool> = new Map();
 
-    public collidableCrawler: CollidableCrawler;
 
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
@@ -45,7 +44,6 @@ export class InterfaceSystemController extends AbstractSystemController {
         } else {
             throw new Error("interface camera entity not found.");
         }
-        this.collidableCrawler = new CollidableCrawler(this.interfaceEntity!!.object3D, this.scene.object3D);
 
     }
 
@@ -59,11 +57,30 @@ export class InterfaceSystemController extends AbstractSystemController {
     }
 
     tick(time: number, timeDelta: number): void {
-        this.collidableCrawler!!.crawl();
     }
 
     getCollidables(): Array<Object3D> {
-        return this.collidableCrawler.collideables();
+        /*if (this.collidables.length == 0) {
+            for (let entity of this.scene.children) {
+                if (!entity.hasAttribute("interface")) {
+                    if ((entity as Entity).object3D) {
+                        this.collidables.push((entity as Entity).object3D);
+                    }
+                }
+            }
+        }*/
+        return this.collidables;
+    }
+
+    addCollidable(object: Object3D) {
+        this.collidables.push(object);
+    }
+
+    removeCollidable(object: Object3D) {
+        const index = this.collidables.indexOf(object, 0);
+        if (index > -1) {
+            this.collidables.splice(index, 1);
+        }
     }
 
     setInterfaceController(interfaceController: InterfaceController) {
