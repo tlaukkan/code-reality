@@ -12,7 +12,7 @@ import {SystemControllerDefinition} from "../../AFrame";
 export class SpaceSystemController extends AbstractSystemController {
 
     public static DEFINITION = new SystemControllerDefinition(
-        "dataspace", {type: 'string', default: '?'},
+        "space", {type: 'string', default: '?'},
         (system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data)
     );
 
@@ -60,12 +60,9 @@ export class SpaceSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        console.log(this.systemName + " init");
-
     }
 
     pause(): void {
-        console.log(this.systemName + " pause");
         if (this.client) {
             this.client.close();
             this.client = undefined;
@@ -73,7 +70,6 @@ export class SpaceSystemController extends AbstractSystemController {
     }
 
     play(): void {
-        console.log(this.systemName + " play");
     }
 
     tick(time: number, timeDelta: number): void {

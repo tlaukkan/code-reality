@@ -28,10 +28,6 @@ export class InterfaceSystemController extends AbstractSystemController {
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
 
-        if (!system) {
-            return; // This is prototype
-        }
-
         this.interfaceEntity = this.scene!!.querySelector('[interface]') as Entity;
         if (!this.interfaceEntity) {
             console.error("interface did not find interface entity.");
@@ -47,15 +43,12 @@ export class InterfaceSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        console.log(this.systemName + " system init.");
     }
 
     pause(): void {
-        console.log(this.systemName + " system pause");
     }
 
     play(): void {
-        console.log(this.systemName + " system play");
     }
 
     tick(time: number, timeDelta: number): void {

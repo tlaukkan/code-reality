@@ -15,15 +15,12 @@ export class ExampleSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        console.log(this.systemName + " system init");
     }
 
     pause(): void {
-        console.log(this.systemName + " system pause");
     }
 
     play(): void {
-        console.log(this.systemName + " system play");
     }
 
     tick(time: number, timeDelta: number): void {

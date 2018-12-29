@@ -44,7 +44,7 @@ export class Actuator {
         this.entity.setAttribute("server", serverUrl);
         this.springOne.relaxationTime = 0.2;
         this.springTwo.relaxationTime = 0.2;
-        this.stateSystemController = getSystemController(this.scene, "state-system");
+        this.stateSystemController = getSystemController(this.scene, "state");
         this.movementState = this.stateSystemController.getState(this.entity, States.STATE_MOVEMENT);
     }
 

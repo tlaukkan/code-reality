@@ -64,7 +64,7 @@ export class DynamicSpace {
         const actuator = actuators.get(index);
         if (!actuator) { return; }
         actuator!!.removed();
-        (getSystemController(this.scene, "state-system") as StateSystemController).removeStates(actuator.entity);
+        (getSystemController(this.scene, "state") as StateSystemController).removeStates(actuator.entity);
     }
 
     described(serverUrl: string, index: number, description: string) : void {

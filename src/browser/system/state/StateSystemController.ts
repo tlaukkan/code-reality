@@ -12,7 +12,7 @@ export function registerStateFactory<T>(state: string, factory: () => T) {
 export class StateSystemController extends AbstractSystemController {
 
     public static DEFINITION = new SystemControllerDefinition(
-        "state-system", {},
+        "state", {},
         (system: System, scene: Scene, data: any) => new StateSystemController(system, scene, data)
     );
 
@@ -23,15 +23,12 @@ export class StateSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        console.log(this.systemName + " init");
     }
 
     pause(): void {
-        console.log(this.systemName + " pause");
     }
 
     play(): void {
-        console.log(this.systemName + " play");
     }
 
     tick(time: number, timeDelta: number): void {

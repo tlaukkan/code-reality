@@ -22,7 +22,7 @@ export class AnimationFeature extends AbstractFeature {
 
     constructor(controller: ComponentController, entity: Entity) {
         super("animation-controller", controller, entity);
-        this.stateSystemController = controller.getSystemController("state-system");
+        this.stateSystemController = controller.getSystemController("state");
         this.movementState = this.stateSystemController.getState(this.entity, States.STATE_MOVEMENT);
     }
 

@@ -1,4 +1,4 @@
-import {registerComponentController, registerSystemControllerV2} from "./AFrame";
+import {registerComponentController, registerSystemController} from "./AFrame";
 import {LabelController} from "./component/label/LabelController";
 import {IdentityController} from "./component/identity/IdentityController";
 import {KeyboardAndMouseDevice} from "./system/interface/device/KeyboardAndMouseDevice";
@@ -15,10 +15,10 @@ import {ViveControllerDevice} from "./system/interface/device/ViveControllerDevi
 import {ExampleController} from "./component/ExampleController";
 import {ExampleSystemController} from "./system/ExampleSystemController";
 
-registerSystemControllerV2(ExampleSystemController.DEFINITION);
-registerSystemControllerV2(InterfaceSystemController.DEFINITION);
-registerSystemControllerV2(StateSystemController.DEFINITION);
-registerSystemControllerV2(SpaceSystemController.DEFINITION);
+registerSystemController(ExampleSystemController.DEFINITION);
+registerSystemController(InterfaceSystemController.DEFINITION);
+registerSystemController(StateSystemController.DEFINITION);
+registerSystemController(SpaceSystemController.DEFINITION);
 
 registerComponentController(ExampleController.DEFINITION);
 registerComponentController(AnimatorController.DEFINITION);

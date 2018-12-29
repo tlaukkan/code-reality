@@ -65,7 +65,7 @@ export class StaticSpace {
         if (element.parentElement) {
             element.parentElement.removeChild(element);
         }
-        (getSystemController(this.scene, "state-system") as StateSystemController).removeStates(element);
+        (getSystemController(this.scene, "state") as StateSystemController).removeStates(element);
     }
 
     getElement(sid: string) : Entity | undefined {

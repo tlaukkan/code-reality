@@ -2,7 +2,6 @@ import {Entity, Component, System, Scene, ComponentDefinition} from "aframe";
 import {ComponentController} from "./component/ComponentController";
 import {SystemController} from "./system/SystemController";
 
-
 export class ComponentControllerDefinition {
     readonly componentName: string;
     readonly schema: any;
@@ -33,17 +32,24 @@ export class SystemControllerDefinition {
 interface ConstructComponentController { (component: Component, entity: Entity, data: any): ComponentController }
 interface ConstructSystemController { (system: System, scene: Scene, data: any): SystemController }
 
-export function registerSystemControllerV2(definition: SystemControllerDefinition) {
+export function registerSystemController(definition: SystemControllerDefinition) {
     if (typeof AFRAME !== 'undefined') {
         AFRAME.registerSystem(definition.systemName, {
             schema: definition.schema,
             init: function () {
                 (this as any).controller = definition.constructSystemController(this as Component, (this as any)!!.el, this.data);
+                console.log(definition.systemName + " system init");
                 (this as any).controller.init();
             },
             tick: function (time: number, timeDelta: number) {  (this as any).controller.tick(time, timeDelta); },
-            pause: function () { (this as any).controller.pause(); },
-            play: function () { (this as any).controller.play(); }
+            pause: function () {
+                console.log(definition.systemName + " system pause");
+                (this as any).controller.pause();
+            },
+            play: function () {
+                console.log(definition.systemName + " system play");
+                (this as any).controller.play();
+            }
         });
     }
 }
