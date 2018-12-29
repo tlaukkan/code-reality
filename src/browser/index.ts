@@ -14,21 +14,26 @@ import {MovementTool} from "./system/interface/tool/MovementTool";
 import {ViveControllerDevice} from "./system/interface/device/ViveControllerDevice";
 import {ExampleController} from "./component/ExampleController";
 import {ExampleSystemController} from "./system/ExampleSystemController";
+import {EntityTool} from "./system/interface/tool/EntityTool";
 
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
 registerSystemController(StateSystemController.DEFINITION);
 registerSystemController(SpaceSystemController.DEFINITION);
 
+registerComponentController(InterfaceController.DEFINITION);
+
+registerComponentController(EntityTool.DEFINITION);
+registerComponentController(MovementTool.DEFINITION);
+
+registerComponentController(ViveControllerDevice.DEFINITION);
+registerComponentController(KeyboardAndMouseDevice.DEFINITION);
+
 registerComponentController(ExampleController.DEFINITION);
 registerComponentController(AnimatorController.DEFINITION);
 registerComponentController(AvatarController.DEFINITION);
 registerComponentController(IdentityController.DEFINITION);
 registerComponentController(LabelController.DEFINITION);
-registerComponentController(InterfaceController.DEFINITION);
-registerComponentController(KeyboardAndMouseDevice.DEFINITION);
-registerComponentController(ViveControllerDevice.DEFINITION);
-registerComponentController(MovementTool.DEFINITION);
 
 registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });
 

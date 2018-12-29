@@ -87,21 +87,37 @@ LS0tLS1CRUdJTiBFTkNSWVBURUQgUFJJVkFURSBLRVktLS0tLQpNSUlGTFRCWEJna3Foa2lHOXcwQkJR
 
 ## Controllers
 
-Controllers inputs are mapped to semantically meaningful buttons and axes:
+Controllers inputs are mapped to semantically meaningful buttons and sticks:
 
 ### Buttons
 
-* Primary / Secondary Trigger
-* Primary / Secondary Grip
-* Primary / Secondary Menu
-* Primary / Secondary Left
-* Primary / Secondary Right
-* Primary / Secondary Up
-* Primary / Secondary Down
+* Trigger
+* Grip
+* Menu
+* Left
+* Right
+* Up
+* Down
 
-### Axes
+### Sticks
 
-* Primary / Secondary X
-* Primary / Secondary Y
-* Primary / Secondary Z
+* Translate
+* Rotate
 
+## Tools
+
+Terms:
+
+* Point - Entity is pointed by laser pointer.
+* Hover - Entity is intersected or pointed by controller.
+
+### Movement Tool
+
+### Entity Tool
+
+* Grip Down - If entity hovered then hold else spawn and hold.
+* Grip Up - Release hold entity.
+* Trigger Down - Start laser pointer.
+* Trigger Up - Stop laser pointer.
+
+* Point - Increasing haptic feedback when entity is pointed until deleted after 3 seconds.

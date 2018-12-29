@@ -29,7 +29,7 @@ export class CollidableCrawler {
         this.crawl()
     }
 
-    collideables() {
+    collideables(): Array<Object3D> {
         return this.collidablesFinal;
     }
 

@@ -12,7 +12,7 @@ export class InterfaceController extends AbstractComponentController {
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
         console.log(this.componentName + " init: " + JSON.stringify(this.data));
-        this.interfaceSystemController.setInterfaceController(this);
+        this.interface.setInterfaceController(this);
     }
 
     init(): void {

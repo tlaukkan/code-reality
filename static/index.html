@@ -29,7 +29,7 @@
             <a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>
 
             <!-- Terrain -->
-            <a-tiny-terrain id="terrain" position="0 -20 0" height-function="custom" radius-edge-count="50" edge-length = "1.5" palette = "#8EA604" palette-accuracy="3" palette-range-min="0" palette-range-max="20" ></a-tiny-terrain>
+            <a-tiny-terrain id="terrain" position="0 -20 0" height-function="custom" radius-edge-count="25" edge-length = "1.5" palette = "#8EA604" palette-accuracy="3" palette-range-min="0" palette-range-max="20" ></a-tiny-terrain>
 
             <!-- Scene objects -->
             <a-box color="#BF3100" position="0 -0.75 -3" scale="2 2 2" ></a-box>
@@ -41,12 +41,17 @@
             <a-sphere position="2 0 -3" scale="1 1 1" color="#FFFFFF" identity example></a-sphere>
 
             <!-- Interface -->
-            <a-entity interface movement-tool position="0 2 0">
-                <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0"></a-entity>
+            <a-entity interface position="0 2 0">
+                <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0">
+                    <a-entity keyboard-and-mouse position="0.3 -0.3 -0.3"></a-entity>
+                </a-entity>
 
-                <a-entity keyboard-and-mouse></a-entity>
                 <a-entity vive-controller="hand: left" vive-controls="hand: left"></a-entity>
                 <a-entity vive-controller="hand: right" vive-controls="hand: right"></a-entity>
+
+                <a-entity entity-tool></a-entity>
+                <a-entity movement-tool></a-entity>
+
             </a-entity>
 
         </a-scene>

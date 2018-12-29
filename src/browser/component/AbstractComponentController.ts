@@ -14,7 +14,7 @@ export abstract class AbstractComponentController implements ComponentController
     data: any;
     readonly component: Component;
 
-    protected interfaceSystemController: InterfaceSystemController;
+    protected interface: InterfaceSystemController;
 
     constructor(component: Component, entity: Entity, data: any) {
         this.componentName = component.name;
@@ -30,11 +30,11 @@ export abstract class AbstractComponentController implements ComponentController
 
         if (!component) {
             // This is prototype not actual system instance.
-            this.interfaceSystemController = {} as any;
+            this.interface = {} as any;
             return;
         }
 
-        this.interfaceSystemController = getSystemController(this.entity.sceneEl!!, "interface");
+        this.interface = getSystemController(this.entity.sceneEl!!, "interface");
     }
 
     setData(data: any): void {

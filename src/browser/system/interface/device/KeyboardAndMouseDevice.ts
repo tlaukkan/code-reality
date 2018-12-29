@@ -22,7 +22,7 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
 
-        this.interfaceSystemController.setDevice(DeviceSlot.KEYBOARD_AND_MOUSE, this);
+        this.interface.setDevice(DeviceSlot.KEYBOARD_AND_MOUSE, this);
     }
 
     init(): void {
@@ -39,36 +39,36 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         (this.entity.sceneEl!! as any).addEventListener('mousedown', (e: MouseEvent) => {
             console.log('mousedown: ' + e.button );
             if (e.button == 0) {
-                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY, Button.TRIGGER);
+                this.interface.buttonDown(this, ToolSlot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
-                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY, Button.MENU);
+                this.interface.buttonDown(this, ToolSlot.PRIMARY, Button.MENU);
             }
             if (e.button == 2) {
-                this.interfaceSystemController.buttonDown(this, ToolSlot.PRIMARY, Button.GRIP);
+                this.interface.buttonDown(this, ToolSlot.PRIMARY, Button.GRIP);
             }
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mouseup', (e: MouseEvent) => {
             console.log('mouseup: ' + e.button );
             if (e.button == 0) {
-                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY, Button.TRIGGER);
+                this.interface.buttonUp(this, ToolSlot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
-                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY, Button.MENU);
+                this.interface.buttonUp(this, ToolSlot.PRIMARY, Button.MENU);
             }
             if (e.button == 2) {
-                this.interfaceSystemController.buttonUp(this, ToolSlot.PRIMARY, Button.GRIP);
+                this.interface.buttonUp(this, ToolSlot.PRIMARY, Button.GRIP);
             }
         });
 
-        (this.entity.sceneEl!! as any).addEventListener('click', (e: MouseEvent) => {
+        /*(this.entity.sceneEl!! as any).addEventListener('click', (e: MouseEvent) => {
             console.log('mouse click ' + e.button);
         });
 
         (this.entity.sceneEl!! as any).addEventListener('wheel', (e: WheelEvent) => {
             console.log('wheel: x=' + e.deltaX + ', y=' + e.deltaY + ', z=' + e.deltaZ);
-        });
+        });*/
 
     }
 
@@ -89,37 +89,37 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
 
     onKeyDown(key: string) {
         if (key == this.backwardKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.DOWN);
+            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.DOWN);
         }
         if (key == this.forwardKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.UP);
+            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.UP);
         }
         if (key == this.leftKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.LEFT);
+            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.LEFT);
         }
         if (key == this.rightKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.RIGHT);
+            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interfaceSystemController.buttonDown(this, ToolSlot.SECONDARY, Button.TRIGGER);
+            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.TRIGGER);
         }
     }
 
     onKeyUp(key: string) {
         if (key == this.backwardKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.DOWN);
+            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.DOWN);
         }
         if (key == this.forwardKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.UP);
+            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.UP);
         }
         if (key == this.leftKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.LEFT);
+            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.LEFT);
         }
         if (key == this.rightKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.RIGHT);
+            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interfaceSystemController.buttonUp(this, ToolSlot.SECONDARY, Button.TRIGGER);
+            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.TRIGGER);
         }
     }
 

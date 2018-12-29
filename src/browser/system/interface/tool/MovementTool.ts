@@ -36,7 +36,6 @@ export class MovementTool extends AbstractComponentController implements Tool {
     rightKey: Button = Button.RIGHT;
     jumpKey: Button = Button.TRIGGER;
 
-    collidableCrawler: CollidableCrawler | undefined;
     raycaster: Raycaster | undefined;
     yAxisPositive: Vector3 = new Vector3(0, 1, 0);
     yAxisNegative: Vector3 = new Vector3(0, -1, 0);
@@ -62,7 +61,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
-        this.interfaceSystemController.setTool(ToolSlot.SECONDARY, this);
+        this.interface.setTool(ToolSlot.SECONDARY, this);
     }
 
     init(): void {
@@ -77,7 +76,6 @@ export class MovementTool extends AbstractComponentController implements Tool {
         this.jumpStartSpeed = this.data.jumpStartSpeed;
 
         // Utility objects
-        this.collidableCrawler = new CollidableCrawler(this.interfaceSystemController.interfaceEntity!!.object3D, this.interfaceSystemController.interfaceEntity!!.sceneEl!!.object3D);
         this.raycaster = new Raycaster();
 
         // Constants
@@ -95,9 +93,9 @@ export class MovementTool extends AbstractComponentController implements Tool {
 
         // Reused vector variables.
         this.centerOfMassPosition = new Vector3(0, 0, 0); // Center of mass for collision checks
-        this.centerOfMassPosition.x = this.interfaceSystemController.interfaceEntity!!!!.object3D.position.x;
-        this.centerOfMassPosition.y = this.interfaceSystemController.interfaceEntity!!!!.object3D.position.y + this.height / 2;
-        this.centerOfMassPosition.z = this.interfaceSystemController.interfaceEntity!!!!.object3D.position.z;
+        this.centerOfMassPosition.x = this.interface.interfaceEntity!!!!.object3D.position.x;
+        this.centerOfMassPosition.y = this.interface.interfaceEntity!!!!.object3D.position.y + this.height / 2;
+        this.centerOfMassPosition.z = this.interface.interfaceEntity!!!!.object3D.position.z;
 
         this.cameraDirection = new Vector3(0, 0, 0);
         this.xzCameraDirection = new Vector3(0, 0, 0);
@@ -122,9 +120,9 @@ export class MovementTool extends AbstractComponentController implements Tool {
 
     entityStateChange(state: string, enabled: boolean) {
         if (enabled) {
-            this.interfaceSystemController.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
+            this.interface.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
         } else {
-            this.interfaceSystemController.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
+            this.interface.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
         }
     }
 
@@ -137,20 +135,18 @@ export class MovementTool extends AbstractComponentController implements Tool {
     play(): void {}
 
     tick(time: number, timeDelta: number): void {
-        this.collidableCrawler!!.crawl();
-
         this.time = time;
 
         if (timeDelta > 40) {
             timeDelta = 40;
         }
 
-        let collidables = this.collidableCrawler!!.collideables();
+        let collidables = this.interface.getCollidables();
         this.updateXZ(timeDelta, collidables);
         this.updateY(timeDelta, collidables);
         if (this.stickRotation.x != 0 || this.stickRotation.y != 0 || this.stickRotation.z != 0) {
             let delta = this.rotationSpeed * timeDelta / 1000.0;
-            this.interfaceSystemController.interfaceEntity!!.object3D.rotation.y -= this.stickRotation.y * delta;
+            this.interface.interfaceEntity!!.object3D.rotation.y -= this.stickRotation.y * delta;
         }
     }
 
@@ -211,13 +207,13 @@ export class MovementTool extends AbstractComponentController implements Tool {
     }
 
     updateXZ(timeDelta: number, collidables: Array<Object3D>) {
-        let position = this.interfaceSystemController.interfaceEntity!!.object3D.position;
+        let position = this.interface.interfaceEntity!!.object3D.position;
 
         if (this.stickTranslation.x != 0 || this.stickTranslation.z != 0) {
             let delta = this.movementSpeed * timeDelta / 1000.0;
             this.computeXZDirectionFromCamera();
-            this.centerOfMassPosition.x = this.interfaceSystemController.interfaceEntity!!.object3D.position.x;
-            this.centerOfMassPosition.z = this.interfaceSystemController.interfaceEntity!!.object3D.position.z;
+            this.centerOfMassPosition.x = this.interface.interfaceEntity!!.object3D.position.x;
+            this.centerOfMassPosition.z = this.interface.interfaceEntity!!.object3D.position.z;
 
             this.xDirection.copy(this.xzCameraDirection);
 
@@ -239,7 +235,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
     }
 
     updateY(timeDelta: number, collidables: Array<Object3D>) {
-        let position = this.interfaceSystemController.interfaceEntity!!.object3D.position;
+        let position = this.interface.interfaceEntity!!.object3D.position;
 
         var distanceToNearestBelow = this.findDistanceToNearest(this.yAxisNegative, collidables);
 
@@ -285,7 +281,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
     }
 
     computeXZDirectionFromCamera() {
-        this.interfaceSystemController.cameraEntity!!.object3D.getWorldDirection(this.cameraDirection);
+        this.interface.cameraEntity!!.object3D.getWorldDirection(this.cameraDirection);
         this.cameraDirection.multiplyScalar(-1);
         this.xzPlane.projectPoint(this.cameraDirection, this.xzCameraDirection);
         this.xzCameraDirection.normalize();

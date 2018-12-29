@@ -8,6 +8,8 @@ import {Tool} from "./Tool";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
 import {SystemControllerDefinition} from "../../AFrame";
+import {CollidableCrawler} from "./tool/CollideableCrawler";
+import {Object3D} from "three";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
@@ -17,29 +19,34 @@ export class InterfaceSystemController extends AbstractSystemController {
     );
 
 
-    public interfaceEntity: Entity | undefined;
-    public cameraEntity: Entity | undefined;
+    public interfaceEntity: Entity;
+    public cameraEntity: Entity;
 
     private interfaceController: InterfaceController | undefined;
 
     private devices: Map<DeviceSlot, Device> = new Map();
     private tools: Map<ToolSlot, Tool> = new Map();
 
+    public collidableCrawler: CollidableCrawler;
+
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
 
         this.interfaceEntity = this.scene!!.querySelector('[interface]') as Entity;
-        if (!this.interfaceEntity) {
-            console.error("interface did not find interface entity.");
+        if (this.interfaceEntity) {
+            console.info("interface entity set.");
         } else {
-            console.log("interface entity set.");
-            this.cameraEntity = this.interfaceEntity!!.querySelector('[camera]') as Entity;
-            if (!this.cameraEntity) {
-                console.error("interface did not find camera under interface entity.");
-            } else {
-                console.log("interface camera entity set.");
-            }
+            throw new Error("interface entity not found.");
         }
+
+        this.cameraEntity = this.interfaceEntity!!.querySelector('[camera]') as Entity;
+        if (this.cameraEntity) {
+            console.info("interface camera entity set.");
+        } else {
+            throw new Error("interface camera entity not found.");
+        }
+        this.collidableCrawler = new CollidableCrawler(this.interfaceEntity!!.object3D, this.scene.object3D);
+
     }
 
     init(): void {
@@ -52,6 +59,11 @@ export class InterfaceSystemController extends AbstractSystemController {
     }
 
     tick(time: number, timeDelta: number): void {
+        this.collidableCrawler!!.crawl();
+    }
+
+    getCollidables(): Array<Object3D> {
+        return this.collidableCrawler.collideables();
     }
 
     setInterfaceController(interfaceController: InterfaceController) {

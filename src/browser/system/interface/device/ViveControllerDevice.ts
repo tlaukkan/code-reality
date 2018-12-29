@@ -30,32 +30,32 @@ export class ViveControllerDevice extends AbstractComponentController implements
             this.deviceSlot = DeviceSlot.SECONDARY_HAND;
             this.toolSlot = ToolSlot.SECONDARY;
         }
-        this.interfaceSystemController.setDevice(this.deviceSlot, this);
+        this.interface.setDevice(this.deviceSlot, this);
 
         this.addEventListener("triggerup", (detail: any) => {
-            this.interfaceSystemController.buttonUp(this, this.toolSlot, Button.TRIGGER);
+            this.interface.buttonUp(this, this.toolSlot, Button.TRIGGER);
             console.log("triggerup " + detail);
         });
         this.addEventListener("triggerdown", (detail: any) => {
-            this.interfaceSystemController.buttonDown(this, this.toolSlot, Button.TRIGGER);
+            this.interface.buttonDown(this, this.toolSlot, Button.TRIGGER);
             console.log("triggerdown " + detail);
         });
 
         this.addEventListener("gripup", (detail: any) => {
-            this.interfaceSystemController.buttonUp(this, this.toolSlot, Button.GRIP);
+            this.interface.buttonUp(this, this.toolSlot, Button.GRIP);
             console.log("gripup " + detail);
         });
         this.addEventListener("gripdown", (detail: any) => {
-            this.interfaceSystemController.buttonDown(this, this.toolSlot, Button.GRIP);
+            this.interface.buttonDown(this, this.toolSlot, Button.GRIP);
             console.log("gripdown " + detail);
         });
 
         this.addEventListener("menuup", (detail: any) => {
-            this.interfaceSystemController.buttonUp(this, this.toolSlot, Button.MENU);
+            this.interface.buttonUp(this, this.toolSlot, Button.MENU);
             console.log("menuup " + detail);
         });
         this.addEventListener("menudown", (detail: any) => {
-            this.interfaceSystemController.buttonDown(this, this.toolSlot, Button.MENU);
+            this.interface.buttonDown(this, this.toolSlot, Button.MENU);
             console.log("menudown " + detail);
         });
 
@@ -72,9 +72,9 @@ export class ViveControllerDevice extends AbstractComponentController implements
             const axis: Array<number> = detail.axis;
             console.log(this.toolSlot + " axismove " + axis);
             if (this.deviceSlot == DeviceSlot.PRIMARY_HAND) {
-                this.interfaceSystemController.stickTwist(this, ToolSlot.SECONDARY, Stick.ROTATE, axis[1], axis[0]);
+                this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.ROTATE, axis[1], axis[0]);
             } else {
-                this.interfaceSystemController.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, axis[1], axis[0]);
+                this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, axis[1], axis[0]);
             }
         });
         /*this.addEventListener("trackpadchanged", (detail: any) => {
