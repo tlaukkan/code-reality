@@ -4,6 +4,10 @@
   "description": "aframe-reality framework enables building networked extended reality (XR) experiences with A-Frame.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
+  "browser": {
+    "./index.js": "./browser.js",
+    "./index.d.ts": "./browser.d.ts"
+  },
   "scripts": {
     "lint": "eslint src test *.js",
     "start": "ts-node src/node/app.js",
