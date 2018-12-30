@@ -1,0 +1,14 @@
+.idea
+.gitignore
+aframe-reality.iml
+karma.config.js
+Procfile
+Readme.md
+tsconfig.json
+webpack.config.js
+lib/test
+node_modules
+src
+static
+test
+config/local-development.json

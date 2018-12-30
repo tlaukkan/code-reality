@@ -1,8 +1,9 @@
 {
-  "name": "scape",
+  "name": "aframe-reality",
   "version": "0.0.1",
-  "description": "Scape",
-  "main": "src/node/server.js",
+  "description": "aframe-reality framework enables building networked extended reality (XR) experiences with A-Frame.",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "scripts": {
     "lint": "eslint src test *.js",
     "start": "ts-node src/node/app.js",
@@ -13,11 +14,12 @@
     "test": "npm run test:node && npm run test:browser",
     "build:browser": "webpack --display-modules",
     "build:browser:watch": "webpack --watch",
-    "build:lib": "tsc"
+    "build:lib": "tsc",
+    "prepublishOnly": "npm run build:lib"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tlaukkan/scape.git"
+    "url": "git+https://github.com/tlaukkan/aframe-reality.git"
   },
   "keywords": [
     "aframe",
@@ -26,9 +28,9 @@
   "author": "Tommi Laukkanen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tlaukkan/scape/issues"
+    "url": "https://github.com/tlaukkan/aframe-reality/issues"
   },
-  "homepage": "https://github.com/tlaukkan/scape#readme",
+  "homepage": "https://github.com/tlaukkan/aframe-reality#readme",
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
@@ -80,9 +82,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "express-ws": "^4.0.0",
-    "github-api": "^3.0.0",
     "jsonwebtoken": "^8.4.0",
-    "nodemailer": "^4.6.8",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "serve-static": "^1.13.2",
