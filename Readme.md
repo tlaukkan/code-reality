@@ -121,3 +121,18 @@ Terms:
 * Trigger Up - Stop laser pointer.
 
 * Point - Increasing haptic feedback when entity is pointed until deleted after 3 seconds.
+
+## Publish package
+
+### First publish
+
+---
+    npm publish --access public
+---
+
+### Update
+
+---
+    npm version patch
+    npm publish
+---

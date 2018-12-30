@@ -6,7 +6,7 @@ import passportFacebook from "passport-facebook";
 import {User} from "../model/User";
 const Strategy = passportFacebook.Strategy;
 
-module.exports = function (app: Express, config: IConfig) {
+export function initializeAuthentication(app: Express, config: IConfig) {
 
     app.use(passport.initialize());
     app.use(passport.session());

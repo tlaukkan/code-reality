@@ -1,8 +1,7 @@
 import {Express} from "express";
 import {User} from "../model/User";
-import {createIdToken} from "../util/jwt";
 
-module.exports = function (app: Express) {
+export function initializeRoutes(app: Express) {
     app.get('/api/users/current', function (request, response) {
         console.log('/api/users/current: ' + JSON.stringify(request.user));
         let user: User;

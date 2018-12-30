@@ -17,4 +17,6 @@ export {ExampleSystemController} from "./browser/system/ExampleSystemController"
 export {EntityTool} from "./browser/system/interface/tool/EntityTool";
 export {CollidableController} from "./browser/component/collidable/CollidableController";
 export {QuaternionController} from "./browser/component/quaternion/QuaternionController";
-
+export {initializeAuthentication} from "./node/express/authentication";
+export {initializeSession} from "./node/express/session";
+export {initializeRoutes} from "./node/express/routes";
