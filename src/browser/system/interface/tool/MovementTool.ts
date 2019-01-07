@@ -18,7 +18,8 @@ export class MovementTool extends AbstractComponentController implements Tool {
             rotationSpeed: {type: 'number', default: 1}, // Radians per second
             height: {type: 'number', default: 2},
             width: {type: 'number', default: 0.5},
-            jumpStartSpeed: {type: 'number', default: 5.0}
+            jumpStartSpeed: {type: 'number', default: 5.0},
+            minY: {type: 'number', default: -1}
         }, false,
         (component: Component, entity: Entity, data: any) => new MovementTool(component, entity, data)
     );
@@ -28,6 +29,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
     height: number = 0;
     width: number = 0;
     jumpStartSpeed: number = 0;
+    minY: number = 0;
 
     forwardKey: Button = Button.UP;
     backwardKey: Button = Button.DOWN;
@@ -69,6 +71,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
         // Configuration
         this.movementSpeed = this.data.movementSpeed;
         this.rotationSpeed = this.data.rotationSpeed;
+        this.minY = this.data.minY;
 
         this.height = this.data.height;
         this.width = this.data.width;
@@ -89,12 +92,6 @@ export class MovementTool extends AbstractComponentController implements Tool {
         // State variables
         this.time = 0;
         this.yVelocity = 0;
-
-        // Reused vector variables.
-        this.centerOfMassPosition = new Vector3(0, 0, 0); // Center of mass for collision checks
-        this.centerOfMassPosition.x = this.interface.interfaceEntity!!!!.object3D.position.x;
-        this.centerOfMassPosition.y = this.interface.interfaceEntity!!!!.object3D.position.y + this.height / 2;
-        this.centerOfMassPosition.z = this.interface.interfaceEntity!!!!.object3D.position.z;
 
         this.cameraDirection = new Vector3(0, 0, 0);
         this.xzCameraDirection = new Vector3(0, 0, 0);
@@ -131,7 +128,13 @@ export class MovementTool extends AbstractComponentController implements Tool {
 
     pause(): void {}
 
-    play(): void {}
+    play(): void {
+        // Reused vector variables.
+        this.centerOfMassPosition = new Vector3(0, 0, 0); // Center of mass for collision checks
+        this.centerOfMassPosition.x = this.interface.interfaceEntity!!!!.object3D.position.x;
+        this.centerOfMassPosition.y = this.interface.interfaceEntity!!!!.object3D.position.y + this.height / 2;
+        this.centerOfMassPosition.z = this.interface.interfaceEntity!!!!.object3D.position.z;
+    }
 
     tick(time: number, timeDelta: number): void {
         this.time = time;
@@ -275,6 +278,10 @@ export class MovementTool extends AbstractComponentController implements Tool {
         }
 
         this.centerOfMassPosition.y = this.centerOfMassPosition.y + delta;
+
+        if (this.centerOfMassPosition.y - this.height/2 < this.minY) {
+            this.centerOfMassPosition.y = this.minY + this.height/2;
+        }
 
         position.y = this.centerOfMassPosition.y - this.height/2;
     }
