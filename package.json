@@ -1,5 +1,5 @@
 {
-  "name": "@tlaukkan/a-reality",
+  "name": "a-reality",
   "version": "0.0.1",
   "description": "A-Reality framework enables building networked extended reality (XR) experiences with A-Frame.",
   "main": "lib/src/index.js",
