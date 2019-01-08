@@ -1,7 +1,7 @@
 {
-  "name": "a-reality",
+  "name": "code-reality",
   "version": "0.0.1",
-  "description": "A-Reality framework enables building networked extended reality (XR) experiences with A-Frame.",
+  "description": "Code Reality framework enables building networked extended reality (XR) experiences with A-Frame.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "scripts": {
