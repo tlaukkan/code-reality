@@ -1,8 +1,8 @@
-# A-Frame Reality Readme
+# A-Reality Readme
 
 This is work in progress...
 
-aframe-reality framework enables building networked extended reality (XR) experiences with A-Frame.
+a-reality framework enables building networked extended reality (XR) experiences with A-Frame.
 
 aframe-dataspace servers provide a shared space to store and transmit scene data between browsers.
 

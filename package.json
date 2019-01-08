@@ -1,7 +1,7 @@
 {
-  "name": "@tlaukkan/aframe-reality",
-  "version": "0.0.6",
-  "description": "aframe-reality framework enables building networked extended reality (XR) experiences with A-Frame.",
+  "name": "@tlaukkan/a-reality",
+  "version": "0.0.1",
+  "description": "A-Reality framework enables building networked extended reality (XR) experiences with A-Frame.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "scripts": {
