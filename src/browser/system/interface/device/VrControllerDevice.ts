@@ -79,16 +79,24 @@ export class VrControllerDevice extends AbstractComponentController implements D
         this.addEventListener("trackpaddown", (detail: any) => {
             console.log("trackpaddown " + detail);
             if (this.axis) {
-                const button = this.getTouchPadButton(this.axis[0], this.axis[1]);
-                this.interface.buttonUp(this, this.toolSlot, button);
+                const button = this.getStickButton(this.axis[0], this.axis[1]);
+                if (this.controllerName==="vive-controls" || this.controllerName==="rift-controls") {
+                    this.interface.buttonDown(this, this.toolSlot, button);
+                } else {
+                    this.interface.buttonDown(this, ToolSlot.SECONDARY, button);
+                }
                 console.log("button down: "+ Button[button]);
             }
         });
         this.addEventListener("trackpadup", (detail: any) => {
             console.log("trackpadup " + detail);
             if (this.axis) {
-                const button = this.getTouchPadButton(this.axis[0], this.axis[1]);
-                this.interface.buttonDown(this, this.toolSlot, button);
+                const button = this.getStickButton(this.axis[0], this.axis[1]);
+                if (this.controllerName==="vive-controls" || this.controllerName==="rift-controls") {
+                    this.interface.buttonUp(this, this.toolSlot, button);
+                } else {
+                    this.interface.buttonUp(this, ToolSlot.SECONDARY, button);
+                }
                 console.log("button up: "+ Button[button]);
             }
         });
@@ -108,7 +116,7 @@ export class VrControllerDevice extends AbstractComponentController implements D
                     this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, this.axis[1], this.axis[0]);
                 }
             } else {
-                this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, this.axis[1], this.axis[0]);
+                //this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, this.axis[1], this.axis[0]);
             }
         });
 
@@ -126,16 +134,32 @@ export class VrControllerDevice extends AbstractComponentController implements D
         });*/
     }
 
-    getTouchPadButton(x: number, y: number): Button {
+    getStickButton(x: number, y: number): Button {
         var angle = Math.atan2(y, x) * 180 / Math.PI;
         if (angle >= -45 && angle < 45) {
-            return Button.STICK_RIGHT;
+            if (this.controllerName === "vive-controls" || this.controllerName === "rift-controls") {
+                return Button.STICK_RIGHT;
+            } else {
+                return Button.RIGHT;
+            }
         } else if (angle >= 45 && angle < 135) {
-            return Button.STICK_UP;
+            if (this.controllerName === "vive-controls" || this.controllerName === "rift-controls") {
+                return Button.STICK_UP;
+            } else {
+                return Button.UP;
+            }
         } else if (angle >= 135 || angle <= -135) {
-            return Button.STICK_LEFT;
+            if (this.controllerName === "vive-controls" || this.controllerName === "rift-controls") {
+                return Button.STICK_LEFT;
+            } else {
+                return Button.LEFT;
+            }
         } else {
-            return Button.STICK_DOWN;
+            if (this.controllerName === "vive-controls" || this.controllerName === "rift-controls") {
+                return Button.STICK_DOWN;
+            } else {
+                return Button.DOWN;
+            }
         }
     }
 
