@@ -9,4 +9,5 @@ export interface Tool extends ComponentController{
     buttonUp(device: Device, toolSlot: ToolSlot,  button: Button): void;
     buttonDown(device: Device, toolSlot: ToolSlot, button: Button): void;
     stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number): void;
+
 }

@@ -5,5 +5,9 @@ export enum Button {
     UP,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    STICK_UP,
+    STICK_DOWN,
+    STICK_LEFT,
+    STICK_RIGHT
 }

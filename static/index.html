@@ -5,6 +5,7 @@
         <meta name="description" content="Code Reality Test">
 
         <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@cb4de2e19d577e9b5c34f01efe1c1d96c1d1c2e0/dist/aframe-master.min.js"></script>
+        <!--<script src="aframe-master.js"></script>-->
         <!--<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@b20527f/dist/aframe-master.min.js"></script>-->
 
         <script src="https://unpkg.com/@tlaukkan/aframe-tiny-terrain-component@0.0.5/dist/terrain.js"></script>
@@ -14,7 +15,7 @@
     </head>
     <body>
 
-        <a-scene light="defaultLightsEnabled: false" stats space="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-dataspace@0.0.18/defaul-configuration.json">
+        <a-scene light="defaultLightsEnabled: false" stats space="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-dataspace@0.0.18/defaul-configuration.json" renderer="antialias: true; sortObjects: true; maxCanvasWidth: -1; maxCanvasHeight: -1; gammaOutput: false;">
 
             <!-- Assets -->
             <a-assets>
@@ -42,13 +43,14 @@
             <a-sphere position="2 0 -3" collidable scale="1 1 1" color="#FFFFFF" identity example></a-sphere>
 
             <!-- Interface -->
-            <a-entity id="doh" interface position="0 0 0">
+            <a-entity interface position="0 0 0">
+
                 <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0">
                     <a-entity keyboard-and-mouse position="0.25 -0.25 -0.75"></a-entity>
                 </a-entity>
 
-                <a-entity vive-controller="hand: left" vive-controls="hand: left"></a-entity>
-                <a-entity vive-controller="hand: right" vive-controls="hand: right"></a-entity>
+                <a-entity vr-controller="hand: left" oculus-touch-controls="hand: left" vive-controls="hand: left"></a-entity>
+                <a-entity vr-controller="hand: right" oculus-touch-controls="hand: right" vive-controls="hand: right" daydream-controls gearvr-controls oculus-go-controls></a-entity>
 
                 <a-entity movement-tool="minY: -20;"></a-entity>
                 <a-entity entity-tool></a-entity>

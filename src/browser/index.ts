@@ -11,7 +11,7 @@ import {MovementState} from "./model/MovementState";
 import {InterfaceSystemController} from "./system/interface/InterfaceSystemController";
 import {InterfaceController} from "./system/interface/InterfaceController";
 import {MovementTool} from "./system/interface/tool/MovementTool";
-import {ViveControllerDevice} from "./system/interface/device/ViveControllerDevice";
+import {VrControllerDevice} from "./system/interface/device/VrControllerDevice";
 import {ExampleController} from "./component/ExampleController";
 import {ExampleSystemController} from "./system/ExampleSystemController";
 import {EntityTool} from "./system/interface/tool/EntityTool";
@@ -28,7 +28,7 @@ registerComponentController(InterfaceController.DEFINITION);
 registerComponentController(EntityTool.DEFINITION);
 registerComponentController(MovementTool.DEFINITION);
 
-registerComponentController(ViveControllerDevice.DEFINITION);
+registerComponentController(VrControllerDevice.DEFINITION);
 registerComponentController(KeyboardAndMouseDevice.DEFINITION);
 
 registerComponentController(ExampleController.DEFINITION);

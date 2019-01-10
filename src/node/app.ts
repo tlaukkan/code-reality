@@ -10,6 +10,7 @@ const host = config.get('Server.host') as string;
 
 const app = express();
 
+app.use(express.static('static'));
 app.use(express.static('dist'));
 
 initializeSession(app);

@@ -7,17 +7,19 @@ import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
 
-export class ViveControllerDevice extends AbstractComponentController implements Device {
+export class VrControllerDevice extends AbstractComponentController implements Device {
 
     public static DEFINITION = new ComponentControllerDefinition(
-        "vive-controller", {
+        "vr-controller", {
             hand: {type: 'string', default: "right"},
         }, false,
-        (component: Component, entity: Entity, data: any) => new ViveControllerDevice(component, entity, data)
+        (component: Component, entity: Entity, data: any) => new VrControllerDevice(component, entity, data)
     );
 
+    private controllerName: string = "";
     private deviceSlot: DeviceSlot = DeviceSlot.PRIMARY_HAND;
     private toolSlot: ToolSlot = ToolSlot.PRIMARY;
+    private axis: Array<number> | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -31,6 +33,20 @@ export class ViveControllerDevice extends AbstractComponentController implements
             this.toolSlot = ToolSlot.SECONDARY;
         }
         this.interface.setDevice(this.deviceSlot, this);
+
+        this.addEventListener("controllerconnected", (detail: any) => {
+            this.interface.buttonUp(this, this.toolSlot, Button.TRIGGER);
+            this.controllerName = detail.name;
+            console.log("controllerconnected " + this.controllerName);
+            //console.log(detail);
+        });
+
+        this.addEventListener("controllerdisconnected", (detail: any) => {
+            this.interface.buttonUp(this, this.toolSlot, Button.TRIGGER);
+            console.log("controllerdisconnected " + this.controllerName);
+            //console.log(detail);
+        });
+
 
         this.addEventListener("triggerup", (detail: any) => {
             this.interface.buttonUp(this, this.toolSlot, Button.TRIGGER);
@@ -59,27 +75,68 @@ export class ViveControllerDevice extends AbstractComponentController implements
             console.log("menudown " + detail);
         });
 
-        /*
+
         this.addEventListener("trackpaddown", (detail: any) => {
             console.log("trackpaddown " + detail);
+            if (this.axis) {
+                const button = this.getTouchPadButton(this.axis[0], this.axis[1]);
+                this.interface.buttonUp(this, this.toolSlot, button);
+                console.log("button down: "+ Button[button]);
+            }
         });
         this.addEventListener("trackpadup", (detail: any) => {
             console.log("trackpadup " + detail);
+            if (this.axis) {
+                const button = this.getTouchPadButton(this.axis[0], this.axis[1]);
+                this.interface.buttonDown(this, this.toolSlot, button);
+                console.log("button up: "+ Button[button]);
+            }
         });
-        */
+
 
         this.addEventListener("axismove", (detail:  any) => {
             const axis: Array<number> = detail.axis;
-            console.log(this.toolSlot + " axismove " + axis);
-            if (this.deviceSlot == DeviceSlot.PRIMARY_HAND) {
-                this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.ROTATE, axis[1], axis[0]);
+            this.axis = Object.assign([], axis);
+            if (this.controllerName==="oculus-go-controls") {
+                this.axis[1] = -1 * this.axis[1];
+            }
+            //console.log(this.toolSlot + " axismove " + axis);
+            if (this.controllerName==="vive-controls" || this.controllerName==="rift-controls") {
+                if (this.deviceSlot == DeviceSlot.PRIMARY_HAND) {
+                    this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.ROTATE, this.axis[1], this.axis[0]);
+                } else {
+                    this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, this.axis[1], this.axis[0]);
+                }
             } else {
-                this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, axis[1], axis[0]);
+                this.interface.stickTwist(this, ToolSlot.SECONDARY, Stick.TRANSLATE, this.axis[1], this.axis[0]);
             }
         });
+
+        /*this.addEventListener("touchstart", (detail: any) => {
+            console.log("touchstart " + JSON.stringify(detail));
+        });
+        this.addEventListener("touchend", (detail: any) => {
+            console.log("touchend " + JSON.stringify(detail));
+        });*/
+
+
+
         /*this.addEventListener("trackpadchanged", (detail: any) => {
             console.log("trackpadchanged " + JSON.stringify(detail));
         });*/
+    }
+
+    getTouchPadButton(x: number, y: number): Button {
+        var angle = Math.atan2(y, x) * 180 / Math.PI;
+        if (angle >= -45 && angle < 45) {
+            return Button.STICK_RIGHT;
+        } else if (angle >= 45 && angle < 135) {
+            return Button.STICK_UP;
+        } else if (angle >= 135 || angle <= -135) {
+            return Button.STICK_LEFT;
+        } else {
+            return Button.STICK_DOWN;
+        }
     }
 
     update(data: any, oldData: any): void {
