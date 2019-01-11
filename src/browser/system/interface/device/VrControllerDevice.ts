@@ -20,6 +20,7 @@ export class VrControllerDevice extends AbstractComponentController implements D
     private deviceSlot: DeviceSlot = DeviceSlot.PRIMARY_HAND;
     private toolSlot: ToolSlot = ToolSlot.PRIMARY;
     private axis: Array<number> | undefined;
+    private lastStickButton: Button | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -85,19 +86,22 @@ export class VrControllerDevice extends AbstractComponentController implements D
                 } else {
                     this.interface.buttonDown(this, ToolSlot.SECONDARY, button);
                 }
+                this.lastStickButton = button;
                 console.log("button down: "+ Button[button]);
             }
         });
         this.addEventListener("trackpadup", (detail: any) => {
             console.log("trackpadup " + detail);
             if (this.axis) {
-                const button = this.getStickButton(this.axis[0], this.axis[1]);
-                if (this.controllerName==="vive-controls" || this.controllerName==="rift-controls") {
-                    this.interface.buttonUp(this, this.toolSlot, button);
-                } else {
-                    this.interface.buttonUp(this, ToolSlot.SECONDARY, button);
+                if (this.lastStickButton) {
+                    const button = this.lastStickButton;
+                    if (this.controllerName === "vive-controls" || this.controllerName === "rift-controls") {
+                        this.interface.buttonUp(this, this.toolSlot, button);
+                    } else {
+                        this.interface.buttonUp(this, ToolSlot.SECONDARY, button);
+                    }
+                    console.log("button up: " + Button[button]);
                 }
-                console.log("button up: "+ Button[button]);
             }
         });
 

@@ -13,6 +13,11 @@ Tested browsers (latest versions):
 1) Windows Chrome
 2) Windows Firefox
 
+## Build
+
+npm run build:node
+npm run build:browser
+
 ## Run
 
 ### Development mode
