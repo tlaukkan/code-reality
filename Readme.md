@@ -10,8 +10,15 @@ aframe-dataspace servers provide a shared space to store and transmit scene data
 
 Tested browsers (latest versions):
 
-1) Windows Chrome
-2) Windows Firefox
+* Windows / Firefox
+* Windows / Chrome
+* macOS / Safari
+* iOS / Safari
+
+Tested devices:
+
+* HTC Vive
+* Oculus Go (Oculus Browser)
 
 ## Build
 
