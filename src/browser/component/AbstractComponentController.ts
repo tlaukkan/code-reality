@@ -69,7 +69,7 @@ export abstract class AbstractComponentController implements ComponentController
     getComponentController<C extends ComponentController>(componentName: string): C {
         const component = this.entity.components[componentName];
         if (!component) {
-            throw new Error("Component is not registered to entity: " + component);
+            throw new Error("Component is not registered to entity: " + componentName);
         }
 
         return (component as any).controller;

@@ -9,6 +9,7 @@ import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
 import {SystemControllerDefinition} from "../../AFrame";
 import {Object3D} from "three";
+import {ComponentController} from "../../component/ComponentController";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
@@ -25,7 +26,8 @@ export class InterfaceSystemController extends AbstractSystemController {
     private interfaceController: InterfaceController | undefined;
 
     private devices: Map<DeviceSlot, Device> = new Map();
-    private tools: Map<ToolSlot, Tool> = new Map();
+    private tools: Map<string, Tool> = new Map();
+    private toolSlots: Map<ToolSlot, Tool> = new Map();
 
 
     constructor(system: System, scene: Scene, data: any) {
@@ -100,30 +102,47 @@ export class InterfaceSystemController extends AbstractSystemController {
         return this.devices.get(slot);
     }
 
+    registerTool(tool: Tool) {
+        if (!this.tools.has(name)) {
+            console.log("interface tool '" + tool.componentName + "' registered.");
+            this.tools.set(tool.componentName, tool);
+        } else {
+            throw new Error("Tool '" + name + "' already registered.");
+        }
+    }
+
+    getTool<T extends Tool>(name: string): T {
+        if (this.tools.has(name)) {
+            return this.tools.get(name)! as T;
+        } else {
+            throw new Error("Tool '" + name + "' not registered.");
+        }
+    }
+
     setTool(slot: ToolSlot, tool: Tool) {
-        if (this.tools.has(slot)) {
+        if (this.toolSlots.has(slot)) {
             console.log("interface already has tool at: " + ToolSlot[slot]);
         } else {
-            this.tools.set(slot, tool);
+            this.toolSlots.set(slot, tool);
             console.log("interface tool " + tool.componentName + " set at: " + ToolSlot[slot]);
         }
     }
 
     buttonUp(device: Device, toolSlot: ToolSlot,  button: Button) {
-        if (this.tools.has(toolSlot)) {
-            this.tools.get(toolSlot)!!.buttonUp(device, toolSlot, button);
+        if (this.toolSlots.has(toolSlot)) {
+            this.toolSlots.get(toolSlot)!!.buttonUp(device, toolSlot, button);
         }
     }
 
     buttonDown(device: Device, toolSlot: ToolSlot, button: Button) {
-        if (this.tools.has(toolSlot)) {
-            this.tools.get(toolSlot)!!.buttonDown(device, toolSlot, button);
+        if (this.toolSlots.has(toolSlot)) {
+            this.toolSlots.get(toolSlot)!!.buttonDown(device, toolSlot, button);
         }
     }
 
     stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number) {
-        if (this.tools.has(toolSlot)) {
-            this.tools.get(toolSlot)!!.stickTwist(device, toolSlot, stick, x, y);
+        if (this.toolSlots.has(toolSlot)) {
+            this.toolSlots.get(toolSlot)!!.stickTwist(device, toolSlot, stick, x, y);
         }
     }
 

@@ -31,21 +31,23 @@ export class PointerTool extends AbstractComponentController implements Tool {
 
     pressed: Set<Button> = new Set();
     time: number = 0;
-    pointerLine = this.constructPointerLine();
-    pointerCursor = this.constructPointerCursor();
+
     raycaster: Raycaster;
 
-    pointerDevice: Device | undefined;
-    pointerPosition: Vector3 = new Vector3(0,0,0);
-    pointerDirection: Vector3 = new Vector3(0,0,0);
-    pointerHoverCursorPoint: Vector3 | undefined;
+    pointerLine = this.constructPointerLine();
+    pointerCursor = this.constructPointerCursor();
 
-    hoveredObject: Object3D | undefined;
+    pointerDevice: Device | undefined;
+    pointerDevicePosition: Vector3 = new Vector3(0,0,0);
+    pointerDirection: Vector3 = new Vector3(0,0,0);
+    cursorPosition: Vector3 | undefined;
+
+    pointedObject: Object3D | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
-        this.interface.setTool(ToolSlot.PRIMARY, this);
         this.raycaster = new Raycaster();
+        this.interface.registerTool(this);
     }
 
     init(): void {
@@ -90,6 +92,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
 
     constructPointerLine(): Object3D {
         var geometry = new Geometry();
+
         geometry.vertices.push(
             new Vector3( 0, 0, -100 ),
             new Vector3( 0, 0, 0 )
@@ -108,8 +111,8 @@ export class PointerTool extends AbstractComponentController implements Tool {
     }
 
     pointerOff(device: Device) {
-        if (this.pointerHoverCursorPoint) {
-            this.removePointerHoverCursor();
+        if (this.cursorPosition) {
+            this.removeCursor();
         }
 
         device.entity.object3D.remove(this.pointerLine);
@@ -120,13 +123,13 @@ export class PointerTool extends AbstractComponentController implements Tool {
 
         this.pointerDevice!!.entity.object3D.getWorldDirection(this.pointerDirection);
         this.pointerDirection.multiplyScalar(-1);
-        this.pointerDevice!!.entity.object3D.getWorldPosition(this.pointerPosition);
+        this.pointerDevice!!.entity.object3D.getWorldPosition(this.pointerDevicePosition);
 
         this.raycaster!!.near = 0;
         this.raycaster!!.far = 100;
-        this.raycaster!!.set(this.pointerPosition, this.pointerDirection);
-        var intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables(), true);
+        this.raycaster!!.set(this.pointerDevicePosition, this.pointerDirection);
 
+        const intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables(), true);
         if (intersects.length > 0) {
             if (intersects[0].object === this.pointerCursor) {
                 intersects.splice(0, 1);
@@ -136,29 +139,29 @@ export class PointerTool extends AbstractComponentController implements Tool {
         if (intersects.length > 0) {
             const intersectionPoint = intersects[0].point;
             this.pointerCursor.position.copy(intersectionPoint);
-            if (!this.pointerHoverCursorPoint) {
-                this.addPointerHoverCursor(intersects[0].object);
+            if (!this.cursorPosition) {
+                this.addCursor(intersects[0].object);
             }
-            this.pointerHoverCursorPoint = intersectionPoint;
+            this.cursorPosition = intersectionPoint;
         } else {
-            if (this.pointerHoverCursorPoint) {
-                this.removePointerHoverCursor();
+            if (this.cursorPosition) {
+                this.removeCursor();
             }
         }
 
     }
 
-    private addPointerHoverCursor(object: Object3D) {
+    private addCursor(object: Object3D) {
         this.scene.object3D.add(this.pointerCursor);
-        this.hoveredObject = object;
+        this.pointedObject = object;
         console.log("add pointer cursor.");
     }
 
-    private removePointerHoverCursor() {
+    private removeCursor() {
         this.scene.object3D.remove(this.pointerCursor);
         console.log("remove pointer cursor.");
-        this.hoveredObject = undefined;
-        this.pointerHoverCursorPoint = undefined;
+        this.pointedObject = undefined;
+        this.cursorPosition = undefined;
     }
 
 }

@@ -15,5 +15,6 @@ export {VrControllerDevice} from "./browser/system/interface/device/VrController
 export {ExampleController} from "./browser/component/ExampleController";
 export {ExampleSystemController} from "./browser/system/ExampleSystemController";
 export {EntityTool} from "./browser/system/interface/tool/EntityTool";
+export {TeleportTool} from "./browser/system/interface/tool/TeleportTool";
 export {CollidableController} from "./browser/component/collidable/CollidableController";
 export {QuaternionController} from "./browser/component/quaternion/QuaternionController";

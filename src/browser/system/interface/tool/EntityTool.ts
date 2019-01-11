@@ -19,8 +19,8 @@ export class EntityTool extends PointerTool {
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
-        this.interface.setTool(ToolSlot.PRIMARY, this);
         this.raycaster = new Raycaster();
+        this.interface.setTool(ToolSlot.PRIMARY, this);
     }
 
     init(): void {
@@ -35,7 +35,7 @@ export class EntityTool extends PointerTool {
     buttonDown(device: Device, toolSlot: ToolSlot, button: Button): void {
         if (!this.pressed.has(button)) {
             if (button == Button.GRIP) {
-                if (this.hoveredObject) {
+                if (this.pointedObject) {
 
                 } else {
                     if (!this.heldEntity) {
@@ -50,7 +50,7 @@ export class EntityTool extends PointerTool {
     buttonUp(device: Device, toolSlot: ToolSlot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == Button.GRIP) {
-                if (this.hoveredObject) {
+                if (this.pointedObject) {
 
                 } else {
                     if (this.heldEntity) {

@@ -17,6 +17,7 @@ import {ExampleSystemController} from "./system/ExampleSystemController";
 import {EntityTool} from "./system/interface/tool/EntityTool";
 import {CollidableController} from "./component/collidable/CollidableController";
 import {QuaternionController} from "./component/quaternion/QuaternionController";
+import {TeleportTool} from "./system/interface/tool/TeleportTool";
 
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
@@ -27,6 +28,7 @@ registerComponentController(InterfaceController.DEFINITION);
 
 registerComponentController(EntityTool.DEFINITION);
 registerComponentController(MovementTool.DEFINITION);
+registerComponentController(TeleportTool.DEFINITION);
 
 registerComponentController(VrControllerDevice.DEFINITION);
 registerComponentController(KeyboardAndMouseDevice.DEFINITION);

@@ -62,6 +62,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
+        this.interface.registerTool(this);
         this.interface.setTool(ToolSlot.SECONDARY, this);
     }
 
@@ -130,6 +131,10 @@ export class MovementTool extends AbstractComponentController implements Tool {
 
     play(): void {
         // Reused vector variables.
+        this.setCenterOfMassFromInterfaceEntity();
+    }
+
+    setCenterOfMassFromInterfaceEntity() {
         this.centerOfMassPosition = new Vector3(0, 0, 0); // Center of mass for collision checks
         this.centerOfMassPosition.x = this.interface.interfaceEntity!!!!.object3D.position.x;
         this.centerOfMassPosition.y = this.interface.interfaceEntity!!!!.object3D.position.y + this.height / 2;
