@@ -1,7 +1,7 @@
 import { Quaternion, Raycaster} from "three";
 import {Component, Entity} from "AFrame";
 import {Device} from "../Device";
-import {ToolSlot} from "../model/ToolSlot";
+import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
 import {createElement} from "../../../util";
@@ -20,7 +20,7 @@ export class EntityTool extends PointerTool {
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
         this.raycaster = new Raycaster();
-        this.interface.setTool(ToolSlot.PRIMARY, this);
+        this.interface.slotTool(Slot.PRIMARY, this);
     }
 
     init(): void {
@@ -32,7 +32,7 @@ export class EntityTool extends PointerTool {
         super.tick(time, timeDelta);
     }
 
-    buttonDown(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
             if (button == Button.GRIP) {
                 if (this.pointedObject) {
@@ -47,7 +47,7 @@ export class EntityTool extends PointerTool {
         super.buttonDown(device, toolSlot, button);
     }
 
-    buttonUp(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == Button.GRIP) {
                 if (this.pointedObject) {

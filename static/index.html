@@ -21,6 +21,16 @@
             <a-assets>
                 <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
                 <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
+                <a-asset-item id="tool-selector" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/selector.glb"></a-asset-item>
+
+                <a-asset-item id="add-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/add-object-tool.glb"></a-asset-item>
+                <a-asset-item id="arrow-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/arrow-tool.glb"></a-asset-item>
+                <a-asset-item id="move-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/move-object-tool.glb"></a-asset-item>
+                <a-asset-item id="remove-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/remove-object-tool.glb"></a-asset-item>
+                <a-asset-item id="scale-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/scale-object-tool.glb"></a-asset-item>
+                <a-asset-item id="teleport-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/teleport-tool.glb"></a-asset-item>
+                <a-asset-item id="add-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/add-object-tool.glb"></a-asset-item>
+                <a-asset-item id="walk-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/walk-tool.glb"></a-asset-item>
             </a-assets>
 
             <!-- Lights -->
@@ -42,15 +52,44 @@
             <a-entity gltf-model="#robot" collidable position="1 1 -10" scale="0.3 0.3 0.3" avatar></a-entity>
             <a-sphere position="2 0 -3" collidable scale="1 1 1" color="#FFFFFF" identity example></a-sphere>
 
+
             <!-- Interface -->
             <a-entity interface position="0 0 0">
 
                 <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0">
-                    <a-entity keyboard-and-mouse position="0.25 -0.25 -0.75"></a-entity>
+                    <a-entity keyboard-and-mouse position="0.25 -0.25 -0.4">
+                        <a-entity id="tool-selector-desktop-placeholder" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="60 -45 -10">
+                            <a-entity id="tool-selector" tool-selector-tool gltf-model="#tool-selector">
+                                <a-entity id="selected-tool-placeholder"></a-entity>
+                                <!--<a-entity gltf-model="#add-object-tool"></a-entity>
+                                <a-entity gltf-model="#arrow-tool"></a-entity>
+                                <a-entity gltf-model="#move-object-tool"></a-entity>
+                                <a-entity gltf-model="#remove-object-tool"></a-entity>
+                                <a-entity gltf-model="#scale-object-tool"></a-entity>
+                                <a-entity gltf-model="#teleport-tool"></a-entity>
+                                <a-entity gltf-model="#add-object-tool"></a-entity>
+                                <a-entity gltf-model="#walk-tool"></a-entity>-->
+                            </a-entity>
+                        </a-entity>
+                    </a-entity>
                 </a-entity>
 
-                <a-entity vr-controller="hand: left" oculus-touch-controls="hand: left" vive-controls="hand: left"></a-entity>
-                <a-entity vr-controller="hand: right" oculus-touch-controls="hand: right" vive-controls="hand: right" daydream-controls gearvr-controls oculus-go-controls></a-entity>
+                <a-entity secondary-controller oculus-touch-controls="hand: left" vive-controls="hand: left"></a-entity>
+
+                <a-entity primary-controller oculus-touch-controls="hand: right" vive-controls="hand: right" daydream-controls gearvr-controls oculus-go-controls>
+                    <a-entity id="tool-selector-vr-placeholder" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="0 0 0">
+                        <!--<a-entity gltf-model="#tool-selector" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="0 0 0">
+                            <a-entity gltf-model="#add-object-tool"></a-entity>
+                            <a-entity gltf-model="#arrow-tool"></a-entity>
+                            <a-entity gltf-model="#move-object-tool"></a-entity>
+                            <a-entity gltf-model="#remove-object-tool"></a-entity>
+                            <a-entity gltf-model="#scale-object-tool"></a-entity>
+                            <a-entity gltf-model="#teleport-tool"></a-entity>
+                            <a-entity gltf-model="#add-object-tool"></a-entity>
+                            <a-entity gltf-model="#walk-tool"></a-entity>
+                        </a-entity>-->
+                    </a-entity>
+                </a-entity>
 
                 <a-entity movement-tool="minY: -20;"></a-entity>
                 <a-entity teleport-tool></a-entity>

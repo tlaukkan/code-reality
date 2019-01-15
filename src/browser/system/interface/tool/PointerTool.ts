@@ -13,14 +13,14 @@ import {
 } from "three";
 import {Component, Entity} from "AFrame";
 import {Device} from "../Device";
-import {Tool} from "../Tool";
-import {ToolSlot} from "../model/ToolSlot";
+import {InterfaceTool} from "../InterfaceTool";
+import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
 import {createElement} from "../../../util";
 
-export class PointerTool extends AbstractComponentController implements Tool {
+export class PointerTool extends AbstractComponentController implements InterfaceTool {
 
     public static DEFINITION = new ComponentControllerDefinition(
         "pointer-tool", {}, false,
@@ -69,7 +69,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
         }
     }
 
-    buttonDown(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
             if (button == Button.TRIGGER && !this.pointerDevice) {
                 this.pointerOn(device);
@@ -78,7 +78,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
         }
     }
 
-    buttonUp(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == Button.TRIGGER && this.pointerDevice) {
                 this.pointerOff(device);
@@ -86,7 +86,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
         }
     }
 
-    stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number): void {
+    stickTwist(device: Device, toolSlot: Slot, stick: Stick, x: number, y: number): void {
 
     }
 

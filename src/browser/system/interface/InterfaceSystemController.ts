@@ -3,8 +3,8 @@ import {AbstractSystemController} from "../AbstractSystemController";
 import {InterfaceController} from "./InterfaceController";
 import {DeviceSlot} from "./model/DeviceSlot";
 import {Device} from "./Device";
-import {ToolSlot} from "./model/ToolSlot";
-import {Tool} from "./Tool";
+import {Slot} from "./model/Slot";
+import {InterfaceTool} from "./InterfaceTool";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
 import {SystemControllerDefinition} from "../../AFrame";
@@ -26,8 +26,8 @@ export class InterfaceSystemController extends AbstractSystemController {
     private interfaceController: InterfaceController | undefined;
 
     private devices: Map<DeviceSlot, Device> = new Map();
-    private tools: Map<string, Tool> = new Map();
-    private toolSlots: Map<ToolSlot, Tool> = new Map();
+    private tools: Map<string, InterfaceTool> = new Map();
+    private slots: Map<Slot, InterfaceTool> = new Map();
 
 
     constructor(system: System, scene: Scene, data: any) {
@@ -102,7 +102,7 @@ export class InterfaceSystemController extends AbstractSystemController {
         return this.devices.get(slot);
     }
 
-    registerTool(tool: Tool) {
+    registerTool(tool: InterfaceTool) {
         if (!this.tools.has(name)) {
             console.log("interface tool '" + tool.componentName + "' registered.");
             this.tools.set(tool.componentName, tool);
@@ -111,7 +111,7 @@ export class InterfaceSystemController extends AbstractSystemController {
         }
     }
 
-    getTool<T extends Tool>(name: string): T {
+    getTool<T extends InterfaceTool>(name: string): T {
         if (this.tools.has(name)) {
             return this.tools.get(name)! as T;
         } else {
@@ -119,30 +119,30 @@ export class InterfaceSystemController extends AbstractSystemController {
         }
     }
 
-    setTool(slot: ToolSlot, tool: Tool) {
-        if (this.toolSlots.has(slot)) {
-            console.log("interface already has tool at: " + ToolSlot[slot]);
+    slotTool(slot: Slot, tool: InterfaceTool) {
+        if (this.slots.has(slot)) {
+            console.log("interface already has tool at: " + Slot[slot]);
         } else {
-            this.toolSlots.set(slot, tool);
-            console.log("interface tool " + tool.componentName + " set at: " + ToolSlot[slot]);
+            this.slots.set(slot, tool);
+            console.log("interface tool " + tool.componentName + " set at: " + Slot[slot]);
         }
     }
 
-    buttonUp(device: Device, toolSlot: ToolSlot,  button: Button) {
-        if (this.toolSlots.has(toolSlot)) {
-            this.toolSlots.get(toolSlot)!!.buttonUp(device, toolSlot, button);
+    buttonUp(device: Device, toolSlot: Slot, button: Button) {
+        if (this.slots.has(toolSlot)) {
+            this.slots.get(toolSlot)!!.buttonUp(device, toolSlot, button);
         }
     }
 
-    buttonDown(device: Device, toolSlot: ToolSlot, button: Button) {
-        if (this.toolSlots.has(toolSlot)) {
-            this.toolSlots.get(toolSlot)!!.buttonDown(device, toolSlot, button);
+    buttonDown(device: Device, toolSlot: Slot, button: Button) {
+        if (this.slots.has(toolSlot)) {
+            this.slots.get(toolSlot)!!.buttonDown(device, toolSlot, button);
         }
     }
 
-    stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number) {
-        if (this.toolSlots.has(toolSlot)) {
-            this.toolSlots.get(toolSlot)!!.stickTwist(device, toolSlot, stick, x, y);
+    stickTwist(device: Device, toolSlot: Slot, stick: Stick, x: number, y: number) {
+        if (this.slots.has(toolSlot)) {
+            this.slots.get(toolSlot)!!.stickTwist(device, toolSlot, stick, x, y);
         }
     }
 

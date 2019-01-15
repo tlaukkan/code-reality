@@ -2,7 +2,7 @@ import {AbstractComponentController} from "../../../component/AbstractComponentC
 import {Component, Entity} from "AFrame";
 import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
-import {ToolSlot} from "../model/ToolSlot";
+import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
 
@@ -39,26 +39,26 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         (this.entity.sceneEl!! as any).addEventListener('mousedown', (e: MouseEvent) => {
             console.log('mousedown: ' + e.button );
             if (e.button == 0) {
-                this.interface.buttonDown(this, ToolSlot.PRIMARY, Button.TRIGGER);
+                this.interface.buttonDown(this, Slot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
-                this.interface.buttonDown(this, ToolSlot.PRIMARY, Button.MENU);
+                this.interface.buttonDown(this, Slot.PRIMARY, Button.MENU);
             }
             if (e.button == 2) {
-                this.interface.buttonDown(this, ToolSlot.PRIMARY, Button.GRIP);
+                this.interface.buttonDown(this, Slot.PRIMARY, Button.GRIP);
             }
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mouseup', (e: MouseEvent) => {
             console.log('mouseup: ' + e.button );
             if (e.button == 0) {
-                this.interface.buttonUp(this, ToolSlot.PRIMARY, Button.TRIGGER);
+                this.interface.buttonUp(this, Slot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
-                this.interface.buttonUp(this, ToolSlot.PRIMARY, Button.MENU);
+                this.interface.buttonUp(this, Slot.PRIMARY, Button.MENU);
             }
             if (e.button == 2) {
-                this.interface.buttonUp(this, ToolSlot.PRIMARY, Button.GRIP);
+                this.interface.buttonUp(this, Slot.PRIMARY, Button.GRIP);
             }
         });
 
@@ -89,37 +89,37 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
 
     onKeyDown(key: string) {
         if (key == this.backwardKey) {
-            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.DOWN);
+            this.interface.buttonDown(this, Slot.MOVEMENT, Button.DOWN);
         }
         if (key == this.forwardKey) {
-            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.UP);
+            this.interface.buttonDown(this, Slot.MOVEMENT, Button.UP);
         }
         if (key == this.leftKey) {
-            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.LEFT);
+            this.interface.buttonDown(this, Slot.MOVEMENT, Button.LEFT);
         }
         if (key == this.rightKey) {
-            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.RIGHT);
+            this.interface.buttonDown(this, Slot.MOVEMENT, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interface.buttonDown(this, ToolSlot.SECONDARY, Button.TRIGGER);
+            this.interface.buttonDown(this, Slot.MOVEMENT, Button.TRIGGER);
         }
     }
 
     onKeyUp(key: string) {
         if (key == this.backwardKey) {
-            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.DOWN);
+            this.interface.buttonUp(this, Slot.MOVEMENT, Button.DOWN);
         }
         if (key == this.forwardKey) {
-            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.UP);
+            this.interface.buttonUp(this, Slot.MOVEMENT, Button.UP);
         }
         if (key == this.leftKey) {
-            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.LEFT);
+            this.interface.buttonUp(this, Slot.MOVEMENT, Button.LEFT);
         }
         if (key == this.rightKey) {
-            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.RIGHT);
+            this.interface.buttonUp(this, Slot.MOVEMENT, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interface.buttonUp(this, ToolSlot.SECONDARY, Button.TRIGGER);
+            this.interface.buttonUp(this, Slot.MOVEMENT, Button.TRIGGER);
         }
     }
 

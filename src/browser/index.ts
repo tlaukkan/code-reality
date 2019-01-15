@@ -11,13 +11,14 @@ import {MovementState} from "./model/MovementState";
 import {InterfaceSystemController} from "./system/interface/InterfaceSystemController";
 import {InterfaceController} from "./system/interface/InterfaceController";
 import {MovementTool} from "./system/interface/tool/MovementTool";
-import {VrControllerDevice} from "./system/interface/device/VrControllerDevice";
+import {PrimaryControllerDevice} from "./system/interface/device/PrimaryControllerDevice";
 import {ExampleController} from "./component/ExampleController";
 import {ExampleSystemController} from "./system/ExampleSystemController";
 import {EntityTool} from "./system/interface/tool/EntityTool";
 import {CollidableController} from "./component/collidable/CollidableController";
 import {QuaternionController} from "./component/quaternion/QuaternionController";
 import {TeleportTool} from "./system/interface/tool/TeleportTool";
+import {ToolSelectorTool} from "./system/interface/tool/ToolSelectorTool";
 
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
@@ -25,12 +26,13 @@ registerSystemController(StateSystemController.DEFINITION);
 registerSystemController(SpaceSystemController.DEFINITION);
 
 registerComponentController(InterfaceController.DEFINITION);
+registerComponentController(ToolSelectorTool.DEFINITION);
 
 registerComponentController(EntityTool.DEFINITION);
 registerComponentController(MovementTool.DEFINITION);
 registerComponentController(TeleportTool.DEFINITION);
 
-registerComponentController(VrControllerDevice.DEFINITION);
+registerComponentController(PrimaryControllerDevice.DEFINITION);
 registerComponentController(KeyboardAndMouseDevice.DEFINITION);
 
 registerComponentController(ExampleController.DEFINITION);

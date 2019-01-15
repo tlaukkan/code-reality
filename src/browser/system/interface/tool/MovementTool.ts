@@ -4,13 +4,13 @@ import {EntityStateEventDetail} from "../../../model/EntityStateEventDetail";
 import {Events} from "../../../model/Events";
 import {Component, Entity} from "AFrame";
 import {Device} from "../Device";
-import {Tool} from "../Tool";
-import {ToolSlot} from "../model/ToolSlot";
+import {InterfaceTool} from "../InterfaceTool";
+import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
 
-export class MovementTool extends AbstractComponentController implements Tool {
+export class MovementTool extends AbstractComponentController implements InterfaceTool {
 
     public static DEFINITION = new ComponentControllerDefinition(
         "movement-tool", {
@@ -63,7 +63,8 @@ export class MovementTool extends AbstractComponentController implements Tool {
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
         this.interface.registerTool(this);
-        this.interface.setTool(ToolSlot.SECONDARY, this);
+        this.interface.slotTool(Slot.SECONDARY, this);
+        this.interface.slotTool(Slot.MOVEMENT, this);
     }
 
     init(): void {
@@ -158,7 +159,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
     }
 
 
-    buttonDown(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
             if (button == this.backwardKey) {
                 this.entityStateChange("backward", true);
@@ -180,7 +181,7 @@ export class MovementTool extends AbstractComponentController implements Tool {
         this.pressed.set(button, this.time);
     }
 
-    buttonUp(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == this.backwardKey) {
                 this.entityStateChange("backward", false);
@@ -202,12 +203,12 @@ export class MovementTool extends AbstractComponentController implements Tool {
         }
     }
 
-    stickTwist(device: Device, toolSlot: ToolSlot, stick: Stick, x: number, y: number): void {
-        if (stick == Stick.TRANSLATE) {
+    stickTwist(device: Device, toolSlot: Slot, stick: Stick, x: number, y: number): void {
+        if (stick == Stick.PRIMARY) {
             this.stickTranslation.x = 1.5 * x;
             this.stickTranslation.z = 1.5 * y;
         }
-        if (stick == Stick.ROTATE) {
+        if (stick == Stick.SECONDARY) {
             this.stickRotation.x = 1.0 * x;
             this.stickRotation.y = 1.0 * y;
         }

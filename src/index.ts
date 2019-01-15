@@ -11,7 +11,7 @@ export {MovementState} from "./browser/model/MovementState";
 export {InterfaceSystemController} from "./browser/system/interface/InterfaceSystemController";
 export {InterfaceController} from "./browser/system/interface/InterfaceController";
 export {MovementTool} from "./browser/system/interface/tool/MovementTool";
-export {VrControllerDevice} from "./browser/system/interface/device/VrControllerDevice";
+export {PrimaryControllerDevice} from "./browser/system/interface/device/PrimaryControllerDevice";
 export {ExampleController} from "./browser/component/ExampleController";
 export {ExampleSystemController} from "./browser/system/ExampleSystemController";
 export {EntityTool} from "./browser/system/interface/tool/EntityTool";

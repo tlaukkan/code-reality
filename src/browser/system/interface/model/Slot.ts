@@ -1,0 +1,7 @@
+export enum Slot {
+    PRIMARY,
+    SECONDARY,
+    PRIMARY_SELECTOR,
+    SECONDARY_SELECTOR,
+    MOVEMENT
+}

@@ -1,7 +1,7 @@
 import {Raycaster} from "three";
 import {Component, Entity} from "AFrame";
 import {Device} from "../Device";
-import {ToolSlot} from "../model/ToolSlot";
+import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
 import {PointerTool} from "./PointerTool";
@@ -18,7 +18,7 @@ export class TeleportTool extends PointerTool {
         //this.interface.setTool(ToolSlot.PRIMARY, this);
         this.raycaster = new Raycaster();
         this.interface.registerTool(this);
-        this.interface.setTool(ToolSlot.PRIMARY, this);
+        this.interface.slotTool(Slot.PRIMARY, this);
     }
 
     init(): void {
@@ -30,14 +30,14 @@ export class TeleportTool extends PointerTool {
         super.tick(time, timeDelta);
     }
 
-    buttonDown(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
 
         }
         super.buttonDown(device, toolSlot, button);
     }
 
-    buttonUp(device: Device, toolSlot: ToolSlot, button: Button): void {
+    buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == Button.TRIGGER) {
                 if (this.cursorPosition) {
