@@ -18,6 +18,7 @@ export class TeleportTool extends PointerTool {
         //this.interface.setTool(ToolSlot.PRIMARY, this);
         this.raycaster = new Raycaster();
         this.interface.registerTool(this);
+        this.interface.slotTool(Slot.PRIMARY, this);
     }
 
     init(): void {

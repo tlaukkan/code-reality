@@ -5,6 +5,7 @@ import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
+import {addDocumentEventListener, addEntityEventListener} from "../../../util";
 
 export class KeyboardAndMouseDevice extends AbstractComponentController implements Device {
 
@@ -24,6 +25,8 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     upKey = 'ArrowUp';
     downKey = 'ArrowDown';
 
+    pointerLockChanged: boolean = false;
+
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -34,6 +37,10 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     init(): void {
         console.log(this.componentName + " init");
 
+        addDocumentEventListener("pointerlockchange", (detail: any) => {
+            this.pointerLockChanged = true;
+        });
+
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             this.onKeyDown(e.key);
         });
@@ -43,6 +50,7 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mousedown', (e: MouseEvent) => {
+            this.pointerLockChanged = false;
             if (e.button == 0) {
                 this.interface.buttonDown(this, Slot.PRIMARY, Button.TRIGGER);
             }
@@ -52,10 +60,14 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             if (e.button == 2) {
                 this.interface.buttonDown(this, Slot.PRIMARY, Button.GRIP);
             }
+            this.pointerLockChanged = false;
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mouseup', (e: MouseEvent) => {
             if (e.button == 0) {
+                if (this.pointerLockChanged) {
+                    return;
+                }
                 this.interface.buttonUp(this, Slot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
@@ -64,6 +76,7 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             if (e.button == 2) {
                 this.interface.buttonUp(this, Slot.PRIMARY, Button.GRIP);
             }
+            this.pointerLockChanged = false;
         });
 
         /*(this.entity.sceneEl!! as any).addEventListener('click', (e: MouseEvent) => {

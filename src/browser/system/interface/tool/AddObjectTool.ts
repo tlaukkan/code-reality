@@ -20,7 +20,6 @@ export class AddObjectTool extends PointerTool {
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
         this.raycaster = new Raycaster();
-        this.interface.slotTool(Slot.PRIMARY, this);
     }
 
     init(): void {

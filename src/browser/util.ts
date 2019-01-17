@@ -11,3 +11,9 @@ export function addEntityEventListener(entity: Entity, type: string, listener: (
         listener(e.detail);
     }) as any);
 }
+
+export function addDocumentEventListener(type: string, listener: ((detail: any) => void)) {
+    document.addEventListener(type, ((e: CustomEvent) => {
+        listener(e.detail);
+    }) as any);
+}
