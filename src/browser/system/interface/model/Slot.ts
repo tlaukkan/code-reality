@@ -3,5 +3,5 @@ export enum Slot {
     SECONDARY,
     PRIMARY_SELECTOR,
     SECONDARY_SELECTOR,
-    MOVEMENT
+    WALK
 }

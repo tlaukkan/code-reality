@@ -1,26 +1,14 @@
 import {AbstractComponentController} from "../../../component/AbstractComponentController";
-import {
-    Euler,
-    Geometry,
-    Line,
-    LineBasicMaterial, Mesh,
-    MeshBasicMaterial,
-    Object3D, Quaternion,
-    Raycaster,
-    SphereGeometry, Vector,
-    Vector3,
-    Math
-} from "three";
+import {Geometry, Line, LineBasicMaterial, Mesh, Object3D, Raycaster, SphereGeometry, Vector3} from "three";
 import {Component, Entity} from "AFrame";
 import {Device} from "../Device";
-import {InterfaceTool} from "../InterfaceTool";
+import {Tool} from "../Tool";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
-import {createElement} from "../../../util";
 
-export class PointerTool extends AbstractComponentController implements InterfaceTool {
+export class PointerTool extends AbstractComponentController implements Tool {
 
     public static DEFINITION = new ComponentControllerDefinition(
         "pointer-tool", {}, false,

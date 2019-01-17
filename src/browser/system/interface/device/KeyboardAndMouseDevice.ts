@@ -13,11 +13,17 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         (component: Component, entity: Entity, data: any) => new KeyboardAndMouseDevice(component, entity, data)
     );
 
-    forwardKey: string = 'w';
-    backwardKey: string = 's';
-    leftKey: string = 'a';
-    rightKey: string = 'd';
+    movementForwardKey: string = 'w';
+    movementBackwardKey: string = 's';
+    movementLeftKey: string = 'a';
+    movementRightKey: string = 'd';
     jumpKey: string = ' ';
+
+    rightKey = 'ArrowRight';
+    leftKey = 'ArrowLeft';
+    upKey = 'ArrowUp';
+    downKey = 'ArrowDown';
+
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -37,7 +43,6 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mousedown', (e: MouseEvent) => {
-            console.log('mousedown: ' + e.button );
             if (e.button == 0) {
                 this.interface.buttonDown(this, Slot.PRIMARY, Button.TRIGGER);
             }
@@ -50,7 +55,6 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mouseup', (e: MouseEvent) => {
-            console.log('mouseup: ' + e.button );
             if (e.button == 0) {
                 this.interface.buttonUp(this, Slot.PRIMARY, Button.TRIGGER);
             }
@@ -88,39 +92,67 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     }
 
     onKeyDown(key: string) {
-        if (key == this.backwardKey) {
-            this.interface.buttonDown(this, Slot.MOVEMENT, Button.DOWN);
+        if (key == this.movementForwardKey) {
+            this.interface.buttonDown(this, Slot.WALK, Button.UP);
         }
-        if (key == this.forwardKey) {
-            this.interface.buttonDown(this, Slot.MOVEMENT, Button.UP);
+        if (key == this.movementBackwardKey) {
+            this.interface.buttonDown(this, Slot.WALK, Button.DOWN);
         }
-        if (key == this.leftKey) {
-            this.interface.buttonDown(this, Slot.MOVEMENT, Button.LEFT);
+        if (key == this.movementLeftKey) {
+            this.interface.buttonDown(this, Slot.WALK, Button.LEFT);
         }
-        if (key == this.rightKey) {
-            this.interface.buttonDown(this, Slot.MOVEMENT, Button.RIGHT);
+        if (key == this.movementRightKey) {
+            this.interface.buttonDown(this, Slot.WALK, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interface.buttonDown(this, Slot.MOVEMENT, Button.TRIGGER);
+            this.interface.buttonDown(this, Slot.WALK, Button.TRIGGER);
         }
+
+        if (key == this.upKey) {
+            this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.UP);
+        }
+        if (key == this.downKey) {
+            this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.DOWN);
+        }
+        if (key == this.rightKey) {
+            this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.RIGHT);
+        }
+        if (key == this.leftKey) {
+            this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.LEFT);
+        }
+
     }
 
     onKeyUp(key: string) {
-        if (key == this.backwardKey) {
-            this.interface.buttonUp(this, Slot.MOVEMENT, Button.DOWN);
+        if (key == this.movementForwardKey) {
+            this.interface.buttonUp(this, Slot.WALK, Button.UP);
         }
-        if (key == this.forwardKey) {
-            this.interface.buttonUp(this, Slot.MOVEMENT, Button.UP);
+        if (key == this.movementBackwardKey) {
+            this.interface.buttonUp(this, Slot.WALK, Button.DOWN);
         }
-        if (key == this.leftKey) {
-            this.interface.buttonUp(this, Slot.MOVEMENT, Button.LEFT);
+        if (key == this.movementLeftKey) {
+            this.interface.buttonUp(this, Slot.WALK, Button.LEFT);
         }
-        if (key == this.rightKey) {
-            this.interface.buttonUp(this, Slot.MOVEMENT, Button.RIGHT);
+        if (key == this.movementRightKey) {
+            this.interface.buttonUp(this, Slot.WALK, Button.RIGHT);
         }
         if (key == this.jumpKey) {
-            this.interface.buttonUp(this, Slot.MOVEMENT, Button.TRIGGER);
+            this.interface.buttonUp(this, Slot.WALK, Button.TRIGGER);
         }
+
+        if (key == this.upKey) {
+            this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.UP);
+        }
+        if (key == this.downKey) {
+            this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.DOWN);
+        }
+        if (key == this.rightKey) {
+            this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.RIGHT);
+        }
+        if (key == this.leftKey) {
+            this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.LEFT);
+        }
+
     }
 
 

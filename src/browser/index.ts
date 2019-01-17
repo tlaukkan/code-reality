@@ -10,11 +10,11 @@ import {States} from "./model/States";
 import {MovementState} from "./model/MovementState";
 import {InterfaceSystemController} from "./system/interface/InterfaceSystemController";
 import {InterfaceController} from "./system/interface/InterfaceController";
-import {MovementTool} from "./system/interface/tool/MovementTool";
+import {WalkTool} from "./system/interface/tool/WalkTool";
 import {PrimaryControllerDevice} from "./system/interface/device/PrimaryControllerDevice";
 import {ExampleController} from "./component/ExampleController";
 import {ExampleSystemController} from "./system/ExampleSystemController";
-import {EntityTool} from "./system/interface/tool/EntityTool";
+import {AddObjectTool} from "./system/interface/tool/AddObjectTool";
 import {CollidableController} from "./component/collidable/CollidableController";
 import {QuaternionController} from "./component/quaternion/QuaternionController";
 import {TeleportTool} from "./system/interface/tool/TeleportTool";
@@ -28,8 +28,8 @@ registerSystemController(SpaceSystemController.DEFINITION);
 registerComponentController(InterfaceController.DEFINITION);
 registerComponentController(ToolSelectorTool.DEFINITION);
 
-registerComponentController(EntityTool.DEFINITION);
-registerComponentController(MovementTool.DEFINITION);
+registerComponentController(AddObjectTool.DEFINITION);
+registerComponentController(WalkTool.DEFINITION);
 registerComponentController(TeleportTool.DEFINITION);
 
 registerComponentController(PrimaryControllerDevice.DEFINITION);

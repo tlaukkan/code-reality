@@ -5,7 +5,7 @@ import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
 import {PointerTool} from "./PointerTool";
-import {MovementTool} from "./MovementTool";
+import {WalkTool} from "./WalkTool";
 
 export class TeleportTool extends PointerTool {
 
@@ -18,7 +18,6 @@ export class TeleportTool extends PointerTool {
         //this.interface.setTool(ToolSlot.PRIMARY, this);
         this.raycaster = new Raycaster();
         this.interface.registerTool(this);
-        this.interface.slotTool(Slot.PRIMARY, this);
     }
 
     init(): void {
@@ -41,7 +40,7 @@ export class TeleportTool extends PointerTool {
         if (this.pressed.has(button)) {
             if (button == Button.TRIGGER) {
                 if (this.cursorPosition) {
-                    const movementTool: MovementTool = this.interface.getTool("movement-tool");
+                    const movementTool: WalkTool = this.interface.getToolAtSlot(Slot.WALK) as WalkTool;
                     this.interface.interfaceEntity.object3D.position.x = this.cursorPosition.x;
                     this.interface.interfaceEntity.object3D.position.y = this.cursorPosition.y;
                     this.interface.interfaceEntity.object3D.position.z = this.cursorPosition.z;

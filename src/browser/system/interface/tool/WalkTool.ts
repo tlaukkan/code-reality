@@ -4,16 +4,16 @@ import {EntityStateEventDetail} from "../../../model/EntityStateEventDetail";
 import {Events} from "../../../model/Events";
 import {Component, Entity} from "AFrame";
 import {Device} from "../Device";
-import {InterfaceTool} from "../InterfaceTool";
+import {Tool} from "../Tool";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
 
-export class MovementTool extends AbstractComponentController implements InterfaceTool {
+export class WalkTool extends AbstractComponentController implements Tool {
 
     public static DEFINITION = new ComponentControllerDefinition(
-        "movement-tool", {
+        "walk-tool", {
             movementSpeed: {type: 'number', default: 2}, // Meters per second
             rotationSpeed: {type: 'number', default: 1}, // Radians per second
             height: {type: 'number', default: 2},
@@ -21,7 +21,7 @@ export class MovementTool extends AbstractComponentController implements Interfa
             jumpStartSpeed: {type: 'number', default: 5.0},
             minY: {type: 'number', default: -1}
         }, false,
-        (component: Component, entity: Entity, data: any) => new MovementTool(component, entity, data)
+        (component: Component, entity: Entity, data: any) => new WalkTool(component, entity, data)
     );
 
     movementSpeed: number = 0;
@@ -63,8 +63,7 @@ export class MovementTool extends AbstractComponentController implements Interfa
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
         this.interface.registerTool(this);
-        this.interface.slotTool(Slot.SECONDARY, this);
-        this.interface.slotTool(Slot.MOVEMENT, this);
+        this.interface.slotTool(Slot.WALK, this);
     }
 
     init(): void {

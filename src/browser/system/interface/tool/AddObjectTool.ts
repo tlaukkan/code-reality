@@ -7,10 +7,10 @@ import {ComponentControllerDefinition} from "../../../AFrame";
 import {createElement} from "../../../util";
 import {PointerTool} from "./PointerTool";
 
-export class EntityTool extends PointerTool {
+export class AddObjectTool extends PointerTool {
 
     public static DEFINITION = new ComponentControllerDefinition(
-        "entity-tool", {}, false, (component: Component, entity: Entity, data: any) => new EntityTool(component, entity, data)
+        "add-object-tool", {}, false, (component: Component, entity: Entity, data: any) => new AddObjectTool(component, entity, data)
     );
 
     entityTemplateScale = 0.5;

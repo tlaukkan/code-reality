@@ -60,7 +60,7 @@
                     <a-entity keyboard-and-mouse position="0.25 -0.25 -0.4">
                         <a-entity id="tool-selector-desktop-placeholder" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="60 -45 -10">
                             <a-entity id="tool-selector" tool-selector-tool gltf-model="#tool-selector">
-                                <a-entity id="selected-tool-placeholder"></a-entity>
+                                <a-entity></a-entity>
                                 <!--<a-entity gltf-model="#add-object-tool"></a-entity>
                                 <a-entity gltf-model="#arrow-tool"></a-entity>
                                 <a-entity gltf-model="#move-object-tool"></a-entity>
@@ -91,9 +91,9 @@
                     </a-entity>
                 </a-entity>
 
-                <a-entity movement-tool="minY: -20;"></a-entity>
+                <a-entity walk-tool="minY: -20;"></a-entity>
+                <a-entity add-object-tool></a-entity>
                 <a-entity teleport-tool></a-entity>
-                <a-entity entity-tool></a-entity>
 
             </a-entity>
 

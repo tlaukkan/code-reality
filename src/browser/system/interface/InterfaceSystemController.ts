@@ -4,12 +4,12 @@ import {InterfaceController} from "./InterfaceController";
 import {DeviceSlot} from "./model/DeviceSlot";
 import {Device} from "./Device";
 import {Slot} from "./model/Slot";
-import {InterfaceTool} from "./InterfaceTool";
+import {Tool} from "./Tool";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
 import {SystemControllerDefinition} from "../../AFrame";
 import {Object3D} from "three";
-import {ComponentController} from "../../component/ComponentController";
+import {SlotListener} from "./SlotListener";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
@@ -18,7 +18,6 @@ export class InterfaceSystemController extends AbstractSystemController {
         (system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data)
     );
 
-
     public interfaceEntity: Entity;
     public cameraEntity: Entity;
     public collidables = new Array<Object3D>();
@@ -26,9 +25,11 @@ export class InterfaceSystemController extends AbstractSystemController {
     private interfaceController: InterfaceController | undefined;
 
     private devices: Map<DeviceSlot, Device> = new Map();
-    private tools: Map<string, InterfaceTool> = new Map();
-    private slots: Map<Slot, InterfaceTool> = new Map();
+    private tools: Map<string, Tool> = new Map();
+    private toolNames: Array<string> = new Array<string>();
+    private slots: Map<Slot, Tool> = new Map();
 
+    private slotListeners: Map<Slot, Array<SlotListener>> = new Map();
 
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
@@ -46,7 +47,6 @@ export class InterfaceSystemController extends AbstractSystemController {
         } else {
             throw new Error("interface camera entity not found.");
         }
-
     }
 
     init(): void {
@@ -62,15 +62,6 @@ export class InterfaceSystemController extends AbstractSystemController {
     }
 
     getCollidables(): Array<Object3D> {
-        /*if (this.collidables.length == 0) {
-            for (let entity of this.scene.children) {
-                if (!entity.hasAttribute("interface")) {
-                    if ((entity as Entity).object3D) {
-                        this.collidables.push((entity as Entity).object3D);
-                    }
-                }
-            }
-        }*/
         return this.collidables;
     }
 
@@ -102,16 +93,28 @@ export class InterfaceSystemController extends AbstractSystemController {
         return this.devices.get(slot);
     }
 
-    registerTool(tool: InterfaceTool) {
-        if (!this.tools.has(name)) {
+    registerTool(tool: Tool) {
+        if (!this.tools.has(tool.componentName)) {
             console.log("interface tool '" + tool.componentName + "' registered.");
             this.tools.set(tool.componentName, tool);
-        } else {
-            throw new Error("Tool '" + name + "' already registered.");
+            this.toolNames.push(tool.componentName);
         }
     }
 
-    getTool<T extends InterfaceTool>(name: string): T {
+    registerSlotListener(slot: Slot, slotListener: SlotListener) {
+        if (!this.slotListeners.has(slot)) {
+            this.slotListeners.set(slot, new Array());
+        }
+        this.slotListeners.get(slot)!!.push(slotListener);
+
+        // Notify slot listener of slotted tool if tool already slotted.
+        const slottedTool = this.getToolAtSlot(Slot.PRIMARY);
+        if (slottedTool) {
+            slotListener.onToolSlotted(Slot.PRIMARY, slottedTool!!.componentName);
+        }
+    }
+
+    getTool<T extends Tool>(name: string): T {
         if (this.tools.has(name)) {
             return this.tools.get(name)! as T;
         } else {
@@ -119,30 +122,59 @@ export class InterfaceSystemController extends AbstractSystemController {
         }
     }
 
-    slotTool(slot: Slot, tool: InterfaceTool) {
+    slotTool(slot: Slot, tool: Tool) {
+        this.slots.set(slot, tool);
+        console.log("interface tool " + tool.componentName + " set at: " + Slot[slot]);
+        if (this.slotListeners.has(slot)) {
+            this.slotListeners.get(slot)!!.forEach((slotListener: SlotListener) => {
+               slotListener.onToolSlotted(slot, tool.componentName);
+            });
+        }
+    }
+
+    getToolAtSlot(slot: Slot): Tool | undefined {
+        return this.slots.get(slot);
+    }
+
+    buttonUp(device: Device, slot: Slot, button: Button) {
         if (this.slots.has(slot)) {
-            console.log("interface already has tool at: " + Slot[slot]);
-        } else {
-            this.slots.set(slot, tool);
-            console.log("interface tool " + tool.componentName + " set at: " + Slot[slot]);
+            this.slots.get(slot)!!.buttonUp(device, slot, button);
         }
     }
 
-    buttonUp(device: Device, toolSlot: Slot, button: Button) {
-        if (this.slots.has(toolSlot)) {
-            this.slots.get(toolSlot)!!.buttonUp(device, toolSlot, button);
+    buttonDown(device: Device, slot: Slot, button: Button) {
+        if (this.slots.has(slot)) {
+            this.slots.get(slot)!!.buttonDown(device, slot, button);
         }
     }
 
-    buttonDown(device: Device, toolSlot: Slot, button: Button) {
-        if (this.slots.has(toolSlot)) {
-            this.slots.get(toolSlot)!!.buttonDown(device, toolSlot, button);
+    stickTwist(device: Device, slot: Slot, stick: Stick, x: number, y: number) {
+        if (this.slots.has(slot)) {
+            this.slots.get(slot)!!.stickTwist(device, slot, stick, x, y);
         }
     }
 
-    stickTwist(device: Device, toolSlot: Slot, stick: Stick, x: number, y: number) {
-        if (this.slots.has(toolSlot)) {
-            this.slots.get(toolSlot)!!.stickTwist(device, toolSlot, stick, x, y);
+    slotNextTool(slot: Slot): void {
+        if (this.slots.has(slot)) {
+            const tool = this.slots.get(slot)!!;
+            const toolIndex = this.toolNames.indexOf(tool.componentName);
+            const nextToolIndex = (toolIndex == this.toolNames.length - 1) ? 0 : toolIndex + 1;
+            console.log("tool index: " + toolIndex + " next tool index: " + nextToolIndex + " lenght: " + this.toolNames.length);
+            console.log(this.toolNames);
+            const nextToolName = this.toolNames[nextToolIndex];
+            const nextTool = this.getTool(nextToolName);
+            this.slotTool(slot, nextTool);
+        }
+    }
+
+    slotPreviousTool(slot: Slot): void {
+        if (this.slots.has(slot)) {
+            const tool = this.slots.get(slot)!!;
+            const toolIndex = this.toolNames.indexOf(tool.componentName);
+            const previousToolIndex = (toolIndex == 0) ? this.toolNames.length - 1 : toolIndex - 1;
+            const previousToolName = this.toolNames[previousToolIndex];
+            const previousTool = this.getTool(previousToolName);
+            this.slotTool(slot, previousTool);
         }
     }
 

@@ -4,7 +4,7 @@ import {Slot} from "./model/Slot";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
 
-export interface InterfaceTool extends ComponentController{
+export interface Tool extends ComponentController{
 
     buttonUp(device: Device, toolSlot: Slot, button: Button): void;
     buttonDown(device: Device, toolSlot: Slot, button: Button): void;
