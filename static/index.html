@@ -58,18 +58,8 @@
 
                 <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0">
                     <a-entity keyboard-and-mouse position="0.25 -0.25 -0.4">
-                        <a-entity id="tool-selector-desktop-placeholder" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="60 -45 -10">
-                            <a-entity id="tool-selector" tool-selector-tool gltf-model="#tool-selector">
-                                <a-entity></a-entity>
-                                <!--<a-entity gltf-model="#add-object-tool"></a-entity>
-                                <a-entity gltf-model="#arrow-tool"></a-entity>
-                                <a-entity gltf-model="#move-object-tool"></a-entity>
-                                <a-entity gltf-model="#remove-object-tool"></a-entity>
-                                <a-entity gltf-model="#scale-object-tool"></a-entity>
-                                <a-entity gltf-model="#teleport-tool"></a-entity>
-                                <a-entity gltf-model="#add-object-tool"></a-entity>
-                                <a-entity gltf-model="#walk-tool"></a-entity>-->
-                            </a-entity>
+                        <a-entity id="tool-selector-desktop-placeholder" position="0 0.01 0.05" scale="1 1 1" rotation="60 -45 -10">
+                            <a-entity id="tool-selector" tool-selector-tool gltf-model="#tool-selector"></a-entity>
                         </a-entity>
                     </a-entity>
                 </a-entity>
@@ -77,18 +67,7 @@
                 <a-entity secondary-controller oculus-touch-controls="hand: left" vive-controls="hand: left"></a-entity>
 
                 <a-entity primary-controller oculus-touch-controls="hand: right" vive-controls="hand: right" daydream-controls gearvr-controls oculus-go-controls>
-                    <a-entity id="tool-selector-vr-placeholder" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="0 0 0">
-                        <!--<a-entity gltf-model="#tool-selector" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="0 0 0">
-                            <a-entity gltf-model="#add-object-tool"></a-entity>
-                            <a-entity gltf-model="#arrow-tool"></a-entity>
-                            <a-entity gltf-model="#move-object-tool"></a-entity>
-                            <a-entity gltf-model="#remove-object-tool"></a-entity>
-                            <a-entity gltf-model="#scale-object-tool"></a-entity>
-                            <a-entity gltf-model="#teleport-tool"></a-entity>
-                            <a-entity gltf-model="#add-object-tool"></a-entity>
-                            <a-entity gltf-model="#walk-tool"></a-entity>
-                        </a-entity>-->
-                    </a-entity>
+                    <a-entity id="tool-selector-vr-placeholder" position="0 0.01 0.05" scale="0.5 0.5 0.5" rotation="0 0 0"></a-entity>
                 </a-entity>
 
                 <a-entity walk-tool="minY: -20;"></a-entity>

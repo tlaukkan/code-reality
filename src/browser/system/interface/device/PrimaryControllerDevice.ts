@@ -80,7 +80,7 @@ export class PrimaryControllerDevice extends AbstractComponentController impleme
             if (this.axis) {
                 if (this.lastStickButton) {
                     const button = this.lastStickButton;
-                    this.interface.buttonUp(this, Slot.SECONDARY_SELECTOR, button);
+                    this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, button);
                     console.log("button up: " + Button[button]);
                 }
             }
@@ -94,7 +94,7 @@ export class PrimaryControllerDevice extends AbstractComponentController impleme
                 this.axis[1] = -1 * this.axis[1];
             }
             //console.log(this.toolSlot + " axismove " + axis);
-            this.interface.stickTwist(this, Slot.PRIMARY, Stick.PRIMARY, this.axis[1], this.axis[0]);
+            //this.interface.stickTwist(this, Slot.PRIMARY, Stick.PRIMARY, this.axis[1], this.axis[0]);
         });
 
     }

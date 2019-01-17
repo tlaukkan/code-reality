@@ -25,7 +25,7 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     upKey = 'ArrowUp';
     downKey = 'ArrowDown';
 
-    pointerLockChanged: boolean = false;
+    pointerLock: boolean = false;
 
 
     constructor(component: Component, entity: Entity, data: any) {
@@ -38,7 +38,7 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         console.log(this.componentName + " init");
 
         addDocumentEventListener("pointerlockchange", (detail: any) => {
-            this.pointerLockChanged = true;
+            this.pointerLock = (document as any).pointerLockElement != null;
         });
 
         window.addEventListener('keydown', (e: KeyboardEvent) => {
@@ -50,7 +50,9 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mousedown', (e: MouseEvent) => {
-            this.pointerLockChanged = false;
+            if (!this.pointerLock) {
+                return;
+            }
             if (e.button == 0) {
                 this.interface.buttonDown(this, Slot.PRIMARY, Button.TRIGGER);
             }
@@ -60,14 +62,13 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             if (e.button == 2) {
                 this.interface.buttonDown(this, Slot.PRIMARY, Button.GRIP);
             }
-            this.pointerLockChanged = false;
         });
 
         (this.entity.sceneEl!! as any).addEventListener('mouseup', (e: MouseEvent) => {
+            if (!this.pointerLock) {
+                return;
+            }
             if (e.button == 0) {
-                if (this.pointerLockChanged) {
-                    return;
-                }
                 this.interface.buttonUp(this, Slot.PRIMARY, Button.TRIGGER);
             }
             if (e.button == 1) {
@@ -76,7 +77,6 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             if (e.button == 2) {
                 this.interface.buttonUp(this, Slot.PRIMARY, Button.GRIP);
             }
-            this.pointerLockChanged = false;
         });
 
         /*(this.entity.sceneEl!! as any).addEventListener('click', (e: MouseEvent) => {
