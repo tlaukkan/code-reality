@@ -1,4 +1,4 @@
-import {ClusterClient, Decode, Encode} from "@tlaukkan/aframe-dataspace";
+import {ClusterClient, Decode, Encode} from "reality-space";
 import uuid = require("uuid");
 import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
 import {Entity, Scene, System} from "AFrame";
@@ -147,7 +147,7 @@ export class SpaceSystemController extends AbstractSystemController {
 
         if (this.playerObject && this.cameraObject) {
 
-            this.client = new ClusterClient(this.clusterUrl!!, this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
+            this.client = new ClusterClient(this.clusterUrl!!, "default", this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
                 this.cameraObject.quaternion.x, this.cameraObject.quaternion.y, this.cameraObject.quaternion.z, this.cameraObject.quaternion.w, '<a-entity gltf-model="#robot" scale="0.3 0.3 0.3" avatar=""></a-entity>', this.idToken!!);
             this.client.onReceive = (serverUrl: string, type: string, message: string[]) => {
                 //console.log(message);
