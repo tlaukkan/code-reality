@@ -1,5 +1,5 @@
 import {AbstractComponentController} from "../../../component/AbstractComponentController";
-import {Component, Entity} from "AFrame";
+import {Component, Entity} from "aframe";
 import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";

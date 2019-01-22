@@ -1,4 +1,4 @@
-import {Component, Entity, Scene, System} from "AFrame";
+import {Component, Entity, Scene, System} from "aframe";
 import {AbstractSystemController} from "../AbstractSystemController";
 import {InterfaceController} from "./InterfaceController";
 import {DeviceSlot} from "./model/DeviceSlot";

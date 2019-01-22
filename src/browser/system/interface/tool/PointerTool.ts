@@ -1,6 +1,6 @@
 import {AbstractComponentController} from "../../../component/AbstractComponentController";
 import {Geometry, Line, LineBasicMaterial, Mesh, Object3D, Raycaster, SphereGeometry, Vector3} from "three";
-import {Component, Entity} from "AFrame";
+import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Tool} from "../Tool";
 import {Slot} from "../model/Slot";

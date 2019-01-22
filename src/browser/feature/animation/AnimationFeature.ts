@@ -5,7 +5,7 @@ import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";
 import {AnimationFinishedEventDetails} from "../../model/AnimationFinishedEventDetail";
 import {Events} from "../../model/Events";
 import {AnimationLoopStyle} from "./AnimationLoopStyle";
-import {Entity} from "AFrame";
+import {Entity} from "aframe";
 import {AbstractFeature} from "../AbstractFeature";
 import {StateSystemController} from "../../system/state/StateSystemController";
 import {getSystemController} from "../../AFrame";

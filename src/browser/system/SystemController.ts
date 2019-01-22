@@ -1,4 +1,4 @@
-import {Entity, Scene, System} from "AFrame";
+import {Entity, Scene, System} from "aframe";
 
 /**
  * Interface for system controllers.

@@ -1,4 +1,4 @@
-import {Scene, System} from "AFrame";
+import {Scene, System} from "aframe";
 import {AbstractSystemController} from "./AbstractSystemController";
 import {SystemControllerDefinition} from "../AFrame";
 

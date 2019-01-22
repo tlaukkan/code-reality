@@ -1,7 +1,7 @@
 import {ClusterClient, Decode, Encode} from "reality-space";
 import uuid = require("uuid");
 import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
-import {Entity, Scene, System} from "AFrame";
+import {Entity, Scene, System} from "aframe";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
 import {DynamicSpace} from "./DynamicSpace";

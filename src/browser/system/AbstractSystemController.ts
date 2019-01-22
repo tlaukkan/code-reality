@@ -1,5 +1,5 @@
 import {SystemController} from "./SystemController";
-import {Scene, System} from "AFrame";
+import {Scene, System} from "aframe";
 
 /**
  * Abstract base class for system controller implementations.

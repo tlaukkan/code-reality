@@ -1,4 +1,4 @@
-import {Component, Entity} from "AFrame";
+import {Component, Entity} from "aframe";
 import {SystemController} from "../system/SystemController";
 
 /**

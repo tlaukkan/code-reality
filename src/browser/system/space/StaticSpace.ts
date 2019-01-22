@@ -1,4 +1,4 @@
-import {Entity, Scene} from "AFrame";
+import {Entity, Scene} from "aframe";
 import {createElement} from "../../util";
 import {StateSystemController} from "../state/StateSystemController";
 import {getSystemController} from "../../AFrame";

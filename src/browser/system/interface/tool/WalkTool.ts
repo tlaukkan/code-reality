@@ -2,7 +2,7 @@ import {AbstractComponentController} from "../../../component/AbstractComponentC
 import {Object3D, Plane, Raycaster, Vector3} from "three";
 import {EntityStateEventDetail} from "../../../model/EntityStateEventDetail";
 import {Events} from "../../../model/Events";
-import {Component, Entity} from "AFrame";
+import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Tool} from "../Tool";
 import {Slot} from "../model/Slot";

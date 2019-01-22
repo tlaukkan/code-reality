@@ -1,4 +1,4 @@
-import {Component, Entity} from "AFrame";
+import {Component, Entity} from "aframe";
 import {AbstractComponentController} from "../AbstractComponentController";
 import {ComponentControllerDefinition} from "../../AFrame";
 

@@ -1,5 +1,5 @@
 import {ComponentController} from "./ComponentController";
-import {Component, Entity, Scene} from "AFrame";
+import {Component, Entity, Scene} from "aframe";
 import {SystemController} from "../system/SystemController";
 import {InterfaceSystemController} from "../system/interface/InterfaceSystemController";
 import {getSystemController} from "../AFrame";

@@ -1,5 +1,5 @@
 import {createElement} from "../../util";
-import {Entity, Scene} from "AFrame";
+import {Entity, Scene} from "aframe";
 import {Euler, Quaternion, Vector3} from "three";
 import {Spring} from "./Spring";
 import {Events} from "../../model/Events";

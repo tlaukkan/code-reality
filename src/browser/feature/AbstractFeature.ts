@@ -1,4 +1,4 @@
-import {Entity} from "AFrame";
+import {Entity} from "aframe";
 import {ComponentController} from "../component/ComponentController";
 
 export abstract class AbstractFeature {

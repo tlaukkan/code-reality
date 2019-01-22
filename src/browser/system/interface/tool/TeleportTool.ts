@@ -1,5 +1,5 @@
 import {Raycaster} from "three";
-import {Component, Entity} from "AFrame";
+import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
