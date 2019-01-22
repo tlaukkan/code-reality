@@ -46,7 +46,19 @@ Currently implemented authentication method is facebook authentication with expr
 ### Authorization
 
 Authorization to rest and web socket services are transmitted with JWT token. 
-The trusted issuer public keys are listed in dataspace cluster configuration.
+The trusted issuer public keys are listed in cluster configuration.
+
+#### Generating key pair
+
+RSA key pair can be generated as follows:
+
+    openssl genrsa -aes128 -out private.pem 2048
+    openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+
+Windows base64 encode:
+
+    certutil -encode public.pem tmp.b64; findstr /v /c:- tmp.b64 > public.b64; rm tmp.b64
+    certutil -encode private.pem tmp.b64; findstr /v /c:- tmp.b64 > private.b64; rm tmp.b64
 
 ### Public test environment JWT signer RSA key pair:
 

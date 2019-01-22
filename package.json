@@ -6,7 +6,7 @@
   "types": "lib/src/index.d.ts",
   "scripts": {
     "lint": "eslint src test *.js",
-    "start": "ts-node src/node/app.js",
+    "start": "ts-node src/node/app.ts",
     "dev:node": "ts-node-dev src/node/app.ts",
     "dev:browser": "webpack-dev-server --open",
     "test:node": "mocha --require ts-node/register --exit ./test/node/**/*.ts ./test/common/**/*.ts",
