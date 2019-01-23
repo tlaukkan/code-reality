@@ -15,51 +15,51 @@ export class DynamicSpace {
         this.scene = scene;
     }
 
-    connected(serverUrl: string) {
-        this.actuatorsMap.set(serverUrl, new Map<number, Actuator>());
+    connected(region: string) {
+        this.actuatorsMap.set(region, new Map<number, Actuator>());
     }
 
-    disconnected(serverUrl: string) {
-        if (!this.actuatorsMap.has(serverUrl)) {
+    disconnected(region: string) {
+        if (!this.actuatorsMap.has(region)) {
             return;
         }
-        this.actuatorsMap.get(serverUrl)!!.forEach((value: Actuator, key: number) => {
+        this.actuatorsMap.get(region)!!.forEach((value: Actuator, key: number) => {
             value.removed();
         });
-        this.actuatorsMap.delete(serverUrl);
+        this.actuatorsMap.delete(region);
     }
 
-    added(serverUrl: string, index: number, id: string, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number, description: string) : void {
+    added(region: string, index: number, id: string, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number, description: string) : void {
         if (id === this.avatarId) {
             this.avatarIndex = index;
             console.log("dataspace - observed own avatar add:" + y);
             return;
         }
-        const actuators = this.actuatorsMap.get(serverUrl);
+        const actuators = this.actuatorsMap.get(region);
         if (!actuators) { return; }
-        const actuator = new Actuator(this.scene, serverUrl, id, description);
+        const actuator = new Actuator(this.scene, region, id, description);
         actuators!!.set(index, actuator);
         actuator.added(x, y, z, rx, ry, rz, rw);
     }
 
-    updated(serverUrl: string, index: number, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
+    updated(region: string, index: number, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {
         if (index === this.avatarIndex) {
             //console.log("dataspace - observed own avatar update.");
             return;
         }
-        const actuators = this.actuatorsMap.get(serverUrl);
+        const actuators = this.actuatorsMap.get(region);
         if (!actuators) { return; }
         const actuator = actuators.get(index);
         if (!actuator) { return; }
         actuator!!.updated(x, y, z, rx, ry, rz, rw)
     }
 
-    removed(serverUrl: string, index: number, id: string) : void {
+    removed(region: string, index: number, id: string) : void {
         if (index == this.avatarIndex) {
             console.log("dataspace - observed own avatar remove.")
             return;
         }
-        const actuators = this.actuatorsMap.get(serverUrl);
+        const actuators = this.actuatorsMap.get(region);
         if (!actuators) { return; }
         const actuator = actuators.get(index);
         if (!actuator) { return; }
@@ -67,22 +67,22 @@ export class DynamicSpace {
         (getSystemController(this.scene, "state") as StateSystemController).removeStates(actuator.entity);
     }
 
-    described(serverUrl: string, index: number, description: string) : void {
+    described(region: string, index: number, description: string) : void {
         if (index == this.avatarIndex) {
             return;
         }
-        const actuators = this.actuatorsMap.get(serverUrl);
+        const actuators = this.actuatorsMap.get(region);
         if (!actuators) { return; }
         const actuator = actuators.get(index);
         if (!actuator) { return; }
         actuator!!.described(description);
     }
 
-    acted(serverUrl: string, index: number, action: string, description: string) : void {
+    acted(region: string, index: number, action: string, description: string) : void {
         if (index == this.avatarIndex) {
             return;
         }
-        const actuators = this.actuatorsMap.get(serverUrl);
+        const actuators = this.actuatorsMap.get(region);
         if (!actuators) { return; }
         const actuator = actuators.get(index);
         if (!actuator) { return; }

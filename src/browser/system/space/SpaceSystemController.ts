@@ -149,47 +149,47 @@ export class SpaceSystemController extends AbstractSystemController {
 
             this.client = new ClusterClient(this.clusterUrl!!, "default", this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
                 this.cameraObject.quaternion.x, this.cameraObject.quaternion.y, this.cameraObject.quaternion.z, this.cameraObject.quaternion.w, '<a-entity gltf-model="#robot" scale="0.3 0.3 0.3" avatar=""></a-entity>', this.idToken!!);
-            this.client.onReceive = (serverUrl: string, type: string, message: string[]) => {
+            this.client.onReceive = (region: string, type: string, message: string[]) => {
                 //console.log(message);
                 if (type === Encode.ADDED) {
                     const m = Decode.added(message);
-                    this.dynamicSpace!!.added(serverUrl, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9]);
+                    this.dynamicSpace!!.added(region, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9]);
                 }
                 if (type === Encode.UPDATED) {
                     const m = Decode.updated(message);
-                    this.dynamicSpace!!.updated(serverUrl, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7]);
+                    this.dynamicSpace!!.updated(region, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7]);
                 }
                 if (type === Encode.REMOVED) {
                     const m = Decode.removed(message);
-                    this.dynamicSpace!!.removed(serverUrl, m[0], m[1]);
+                    this.dynamicSpace!!.removed(region, m[0], m[1]);
                 }
                 if (type === Encode.DESCRIBED) {
                     const m = Decode.described(message);
-                    this.dynamicSpace!!.described(serverUrl, m[0], m[1]);
+                    this.dynamicSpace!!.described(region, m[0], m[1]);
                 }
                 if (type === Encode.ACTED) {
                     const m = Decode.acted(message);
-                    this.dynamicSpace!!.acted(serverUrl, m[0], m[1], m[2]);
+                    this.dynamicSpace!!.acted(region, m[0], m[1], m[2]);
                 }
             };
-            this.client.onStoredRootEntityReceived = (serverUrl, sid, entityXml) => {
-                this.staticSpace!!.setRootEntity(serverUrl, sid, entityXml);
+            this.client.onStoredRootEntityReceived = (region, sid, entityXml) => {
+                this.staticSpace!!.setRootEntity(region, sid, entityXml);
             };
-            this.client.onStoredChildEntityReceived = (serverUrl, parentSid, sid, entityXml) => {
-                this.staticSpace!!.setChildEntity(serverUrl, parentSid, sid, entityXml);
+            this.client.onStoredChildEntityReceived = (region, parentSid, sid, entityXml) => {
+                this.staticSpace!!.setChildEntity(region, parentSid, sid, entityXml);
             };
-            this.client.onStoredEntityRemoved = (serverUrl, sid) => {
-                this.staticSpace!!.removeEntity(serverUrl, sid);
+            this.client.onStoredEntityRemoved = (region, sid) => {
+                this.staticSpace!!.removeEntity(region, sid);
             };
-            this.client.onConnect = (serverUrl: string) => {
-                console.log("dataspace - connected: " + serverUrl);
-                this.dynamicSpace!!.connected(serverUrl);
-                this.staticSpace!!.connected(serverUrl);
+            this.client.onConnect = (region: string) => {
+                console.log("dataspace - connected: " + region);
+                this.dynamicSpace!!.connected(region);
+                this.staticSpace!!.connected(region);
             };
-            this.client.onDisconnect = (serverUrl: string) => {
-                console.log("dataspace - disconnected: " + serverUrl)
-                this.dynamicSpace!!.disconnected(serverUrl);
-                this.staticSpace!!.disconnected(serverUrl);
+            this.client.onDisconnect = (region: string) => {
+                console.log("dataspace - disconnected: " + region)
+                this.dynamicSpace!!.disconnected(region);
+                this.staticSpace!!.disconnected(region);
 
             };
             this.client.connect().catch((error: Error) => {
