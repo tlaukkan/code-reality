@@ -71,6 +71,10 @@ export class AddObjectTool extends PointerTool {
             newEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
             newEntity.setAttribute("position", snappedPosition.x + " " + snappedPosition.y + " " + snappedPosition.z);
             newEntity.setAttribute("oid", uuid.v4().toString());
+            if (newEntity.flushToDOM) {
+                newEntity.flushToDOM(true);
+            }
+
             this.scene.appendChild(newEntity);
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
