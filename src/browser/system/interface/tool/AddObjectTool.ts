@@ -8,6 +8,7 @@ import {createElement} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
 import {SpaceSystemController} from "../../../..";
+import uuid = require("uuid");
 
 export class AddObjectTool extends PointerTool {
 
@@ -69,10 +70,14 @@ export class AddObjectTool extends PointerTool {
             const newEntity = createElement(this.entityTemplate) as Entity;
             newEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
             newEntity.setAttribute("position", snappedPosition.x + " " + snappedPosition.y + " " + snappedPosition.z);
-            //this.scene.appendChild(newEntity);
+            newEntity.setAttribute("oid", uuid.v4().toString());
+            this.scene.appendChild(newEntity);
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-            spaceSystem.saveEntity(newEntity.outerHTML, snappedPosition.x, snappedPosition.y, snappedPosition.z);
+            spaceSystem.saveEntity(newEntity.outerHTML, snappedPosition.x, snappedPosition.y, snappedPosition.z).catch(error => {
+                console.error("Error saving entity", error);
+            });
+
         }
     }
 

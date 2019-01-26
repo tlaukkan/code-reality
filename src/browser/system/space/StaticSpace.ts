@@ -33,8 +33,22 @@ export class StaticSpace {
         }
 
         const newElement = createElement(entityXml);
+        const oid = newElement.getAttribute("oid");
         newElement.setAttribute("server", serverUrl);
+
+        // If element exists with oid then update that element.
+        if (oid) {
+            const elements = document.querySelectorAll('[oid="' + oid + '"]');
+            for (const element of elements) {
+                element.setAttribute("sid", sid);
+                element.setAttribute("server", serverUrl);
+                return;
+            }
+        }
+
+        // Add element as element does not exist yet.
         this.scene.appendChild(newElement);
+
     }
 
     setChildEntity(serverUrl: string, parentSid: string, sid: string, entityXml: string) {

@@ -63,11 +63,10 @@ export class RemoveObjectTool extends PointerTool {
                     const position = pointedEntity.object3D.position.clone();
                     const worldPosition = pointedEntity.object3D.getWorldPosition(position);
                     spaceSystem.removeEntity(entitySid, worldPosition.x, worldPosition.y, worldPosition.z);
-
-                } else {
-                    console.log("removing locally");
-                    pointedEntity.parentElement!!.removeChild(pointedEntity);
                 }
+
+                console.log("removing locally");
+                pointedEntity.parentElement!!.removeChild(pointedEntity);
 
             }
         }
