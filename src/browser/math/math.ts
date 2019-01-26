@@ -1,5 +1,4 @@
 import {Vector3} from "three";
-import {Entity} from "aframe";
 
 /**
  * Snaps vector to axis aligned grid.
@@ -22,9 +21,4 @@ export function snapVector3ToAxisAlignedGrid(vector: Vector3, step: number): Vec
  */
 export function snapNumberToAxisAlignedGrid(number: number, step: number): number {
     return Math.round(number / step) * step;
-
-    /*const reminder = number - Math.round(number / step) * step;
-    const reminderSign = Math.sign(reminder);
-    const snappedValue = number - reminder + reminderSign * step / 2;
-    return snappedValue;*/
 }

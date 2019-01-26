@@ -1,4 +1,4 @@
-import { Quaternion, Raycaster} from "three";
+import {Geometry, Mesh, Quaternion, Raycaster} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
@@ -6,6 +6,7 @@ import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
 import {createElement} from "../../../util";
 import {PointerTool} from "./PointerTool";
+import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
 
 export class AddObjectTool extends PointerTool {
 
@@ -13,9 +14,8 @@ export class AddObjectTool extends PointerTool {
         "add-object-tool", {}, false, (component: Component, entity: Entity, data: any) => new AddObjectTool(component, entity, data)
     );
 
-    entityTemplateScale = 0.5;
-    entityTemplate: string = "<a-box/>";
-    heldEntity: Entity | undefined;
+    entityTemplateScale = 1;
+    entityTemplate: string = '<a-entity gltf-model="#cube" collidable/>';
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -33,29 +33,14 @@ export class AddObjectTool extends PointerTool {
 
     buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
-            if (button == Button.GRIP) {
-                if (this.pointedObject) {
-
-                } else {
-                    if (!this.heldEntity) {
-                        this.addEntity(device);
-                    }
-                }
-            }
         }
         super.buttonDown(device, toolSlot, button);
     }
 
     buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
-            if (button == Button.GRIP) {
-                if (this.pointedObject) {
-
-                } else {
-                    if (this.heldEntity) {
-                        this.releaseEntity();
-                    }
-                }
+            if (button == Button.TRIGGER) {
+                this.addEntity(device);
             }
         }
         super.buttonUp(device, toolSlot, button);
@@ -63,60 +48,43 @@ export class AddObjectTool extends PointerTool {
 
     private addEntity(device: Device) {
         console.log("add object");
-        this.heldEntity = createElement(this.entityTemplate) as Entity;
-        this.heldEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
-        this.heldEntity.setAttribute("position", "0 0 -" + this.entityTemplateScale * 2);
-        device.entity.appendChild(this.heldEntity);
+
+        const gridStep = 1;
+        const pointedObject = this.pointedObject;
+        const pointerPosition = this.cursorPosition;
+        //const pointedFaceIndex = this.pointedFaceIndex;
+
+        if (pointedObject && pointerPosition) {
+            const pointedObjectPosition = pointedObject.position.clone();
+            pointedObject.getWorldPosition(pointedObjectPosition);
+
+            console.log("pointed object position" + JSON.stringify(pointedObjectPosition));
+
+            console.log("pointer position" + JSON.stringify(pointerPosition));
+
+            const newPosition = pointerPosition.clone();
+            console.log("pointed position" + newPosition);
+            newPosition.sub(pointedObjectPosition);
+            console.log("vector from object position to pointer: " + JSON.stringify(newPosition));
+            newPosition.normalize();
+            console.log("dormalized direction: " + JSON.stringify(newPosition));
+            newPosition.multiplyScalar(gridStep);
+            console.log("vector from object position to new position: " + JSON.stringify(newPosition));
+            newPosition.add(pointedObjectPosition);
+            console.log("new position: " + JSON.stringify(newPosition));
+
+            const snappedPosition = snapVector3ToAxisAlignedGrid(newPosition, gridStep);
+            console.log("snapper new position: " + JSON.stringify(snappedPosition));
+
+            const newHeldEntity = createElement(this.entityTemplate) as Entity;
+            //const position = pointerPosition;
+            newHeldEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
+            newHeldEntity.setAttribute("position", snappedPosition.x + " " + snappedPosition.y + " " + snappedPosition.z);
+            this.scene.appendChild(newHeldEntity);
+
+        }
     }
 
-    private releaseEntity() {
-
-        // Extract entity world position
-        //const entityPosition = new Vector3();
-        const entityPosition = (this.heldEntity!!.object3D as any).getWorldPosition();
-        const entityQuaternion = new Quaternion();
-        this.heldEntity!!.object3D.getWorldQuaternion(entityQuaternion);
-        //var entityRotation = (this.heldEntity!!.object3D as any).getWorldRotation();
-
-
-        //(this.heldEntity!! as any).flushToDom();
-        // Extract entity HTML description.
-
-        this.heldEntity!!.flushToDOM();
-        const entityHtml = this.heldEntity!!.outerHTML;
-
-        // Remove entity from current parent.
-        this.heldEntity!!.parentElement!!.removeChild(this.heldEntity!!);
-
-
-
-        // Create new copy of entity
-        this.heldEntity = createElement(entityHtml) as Entity;
-
-        // Set the world position and rotation.
-        this.heldEntity!!.setAttribute("position", entityPosition.x + " " + entityPosition.y + " " + entityPosition.z);
-        this.heldEntity!!.setAttribute("quaternion", entityQuaternion.x + " " + entityQuaternion.y + " " + entityQuaternion.z + " " + entityQuaternion.w);
-        /*this.heldEntity!!.setAttribute("rotation",
-            Math.radToDeg(entityRotation.x) + " " +
-            Math.radToDeg(entityRotation.y) + " " +
-            Math.radToDeg(entityRotation.z));*/
-        this.scene.appendChild(this.heldEntity!!);
-
-        // Add entity to scene.
-        //this.heldEntity!!.setAttribute("position", entityPosition);
-        //this.heldEntity!!.object3D.position.copy(entityPosition);
-        //this.heldEntity!!.object3D.rotation.copy(entityRotation);
-        //this.heldEntity!!.parentElement!!.removeChild(this.heldEntity!!);
-        //this.scene.appendChild(this.heldEntity!!);
-
-        //this.heldEntity!!.object3D.position.copy(entityPosition);
-        //this.heldEntity!!.object3D.rotation.copy(entityRotation);
-        //console.log(entityPosition);
-        //this.heldEntity!!.object3D.position.copy(entityPosition);
-        //this.heldEntity!!.flushToDOM();
-
-        this.heldEntity = undefined;
-    }
 
 }
 

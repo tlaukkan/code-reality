@@ -27,8 +27,6 @@ describe('Math tests.', () => {
 
     it('Test vector3 snap to grid.', async () => {
         expect(snapVector3ToAxisAlignedGrid(new Vector3(0.4, 1.4, 2.4), 0.5).toString()).eq(new Vector3(0.5, 1.5, 2.5).toString());
-
-
     });
 
 });

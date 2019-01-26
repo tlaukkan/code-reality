@@ -31,6 +31,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
     cursorPosition: Vector3 | undefined;
 
     pointedObject: Object3D | undefined;
+    pointedFaceIndex: number | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -126,11 +127,13 @@ export class PointerTool extends AbstractComponentController implements Tool {
 
         if (intersects.length > 0) {
             const intersectionPoint = intersects[0].point;
+            //console.log(JSON.stringify(intersects[0]));
             this.pointerCursor.position.copy(intersectionPoint);
             if (!this.cursorPosition) {
                 this.addCursor(intersects[0].object);
             }
             this.cursorPosition = intersectionPoint;
+            this.pointedFaceIndex = intersects[0].faceIndex;
         } else {
             if (this.cursorPosition) {
                 this.removeCursor();
@@ -149,6 +152,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
         this.scene.object3D.remove(this.pointerCursor);
         console.log("remove pointer cursor.");
         this.pointedObject = undefined;
+        this.pointedFaceIndex = undefined;
         this.cursorPosition = undefined;
     }
 

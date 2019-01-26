@@ -21,7 +21,7 @@
             <a-assets>
                 <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
                 <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
-                <a-asset-item id="cube" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/primitives/stone/cube_marble_white.glb"></a-asset-item>
+                <a-asset-item id="cube" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.1/primitives/stone/cube_marble_white.glb"></a-asset-item>
 
                 <a-asset-item id="tool-selector" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/selector.glb"></a-asset-item>
                 <a-asset-item id="add-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/add-object-tool.glb"></a-asset-item>
@@ -51,27 +51,21 @@
                         <a-box color="#8EA604" collidable position="0 0.5 -10" scale="4 0.5 4" ></a-box>
             -->
 
-            <a-entity gltf-model="#cube" collidable position="0 -1 0" scale="1 1 1" rotation="90 0 0" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="0 -0.75 -2" scale="1 1 1" rotation="0 0 90" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="0 -0.5 -4" scale="1 1 1" rotation="-90 0 0" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="0 -0.25 -6" scale="1 1 1" rotation="0 0 -90" avatar></a-entity>
+            <a-entity gltf-model="#cube" collidable position="0 -1 0" scale="2 2 2" rotation="90 0 0" avatar></a-entity>
+            <a-entity gltf-model="#cube" collidable position="0 -0.75 -2" scale="2 2 2" rotation="0 0 90" avatar></a-entity>
+            <a-entity gltf-model="#cube" collidable position="0 -0.5 -4" scale="2 2 2" rotation="-90 0 0" avatar></a-entity>
+            <a-entity gltf-model="#cube" collidable position="0 -0.25 -6" scale="2 2 2" rotation="0 0 -90" avatar></a-entity>
 
 
-            <a-entity gltf-model="#cube" collidable position="-1 0 -8" scale="1 1 1" rotation="90 0 0" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="1 0 -8" scale="1 1 1" rotation="0 0 90" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="-1 0 -10" scale="1 1 1" rotation="-90 0 0" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="1 0 -10" scale="1 1 1" rotation="0 0 -90" avatar></a-entity>
-
-
-
-
+            <a-entity gltf-model="#cube" collidable position="-1 0 -8" scale="2 2 2" rotation="90 0 0" avatar></a-entity>
+            <a-entity gltf-model="#cube" collidable position="1 0 -8" scale="2 2 2" rotation="0 0 90" avatar></a-entity>
+            <a-entity gltf-model="#cube" collidable position="-1 0 -10" scale="2 2 2" rotation="-90 0 0" avatar></a-entity>
+            <a-entity gltf-model="#cube" collidable position="1 0 -10" scale="2 2 2" rotation="0 0 -90" avatar></a-entity>
 
             <a-entity gltf-model="#tree" collidable position="-1 1 -10" scale="0.01 0.01 0.01"></a-entity>
             <a-entity gltf-model="#robot" collidable position="1 1 -10" scale="0.3 0.3 0.3" avatar></a-entity>
 
-
             <a-sphere position="2 0 -3" collidable scale="1 1 1" color="#FFFFFF" identity example></a-sphere>
-
 
             <!-- Interface -->
             <a-entity interface position="0 0 0">
