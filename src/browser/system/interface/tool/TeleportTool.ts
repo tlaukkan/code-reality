@@ -40,11 +40,11 @@ export class TeleportTool extends PointerTool {
     buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == Button.TRIGGER) {
-                if (this.cursorPosition) {
+                if (this.pointedPosition) {
                     const movementTool: WalkTool = this.interface.getToolAtSlot(Slot.WALK) as WalkTool;
-                    this.interface.interfaceEntity.object3D.position.x = this.cursorPosition.x;
-                    this.interface.interfaceEntity.object3D.position.y = this.cursorPosition.y;
-                    this.interface.interfaceEntity.object3D.position.z = this.cursorPosition.z;
+                    this.interface.interfaceEntity.object3D.position.x = this.pointedPosition.x;
+                    this.interface.interfaceEntity.object3D.position.y = this.pointedPosition.y;
+                    this.interface.interfaceEntity.object3D.position.z = this.pointedPosition.z;
                     movementTool.setCenterOfMassFromInterfaceEntity();
                 }
             }

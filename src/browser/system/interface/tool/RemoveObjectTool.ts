@@ -49,7 +49,7 @@ export class RemoveObjectTool extends PointerTool {
         console.log("remove object");
 
         const pointedObject = this.pointedObject;
-        const pointerPosition = this.cursorPosition;
+        const pointerPosition = this.pointedPosition;
 
         if (pointedObject && pointerPosition) {
             const pointedEntity = getElement(pointedObject);

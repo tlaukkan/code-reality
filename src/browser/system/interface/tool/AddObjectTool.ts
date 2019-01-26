@@ -50,7 +50,7 @@ export class AddObjectTool extends PointerTool {
 
         const gridStep = 1;
         const pointedObject = this.pointedObject;
-        const pointerPosition = this.cursorPosition;
+        const pointerPosition = this.pointedPosition;
         //const pointedFaceIndex = this.pointedFaceIndex;
 
         if (pointedObject && pointerPosition) {

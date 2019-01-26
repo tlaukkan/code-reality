@@ -28,7 +28,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
     pointerDevice: Device | undefined;
     pointerDevicePosition: Vector3 = new Vector3(0,0,0);
     pointerDirection: Vector3 = new Vector3(0,0,0);
-    cursorPosition: Vector3 | undefined;
+    pointedPosition: Vector3 | undefined;
 
     pointedObject: Object3D | undefined;
     pointedFaceIndex: number | undefined;
@@ -100,7 +100,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
     }
 
     pointerOff(device: Device) {
-        if (this.cursorPosition) {
+        if (this.pointedPosition) {
             this.removeCursor();
         }
 
@@ -129,13 +129,14 @@ export class PointerTool extends AbstractComponentController implements Tool {
             const intersectionPoint = intersects[0].point;
             //console.log(JSON.stringify(intersects[0]));
             this.pointerCursor.position.copy(intersectionPoint);
-            if (!this.cursorPosition) {
+            if (!this.pointedPosition) {
                 this.addCursor(intersects[0].object);
             }
-            this.cursorPosition = intersectionPoint;
+            this.pointedPosition = intersectionPoint;
+            this.pointedObject = intersects[0].object;
             this.pointedFaceIndex = intersects[0].faceIndex;
         } else {
-            if (this.cursorPosition) {
+            if (this.pointedPosition) {
                 this.removeCursor();
             }
         }
@@ -144,7 +145,6 @@ export class PointerTool extends AbstractComponentController implements Tool {
 
     private addCursor(object: Object3D) {
         this.scene.object3D.add(this.pointerCursor);
-        this.pointedObject = object;
         console.log("add pointer cursor.");
     }
 
@@ -153,7 +153,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
         console.log("remove pointer cursor.");
         this.pointedObject = undefined;
         this.pointedFaceIndex = undefined;
-        this.cursorPosition = undefined;
+        this.pointedPosition = undefined;
     }
 
 }
