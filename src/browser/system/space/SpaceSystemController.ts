@@ -198,6 +198,64 @@ export class SpaceSystemController extends AbstractSystemController {
             });
         }
     }
+
+    public getClusterClient(): ClusterClient | undefined {
+        return this.client;
+    }
+
+    public async saveEntity(entityXml: string, x: number, y: number, z: number) {
+        const region = this.getRegion(x, y, z);
+        if (region) {
+            if (this.client) {
+                await this.client.storeEntities(region, "<a-entities>" + entityXml + "</a-entities>");
+            } else {
+                console.warn("not connected.");
+            }
+        } else {
+            console.warn("No region found at " + x + "," + y + "," + z);
+        }
+    }
+
+    public async removeEntity(entitySid: string, x: number, y: number, z: number) {
+        const region = this.getRegion(x, y, z);
+        if (region) {
+            if (this.client) {
+                await this.client.removeStoredEntities(region, [entitySid]);
+            } else {
+                console.warn("not connected.");
+            }
+        } else {
+            console.warn("No region found at " + x + "," + y + "," + z);
+        }
+    }
+
+    public getRegion(x: number, y: number, z: number): string | undefined {
+        if (this.client) {
+            const regions = Array<string>();
+            let lastD2 = Number.MAX_SAFE_INTEGER;
+            for (let region of this.client.clusterConfiguration!!.regions) {
+                if (x >= region.x - region.edge / 2 && x <= region.x + region.edge / 2 &&
+                    y >= region.y - region.edge / 2 && y <= region.y + region.edge / 2 &&
+                    z >= region.z - region.edge / 2 && z <= region.z + region.edge / 2) {
+                    const d2 = Math.pow(x - region.x, 2) + Math.pow(y - region.y, 2) + Math.pow(z - region.z, 2);
+                    if (d2 < lastD2) {
+                        regions.unshift(region.region);
+                    } else {
+                        regions.push(region.region);
+                    }
+                    lastD2 = d2;
+                }
+            }
+            if (regions.length > 0) {
+                return regions[0];
+            } else {
+                return undefined;
+            }
+        } else {
+            console.warn("not connected.");
+            return undefined;
+        }
+    }
 }
 
 

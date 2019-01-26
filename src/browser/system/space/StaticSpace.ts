@@ -16,7 +16,7 @@ export class StaticSpace {
     }
 
     disconnected(serverUrl: string) {
-        const elements = document.querySelectorAll('[server="' + serverUrl + ']');
+        const elements = document.querySelectorAll('[server="' + serverUrl + '"]');
         elements.forEach(element => {
             if (element.parentElement) {
                 element.parentElement.removeChild(element);
@@ -69,7 +69,7 @@ export class StaticSpace {
     }
 
     getElement(sid: string) : Entity | undefined {
-        const elements = document.querySelectorAll('[sid="' + sid + ']');
+        const elements = document.querySelectorAll('[sid="' + sid + '"]');
         if (!elements || elements.length == 0) {
             return undefined;
         }
