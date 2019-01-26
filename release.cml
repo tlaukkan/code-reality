@@ -1,2 +1,4 @@
-
 npm run build:browser
+git add .
+git commit -m "commiting dist changes."
+
