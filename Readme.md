@@ -25,6 +25,14 @@ Tested devices:
 npm run build:node
 npm run build:browser
 
+## Add to heroku
+---
+    heroku create --region eu code-reality
+    git push heroku master
+    heroku logs -t
+    heroku logs -t --dyno=web
+---
+
 ## Run
 
 ### Development mode
