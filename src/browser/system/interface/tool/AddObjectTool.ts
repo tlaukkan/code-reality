@@ -47,7 +47,6 @@ export class AddObjectTool extends PointerTool {
     }
 
     private addEntity(device: Device) {
-        console.log("add object");
 
         const gridStep = 1;
         const pointedObject = this.pointedObject;
@@ -58,29 +57,18 @@ export class AddObjectTool extends PointerTool {
             const pointedObjectPosition = pointedObject.position.clone();
             pointedObject.getWorldPosition(pointedObjectPosition);
 
-            console.log("pointed object position" + JSON.stringify(pointedObjectPosition));
-
-            console.log("pointer position" + JSON.stringify(pointerPosition));
-
             const newPosition = pointerPosition.clone();
-            console.log("pointed position" + newPosition);
             newPosition.sub(pointedObjectPosition);
-            console.log("vector from object position to pointer: " + JSON.stringify(newPosition));
             newPosition.normalize();
-            console.log("dormalized direction: " + JSON.stringify(newPosition));
             newPosition.multiplyScalar(gridStep / 2);
-            console.log("vector from object position to new position: " + JSON.stringify(newPosition));
             newPosition.add(pointerPosition);
-            console.log("new position: " + JSON.stringify(newPosition));
 
             const snappedPosition = snapVector3ToAxisAlignedGrid(newPosition, gridStep);
-            console.log("snapper new position: " + JSON.stringify(snappedPosition));
 
-            const newHeldEntity = createElement(this.entityTemplate) as Entity;
-            //const position = pointerPosition;
-            newHeldEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
-            newHeldEntity.setAttribute("position", snappedPosition.x + " " + snappedPosition.y + " " + snappedPosition.z);
-            this.scene.appendChild(newHeldEntity);
+            const newEntity = createElement(this.entityTemplate) as Entity;
+            newEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
+            newEntity.setAttribute("position", snappedPosition.x + " " + snappedPosition.y + " " + snappedPosition.z);
+            this.scene.appendChild(newEntity);
 
         }
     }

@@ -19,6 +19,7 @@ import {CollidableController} from "./component/collidable/CollidableController"
 import {QuaternionController} from "./component/quaternion/QuaternionController";
 import {TeleportTool} from "./system/interface/tool/TeleportTool";
 import {ToolSelectorTool} from "./system/interface/tool/ToolSelectorTool";
+import {RemoveObjectTool} from "./system/interface/tool/RemoveObjectTool";
 
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
@@ -29,6 +30,7 @@ registerComponentController(InterfaceController.DEFINITION);
 registerComponentController(ToolSelectorTool.DEFINITION);
 
 registerComponentController(AddObjectTool.DEFINITION);
+registerComponentController(RemoveObjectTool.DEFINITION);
 registerComponentController(WalkTool.DEFINITION);
 registerComponentController(TeleportTool.DEFINITION);
 

@@ -15,6 +15,7 @@ export {PrimaryControllerDevice} from "./browser/system/interface/device/Primary
 export {ExampleController} from "./browser/component/ExampleController";
 export {ExampleSystemController} from "./browser/system/ExampleSystemController";
 export {AddObjectTool} from "./browser/system/interface/tool/AddObjectTool";
+export {RemoveObjectTool} from "./browser/system/interface/tool/RemoveObjectTool";
 export {TeleportTool} from "./browser/system/interface/tool/TeleportTool";
 export {CollidableController} from "./browser/component/collidable/CollidableController";
 export {QuaternionController} from "./browser/component/quaternion/QuaternionController";
