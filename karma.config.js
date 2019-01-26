@@ -1,11 +1,12 @@
 const webpackConfig = require("./webpack.config");
 
-module.exports = (config) => {
+module.exports = function (config) {
     config.set({
         frameworks: ['mocha','chai'],
         files: [
-            { pattern: 'test/browser/**/*.ts', watched: false },
-            { pattern: 'test/common/**/*.ts', watched: false }
+            { pattern: 'https://cdn.jsdelivr.net/gh/aframevr/aframe@cb4de2e19d577e9b5c34f01efe1c1d96c1d1c2e0/dist/aframe-master.min.js', watched: false},
+            { pattern: 'test/browser/**/*.ts', watched: true },
+            { pattern: 'test/common/**/*.ts', watched: true }
         ],
         preprocessors: {
             'test/browser/**/*.ts': [ 'webpack' ],
@@ -13,7 +14,8 @@ module.exports = (config) => {
         },
         webpack: {
             module: webpackConfig.module,
-            resolve: webpackConfig.resolve
+            resolve: webpackConfig.resolve,
+            externals: webpackConfig.externals
         },
         webpackMiddleware: {
             stats: 'errors-only'
@@ -22,8 +24,8 @@ module.exports = (config) => {
         colors: true,
         logLevel: config.LOG_INFO,
         browsers: ['ChromeHeadless', 'FirefoxHeadless'],
-        autoWatch: false,
-        singleRun: true,
+        autoWatch: true,
+        singleRun: false,
         customLaunchers: {
             FirefoxHeadless: {
                 base: 'Firefox',
