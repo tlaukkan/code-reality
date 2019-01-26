@@ -68,9 +68,9 @@ export class AddObjectTool extends PointerTool {
             console.log("vector from object position to pointer: " + JSON.stringify(newPosition));
             newPosition.normalize();
             console.log("dormalized direction: " + JSON.stringify(newPosition));
-            newPosition.multiplyScalar(gridStep);
+            newPosition.multiplyScalar(gridStep / 2);
             console.log("vector from object position to new position: " + JSON.stringify(newPosition));
-            newPosition.add(pointedObjectPosition);
+            newPosition.add(pointerPosition);
             console.log("new position: " + JSON.stringify(newPosition));
 
             const snappedPosition = snapVector3ToAxisAlignedGrid(newPosition, gridStep);
