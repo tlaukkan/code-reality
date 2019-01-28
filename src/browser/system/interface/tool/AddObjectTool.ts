@@ -40,13 +40,6 @@ export class AddObjectTool extends PointerTool {
         super.init();
     }
 
-    play(): void {
-        this.setReviewEntity();
-        super.play();
-    }
-
-
-
     tick(time: number, timeDelta: number): void {
         super.tick(time, timeDelta);
     }
