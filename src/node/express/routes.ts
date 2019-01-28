@@ -1,5 +1,6 @@
 import {Express} from "express";
 import {User} from "../model/User";
+import config = require('config');
 
 export function initializeRoutes(app: Express) {
     app.get('/api/users/current', function (request, response) {
@@ -34,7 +35,10 @@ export function initializeRoutes(app: Express) {
             //console.log("space not set to session. returning default space.");
             response.send("default");
         }
+    });
 
+    app.get('/api/users/current/cluster-url', function (request, response) {
+        response.send(config.get("Cluster.configurationUrl"));
     });
 
     console.log('routes loaded.');

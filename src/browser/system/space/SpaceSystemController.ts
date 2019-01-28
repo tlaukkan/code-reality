@@ -16,7 +16,7 @@ export class SpaceSystemController extends AbstractSystemController {
         (system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data)
     );
 
-    private readonly clusterUrl: string | undefined = undefined;
+    private clusterUrl: string | undefined = undefined;
     private idToken: string | undefined;
     private space: string | undefined;
 
@@ -47,11 +47,12 @@ export class SpaceSystemController extends AbstractSystemController {
 
         this.dynamicSpace = new DynamicSpace(this.scene!!, this.avatarId);
         this.staticSpace = new StaticSpace(this.scene!!);
-        this.clusterUrl = this.data;
 
-        fetch('/api/users/current/id-token')
+        fetch('/api/users/current/cluster-url')
             .then((response) => {
                 response.text().then((data) => {
+                    this.clusterUrl = data;
+                    console.log("cluster URL: " + this.clusterUrl);
                     //console.log(data);
                     this.idToken = data;
                 });
@@ -63,6 +64,15 @@ export class SpaceSystemController extends AbstractSystemController {
                 response.text().then((data) => {
                     this.space = data;
                     console.log("current space: " + this.space);
+                });
+            }).catch((err) => {
+            console.error(err);
+        });
+        fetch('/api/users/current/id-token')
+            .then((response) => {
+                response.text().then((data) => {
+                    //console.log(data);
+                    this.idToken = data;
                 });
             }).catch((err) => {
             console.error(err);
