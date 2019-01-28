@@ -10,10 +10,19 @@ const host = config.get('Server.host') as string;
 
 const app = express();
 
+initializeSession(app);
+
+app.use(function (req, res, next) {
+    if (req.query.space) {
+        console.log("set current space according to query parameter to: " + req.query.space);
+        (req as any).session.space = req.query.space;
+    }
+    next();
+});
+
 app.use(express.static('static'));
 app.use(express.static('dist'));
 
-initializeSession(app);
 //initializeAuthentication(app, config);
 initializeRoutes(app);
 

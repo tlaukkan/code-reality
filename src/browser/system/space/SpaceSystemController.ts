@@ -18,6 +18,7 @@ export class SpaceSystemController extends AbstractSystemController {
 
     private readonly clusterUrl: string | undefined = undefined;
     private idToken: string | undefined;
+    private space: string | undefined;
 
     private avatarId = uuid.v4();
 
@@ -53,6 +54,15 @@ export class SpaceSystemController extends AbstractSystemController {
                 response.text().then((data) => {
                     //console.log(data);
                     this.idToken = data;
+                });
+            }).catch((err) => {
+            console.error(err);
+        });
+        fetch('/api/users/current/space')
+            .then((response) => {
+                response.text().then((data) => {
+                    this.space = data;
+                    console.log("current space: " + this.space);
                 });
             }).catch((err) => {
             console.error(err);
@@ -99,7 +109,7 @@ export class SpaceSystemController extends AbstractSystemController {
     }
 
     setupClient(): void {
-        if (!this.clusterUrl || !this.idToken) {
+        if (!this.clusterUrl || !this.idToken || !this.space) {
             return;
         }
 
@@ -147,7 +157,7 @@ export class SpaceSystemController extends AbstractSystemController {
 
         if (this.playerObject && this.cameraObject) {
 
-            this.client = new ClusterClient(this.clusterUrl!!, "default", this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
+            this.client = new ClusterClient(this.clusterUrl!!, this.space, this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
                 this.cameraObject.quaternion.x, this.cameraObject.quaternion.y, this.cameraObject.quaternion.z, this.cameraObject.quaternion.w, '<a-entity gltf-model="#robot" scale="0.3 0.3 0.3" avatar=""></a-entity>', this.idToken!!);
             this.client.onReceive = (region: string, type: string, message: string[]) => {
                 //console.log(message);
