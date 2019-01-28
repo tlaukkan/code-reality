@@ -17,7 +17,14 @@ export class AddObjectTool extends PointerTool {
     );
 
     entityTemplateScale = 1;
-    entityTemplate: string = '<a-entity gltf-model="#cube" collidable/>';
+    entityTemplates: Array<string> = [
+        '<a-entity gltf-model="#cube" collidable/>',
+        '<a-entity gltf-model="#cube_wood" collidable/>',
+        '<a-entity gltf-model="#cube_brick" collidable/>',
+        '<a-entity gltf-model="#cube_grass" collidable/>'
+    ];
+    entityTemplateIndex = 0;
+    entityTemplate: string = this.entityTemplates[this.entityTemplateIndex];
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -44,6 +51,23 @@ export class AddObjectTool extends PointerTool {
             if (button == Button.TRIGGER) {
                 this.addEntity(device);
             }
+
+            if (button == Button.UP) {
+                this.entityTemplateIndex++;
+                if (this.entityTemplateIndex >= this.entityTemplates.length) {
+                    this.entityTemplateIndex = 0;
+                }
+                this.entityTemplate = this.entityTemplates[this.entityTemplateIndex];
+            }
+
+            if (button == Button.DOWN) {
+                this.entityTemplateIndex--;
+               if (this.entityTemplateIndex <= 0) {
+                   this.entityTemplateIndex = this.entityTemplates.length - 1;
+               }
+               this.entityTemplate = this.entityTemplates[this.entityTemplateIndex];
+            }
+
         }
         super.buttonUp(device, toolSlot, button);
     }

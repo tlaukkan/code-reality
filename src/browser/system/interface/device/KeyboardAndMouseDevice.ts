@@ -122,10 +122,10 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         }
 
         if (key == this.upKey) {
-            this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.UP);
+            this.interface.buttonDown(this, Slot.PRIMARY, Button.UP);
         }
         if (key == this.downKey) {
-            this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.DOWN);
+            this.interface.buttonDown(this, Slot.PRIMARY, Button.DOWN);
         }
         if (key == this.rightKey) {
             this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.RIGHT);
@@ -154,10 +154,10 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
         }
 
         if (key == this.upKey) {
-            this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.UP);
+            this.interface.buttonUp(this, Slot.PRIMARY, Button.UP);
         }
         if (key == this.downKey) {
-            this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.DOWN);
+            this.interface.buttonUp(this, Slot.PRIMARY, Button.DOWN);
         }
         if (key == this.rightKey) {
             this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.RIGHT);

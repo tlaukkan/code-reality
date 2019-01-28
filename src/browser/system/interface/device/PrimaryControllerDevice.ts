@@ -4,9 +4,7 @@ import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
-import {ToolSlot} from "../../../../../lib/src/browser/system/interface/model/ToolSlot";
 
 export class PrimaryControllerDevice extends AbstractComponentController implements Device {
 
@@ -70,7 +68,11 @@ export class PrimaryControllerDevice extends AbstractComponentController impleme
             console.log("trackpaddown " + detail);
             if (this.axis) {
                 const button = this.getStickButton(this.axis[0], this.axis[1]);
-                this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, button);
+                if (button == Button.UP || button == Button.DOWN) {
+                    this.interface.buttonDown(this, Slot.PRIMARY, button);
+                } else {
+                    this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, button);
+                }
                 this.lastStickButton = button;
                 console.log("button down: "+ Button[button]);
             }
@@ -80,7 +82,11 @@ export class PrimaryControllerDevice extends AbstractComponentController impleme
             if (this.axis) {
                 if (this.lastStickButton) {
                     const button = this.lastStickButton;
-                    this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, button);
+                    if (button == Button.UP || button == Button.DOWN) {
+                        this.interface.buttonUp(this, Slot.PRIMARY, button);
+                    } else {
+                        this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, button);
+                    }
                     console.log("button up: " + Button[button]);
                 }
             }
