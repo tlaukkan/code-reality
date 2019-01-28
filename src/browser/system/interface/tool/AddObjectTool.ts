@@ -9,6 +9,7 @@ import {PointerTool} from "./PointerTool";
 import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
 import {SpaceSystemController} from "../../../..";
 import uuid = require("uuid");
+import {ToolSelectorTool} from "../../../../../lib/src/browser/system/interface/tool/ToolSelectorTool";
 
 export class AddObjectTool extends PointerTool {
 
@@ -16,7 +17,10 @@ export class AddObjectTool extends PointerTool {
         "add-object-tool", {}, false, (component: Component, entity: Entity, data: any) => new AddObjectTool(component, entity, data)
     );
 
+    reviewEntity: Entity | undefined;
+
     entityTemplateScale = 1;
+    entityReviewScale = 0.05;
     entityTemplates: Array<string> = [
         '<a-entity gltf-model="#cube" collidable/>',
         '<a-entity gltf-model="#cube_wood" collidable/>',
@@ -35,6 +39,13 @@ export class AddObjectTool extends PointerTool {
         console.log(this.componentName + " init");
         super.init();
     }
+
+    play(): void {
+        this.setReviewEntity();
+        super.play();
+    }
+
+
 
     tick(time: number, timeDelta: number): void {
         super.tick(time, timeDelta);
@@ -58,6 +69,7 @@ export class AddObjectTool extends PointerTool {
                     this.entityTemplateIndex = 0;
                 }
                 this.entityTemplate = this.entityTemplates[this.entityTemplateIndex];
+                this.setReviewEntity();
             }
 
             if (button == Button.DOWN) {
@@ -66,10 +78,23 @@ export class AddObjectTool extends PointerTool {
                    this.entityTemplateIndex = this.entityTemplates.length - 1;
                }
                this.entityTemplate = this.entityTemplates[this.entityTemplateIndex];
+                this.setReviewEntity();
             }
 
         }
         super.buttonUp(device, toolSlot, button);
+    }
+
+    setReviewEntity() {
+        const toolSelectorTool = this.interface.getToolAtSlot(Slot.PRIMARY_SELECTOR) as ToolSelectorTool;
+
+        if (this.reviewEntity) {
+            toolSelectorTool.entity.removeChild(this.reviewEntity);
+        }
+        this.reviewEntity = createElement(this.entityTemplate) as Entity;
+        this.reviewEntity.setAttribute("scale", this.entityReviewScale + " " + this.entityReviewScale + " " + this.entityReviewScale);
+        this.reviewEntity.setAttribute("position", "0 0 -0.1");
+        toolSelectorTool.entity.appendChild(this.reviewEntity);
     }
 
     private addEntity(device: Device) {
