@@ -53,8 +53,6 @@ export class SpaceSystemController extends AbstractSystemController {
                 response.text().then((data) => {
                     this.clusterUrl = data;
                     console.log("cluster URL: " + this.clusterUrl);
-                    //console.log(data);
-                    this.idToken = data;
                 });
             }).catch((err) => {
             console.error(err);
@@ -71,7 +69,6 @@ export class SpaceSystemController extends AbstractSystemController {
         fetch('/api/users/current/id-token')
             .then((response) => {
                 response.text().then((data) => {
-                    //console.log(data);
                     this.idToken = data;
                 });
             }).catch((err) => {
