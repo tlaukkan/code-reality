@@ -1,6 +1,6 @@
-const webpack = require('webpack');
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+var webpack = require('webpack');
+var path = require('path');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/browser/index.ts',
@@ -12,9 +12,9 @@ module.exports = {
         extensions: [ '.ts', ".js", ".json"]
     },
     module: {
-        rules: [ {
+        rules: [{
             test: /\.js$/,
-            exclude: /(node_modules)/,
+            exclude: [/(node_modules)/,/(dist)/,/(lib)/],
             use: {
                 loader: 'babel-loader',
                 options: {
@@ -23,9 +23,9 @@ module.exports = {
             }
         }, {
             test: /\.ts?$/,
-            loader: "ts-loader"
-        }
-        ]
+            loader: "ts-loader",
+            exclude: [/(node_modules)/,/(dist)/,/(lib)/]
+        }]
     },
     devtool: 'eval-source-map',
     externals: {
