@@ -9,7 +9,7 @@ import {PointerTool} from "./PointerTool";
 import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
 import {SpaceSystemController} from "../../../..";
 import uuid = require("uuid");
-import {ToolSelectorTool} from "../../../../../lib/src/browser/system/interface/tool/ToolSelectorTool";
+import {ToolSelectorTool} from "./ToolSelectorTool";
 
 export class AddObjectTool extends PointerTool {
 
