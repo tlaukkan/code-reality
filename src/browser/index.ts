@@ -20,6 +20,7 @@ import {QuaternionController} from "./component/quaternion/QuaternionController"
 import {TeleportTool} from "./system/interface/tool/TeleportTool";
 import {ToolSelectorTool} from "./system/interface/tool/ToolSelectorTool";
 import {RemoveObjectTool} from "./system/interface/tool/RemoveObjectTool";
+import {StaticModelController} from "./system/merge/StaticModelController";
 
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
@@ -44,6 +45,8 @@ registerComponentController(AvatarController.DEFINITION);
 registerComponentController(IdentityController.DEFINITION);
 registerComponentController(LabelController.DEFINITION);
 registerComponentController(QuaternionController.DEFINITION);
+
+registerComponentController(StaticModelController.DEFINITION);
 
 registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });
 
