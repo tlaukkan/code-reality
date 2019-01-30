@@ -1,4 +1,4 @@
-import {Geometry, Mesh, Quaternion, Raycaster} from "three";
+import {Geometry, Mesh, Quaternion, Raycaster, Vector3} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
@@ -11,6 +11,7 @@ import {SpaceSystemController} from "../../../..";
 import uuid = require("uuid");
 import {ToolSelectorTool} from "./ToolSelectorTool";
 
+
 export class AddObjectTool extends PointerTool {
 
     public static DEFINITION = new ComponentControllerDefinition(
@@ -22,10 +23,10 @@ export class AddObjectTool extends PointerTool {
     entityTemplateScale = 1;
     entityReviewScale = 0.05;
     entityTemplates: Array<string> = [
-        '<a-entity gltf-model="#cube" collidable/>',
-        '<a-entity gltf-model="#cube_wood" collidable/>',
-        '<a-entity gltf-model="#cube_brick" collidable/>',
-        '<a-entity gltf-model="#cube_grass" collidable/>'
+        '<a-entity model="#cube" collidable/>',
+        '<a-entity model="#cube_wood" collidable/>',
+        '<a-entity model="#cube_brick" collidable/>',
+        '<a-entity model="#cube_grass" collidable/>'
     ];
     entityTemplateIndex = 0;
     entityTemplate: string = this.entityTemplates[this.entityTemplateIndex];
@@ -98,31 +99,23 @@ export class AddObjectTool extends PointerTool {
         //const pointedFaceIndex = this.pointedFaceIndex;
 
         if (pointedObject && pointerPosition) {
+
             const pointedObjectPosition = pointedObject.position.clone();
             pointedObject.getWorldPosition(pointedObjectPosition);
 
-            const newPosition = pointerPosition.clone();
-            newPosition.sub(pointedObjectPosition);
-            newPosition.normalize();
-            newPosition.multiplyScalar(gridStep / 2);
-            newPosition.add(pointerPosition);
+            const template = this.entityTemplate;
+            const templateScale = this.entityTemplateScale;
 
-            const snappedPosition = snapVector3ToAxisAlignedGrid(newPosition, gridStep);
+            const entityPosition = pointerPosition.clone();
+            entityPosition.sub(pointedObjectPosition);
+            entityPosition.normalize();
+            entityPosition.multiplyScalar(gridStep / 2);
+            entityPosition.add(pointerPosition);
 
-            const newEntity = createElement(this.entityTemplate) as Entity;
-            newEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
-            newEntity.setAttribute("position", snappedPosition.x + " " + snappedPosition.y + " " + snappedPosition.z);
-            newEntity.setAttribute("oid", uuid.v4().toString());
-            if (newEntity.flushToDOM) {
-                newEntity.flushToDOM(true);
-            }
-
-            this.scene.appendChild(newEntity);
+            const snappedPosition = snapVector3ToAxisAlignedGrid(entityPosition, gridStep);
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-            spaceSystem.saveEntity(newEntity.outerHTML, snappedPosition.x, snappedPosition.y, snappedPosition.z).catch(error => {
-                console.error("Error saving entity", error);
-            });
+            spaceSystem.saveEntityFromTemplate(snappedPosition, template, templateScale);
 
         }
     }

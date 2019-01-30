@@ -2,21 +2,27 @@ import {Entity, Scene} from "aframe";
 import {createElement} from "../../util";
 import {StateSystemController} from "../state/StateSystemController";
 import {getSystemController} from "../../AFrame";
+import {Vector3} from "three";
 
 export class StaticSpace {
 
     scene: Scene;
+    regionElements = new Map<string, Element>();
 
     constructor(scene: Scene) {
         this.scene = scene;
     }
 
-    connected(serverUrl: string) {
-
+    connected(region: string, regionOrigo: Vector3) {
+        if (!this.regionElements.has(region)) {
+            const regionElement = createElement('<a-entity merge region="' + region + '" position="' + regionOrigo.x + ' ' + regionOrigo.y + ' ' + regionOrigo.z + '"/>');
+            this.regionElements.set(region, regionElement);
+            this.scene.appendChild(regionElement);
+        }
     }
 
-    disconnected(serverUrl: string) {
-        const elements = document.querySelectorAll('[server="' + serverUrl + '"]');
+    disconnected(region: string) {
+        const elements = document.querySelectorAll('[server="' + region + '"]');
         elements.forEach(element => {
             if (element.parentElement) {
                 element.parentElement.removeChild(element);
@@ -24,8 +30,8 @@ export class StaticSpace {
         })
     }
 
-    setRootEntity(serverUrl: string, sid: string, entityXml: string) {
-        console.log("Set root entity " + serverUrl + "/" + sid + ": " + entityXml);
+    setRootEntity(region: string, sid: string, entityXml: string) {
+        console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
         const existingElement = this.getElement(sid);
         if (existingElement) {
             // Remove old element as it is being replaced.
@@ -34,25 +40,25 @@ export class StaticSpace {
 
         const newElement = createElement(entityXml);
         const oid = newElement.getAttribute("oid");
-        newElement.setAttribute("server", serverUrl);
+        newElement.setAttribute("server", region);
 
         // If element exists with oid then update that element.
         if (oid) {
             const elements = document.querySelectorAll('[oid="' + oid + '"]');
             for (const element of elements) {
                 element.setAttribute("sid", sid);
-                element.setAttribute("server", serverUrl);
+                element.setAttribute("server", region);
                 return;
             }
         }
 
         // Add element as element does not exist yet.
-        this.scene.appendChild(newElement);
+        this.regionElements.get(region)!!.appendChild(newElement);
 
     }
 
-    setChildEntity(serverUrl: string, parentSid: string, sid: string, entityXml: string) {
-        console.log("Set child entity " + serverUrl + "/" + parentSid + "/" + sid + ": " + entityXml);
+    setChildEntity(region: string, parentSid: string, sid: string, entityXml: string) {
+        console.log("Set child entity " + region + "/" + parentSid + "/" + sid + ": " + entityXml);
         const parentElement = this.getElement(parentSid);
         if (parentElement === undefined) {
             console.log("Parent element not found sid: " + sid);
@@ -65,12 +71,12 @@ export class StaticSpace {
         }
 
         const newElement = createElement(entityXml);
-        newElement.setAttribute("server", serverUrl);
+        newElement.setAttribute("server", region);
         parentElement.appendChild(newElement);
     }
 
-    removeEntity(serverUrl: string, sid: string) {
-        console.log("Removed entity " + serverUrl + "/" + sid);
+    removeEntity(region: string, sid: string) {
+        console.log("Removed entity " + region + "/" + sid);
         const element = this.getElement(sid);
         if (element === undefined) {
             console.log("Element to be removed not found sid: " + sid);

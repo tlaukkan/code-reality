@@ -8,6 +8,8 @@ import {DynamicSpace} from "./DynamicSpace";
 import {StaticSpace} from "./StaticSpace";
 import {AbstractSystemController} from "../AbstractSystemController";
 import {SystemControllerDefinition} from "../../AFrame";
+import {getClusterConfiguration} from "reality-space/lib/src/common/reality/Configuration";
+import {createElement} from "../../util";
 
 export class SpaceSystemController extends AbstractSystemController {
 
@@ -31,7 +33,7 @@ export class SpaceSystemController extends AbstractSystemController {
     private client: ClusterClient | undefined = undefined;
 
     private dynamicSpace: DynamicSpace | undefined = undefined;
-    private staticSpace: StaticSpace | undefined = undefined;
+    public staticSpace: StaticSpace | undefined = undefined;
 
     private lastRefresh: number = 0;
 
@@ -200,8 +202,12 @@ export class SpaceSystemController extends AbstractSystemController {
             };
             this.client.onConnect = (region: string) => {
                 console.log("dataspace - connected: " + region);
+                const regionConfiguration = this.getRegionConfiguration(region);
+                const regionOrigoX = regionConfiguration.x;
+                const regionOrigoY = regionConfiguration.y;
+                const regionOrigoZ = regionConfiguration.z - 2; // TODO Remove this test
                 this.dynamicSpace!!.connected(region);
-                this.staticSpace!!.connected(region);
+                this.staticSpace!!.connected(region, new Vector3(regionOrigoX, regionOrigoY, regionOrigoZ));
             };
             this.client.onDisconnect = (region: string) => {
                 console.log("dataspace - disconnected: " + region)
@@ -218,6 +224,29 @@ export class SpaceSystemController extends AbstractSystemController {
 
     public getClusterClient(): ClusterClient | undefined {
         return this.client;
+    }
+
+    public saveEntityFromTemplate(snappedPosition: Vector3, template: string, templateScale: number) {
+        const region = this.getRegion(snappedPosition.x, snappedPosition.y, snappedPosition.z)!!;
+        const regionConfiguration = this.getRegionConfiguration(region);
+
+        const localPosition = snappedPosition.clone();
+        localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
+        localPosition.z = localPosition.z + 2;
+
+        const newEntity = createElement(template) as Entity;
+        newEntity.setAttribute("scale", templateScale + " " + templateScale + " " + templateScale);
+        newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
+        newEntity.setAttribute("oid", uuid.v4().toString());
+        if (newEntity.flushToDOM) {
+            newEntity.flushToDOM(true);
+        }
+
+        this.staticSpace!!.regionElements.get(region)!!.appendChild(newEntity);
+
+        this.saveEntity(newEntity.outerHTML, snappedPosition.x, snappedPosition.y, snappedPosition.z).catch(error => {
+            console.error("Error saving entity", error);
+        });
     }
 
     public async saveEntity(entityXml: string, x: number, y: number, z: number) {
@@ -272,6 +301,16 @@ export class SpaceSystemController extends AbstractSystemController {
             console.warn("not connected.");
             return undefined;
         }
+    }
+
+    public getRegionConfiguration(region: string) {
+        const clusterConfiguration = this.client!!.clusterConfiguration!!;
+        for (const regionConfiguration of clusterConfiguration.regions) {
+            if (regionConfiguration.region == region) {
+                return regionConfiguration;
+            }
+        }
+        throw new Error("Region configuration not found: " + region);
     }
 }
 

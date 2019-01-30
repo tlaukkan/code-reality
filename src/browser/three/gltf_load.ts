@@ -8,11 +8,12 @@ const modelLoadedCallbacks = new Map<string, Array<() => void>>();
 export async function setEntityGltfModel(entity: Entity, src: string): Promise<void> {
     const gltf = await getGltfModel(src);
     let mesh = cloneObject3D(gltf.scene) || cloneObject3D(gltf.scenes[0]);
-    const mesh2 = cloneObject3D(mesh);
+
+    /*const mesh2 = cloneObject3D(mesh);
     mesh2.position.y = 3;
 
     const mergedMesh = mergeObject3Ds([mesh, mesh2]);
-    mesh = mergedMesh;
+    mesh = mergedMesh;*/
 
     (mesh as any).animations = gltf.animations;
     entity.setObject3D('mesh', mesh);
@@ -38,7 +39,7 @@ export function getGltfModel(src: string): Promise<GLTF> {
                 }
             });
         } else {
-            console.error("GLTF manager - providing from cache: " + src);
+            console.info("GLTF manager - providing from cache: " + src);
             resolve(models.get(src)!!);
         }
 

@@ -1,5 +1,5 @@
 import {AbstractComponentController} from "../../../component/AbstractComponentController";
-import {Object3D, Plane, Raycaster, Vector3} from "three";
+import {Intersection, Object3D, Plane, Raycaster, Vector3} from "three";
 import {EntityStateEventDetail} from "../../../model/EntityStateEventDetail";
 import {Events} from "../../../model/Events";
 import {Component, Entity} from "aframe";
@@ -9,6 +9,8 @@ import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
+import {raycast} from "../../../three/raycast";
+
 
 export class WalkTool extends AbstractComponentController implements Tool {
 
@@ -302,7 +304,10 @@ export class WalkTool extends AbstractComponentController implements Tool {
         this.raycaster!!.near = 0;
         this.raycaster!!.far = this.height;
         this.raycaster!!.set(this.centerOfMassPosition, rayDirection);
-        var intersects = this.raycaster!!.intersectObjects(objects, true);
+
+        const caster = this.raycaster!!;
+        const intersects = raycast(objects, caster);
+        //var intersects = this.raycaster!!.intersectObjects(objects, true);
         if (intersects.length > 0) {
             return intersects[0].distance;
         } else {

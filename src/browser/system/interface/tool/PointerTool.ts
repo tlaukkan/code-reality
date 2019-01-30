@@ -7,6 +7,7 @@ import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
+import {raycast} from "../../../three/raycast";
 
 export class PointerTool extends AbstractComponentController implements Tool {
 
@@ -118,7 +119,9 @@ export class PointerTool extends AbstractComponentController implements Tool {
         this.raycaster!!.far = 100;
         this.raycaster!!.set(this.pointerDevicePosition, this.pointerDirection);
 
-        const intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables(), true);
+        //const intersects = this.raycaster!!.intersectObjects(this.interface.getCollidables(), true);
+        const intersects = raycast(this.interface.getCollidables(), this.raycaster);
+
         if (intersects.length > 0) {
             if (intersects[0].object === this.pointerCursor) {
                 intersects.splice(0, 1);
