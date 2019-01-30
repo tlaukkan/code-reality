@@ -22,7 +22,7 @@ export class ModelController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.merge = this.recursiveFindMergeParent(this.entity);
         if (this.merge) {
             this.mergeSystem.addLoadingMergeChild(this.merge!!, this.entity);
@@ -30,9 +30,9 @@ export class ModelController extends AbstractComponentController {
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.componentName + " update: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " update: " + JSON.stringify(this.data));
         setEntityGltfModel(this.entity, data).then(() => {
-            console.log("Static model loaded: " + data);
+            //console.log("Static model loaded: " + data);
             if (this.merge) {
                 this.mergeSystem.setMergeChildLoaded(this.merge!!, this.entity);
             }

@@ -5,10 +5,11 @@ export class MergeData {
 
     entity: Entity;
     childEntities: Set<Entity> = new Set<Entity>();
-
+    loadingChildEntities: Set<Entity> = new Set<Entity>();
     mergeObject: Object3D | undefined;
 
-    loadingChildEntities: Set<Entity> = new Set<Entity>();
+    lastModificationTimeMillis = 0;
+    lastMergeTimeMillis = 0;
 
     constructor(entity: Entity) {
         this.entity = entity;

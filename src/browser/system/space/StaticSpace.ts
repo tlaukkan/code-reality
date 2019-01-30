@@ -22,6 +22,8 @@ export class StaticSpace {
     }
 
     disconnected(region: string) {
+        this.scene.removeChild(this.regionElements.get(region)!!);
+
         const elements = document.querySelectorAll('[server="' + region + '"]');
         elements.forEach(element => {
             if (element.parentElement) {
@@ -31,7 +33,7 @@ export class StaticSpace {
     }
 
     setRootEntity(region: string, sid: string, entityXml: string) {
-        console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
+        //console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
         const existingElement = this.getElement(sid);
         if (existingElement) {
             // Remove old element as it is being replaced.

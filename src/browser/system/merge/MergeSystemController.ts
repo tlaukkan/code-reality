@@ -31,6 +31,12 @@ export class MergeSystemController extends AbstractSystemController {
     }
 
     tick(time: number, timeDelta: number): void {
+        const timeMillis = new Date().getTime();
+        for (const merge of this.merges.values()) {
+            if (merge.lastMergeTimeMillis != 0 && merge.lastModificationTimeMillis > merge.lastMergeTimeMillis && timeMillis - merge.lastModificationTimeMillis > 60000) {
+                this.merge(merge);
+            }
+        }
     }
 
     addMerge(mergeEntity: Entity) {
@@ -41,16 +47,17 @@ export class MergeSystemController extends AbstractSystemController {
     }
 
     addLoadingMergeChild(mergeEntity: Entity, mergeChildEntity: Entity) {
-        console.log("merge child loading...");
+        //console.log("merge child loading...");
         if (!this.merges.has(mergeEntity)) {
             this.merges.set(mergeEntity, new MergeData(mergeEntity));
         }
-        this.merges.get(mergeEntity)!!.childEntities.add(mergeChildEntity);
-        this.merges.get(mergeEntity)!!.loadingChildEntities.add(mergeChildEntity);
+        const merge = this.merges.get(mergeEntity)!!;
+        merge.childEntities.add(mergeChildEntity);
+        merge.loadingChildEntities.add(mergeChildEntity);
     }
 
     setMergeChildLoaded(mergeEntity: Entity, mergeChildEntity: Entity) {
-        console.log("merge child loaded.");
+        //console.log("merge child loaded.");
         const merge = this.merges.get(mergeEntity)!!;
         if (!merge) {
             return;
@@ -58,16 +65,23 @@ export class MergeSystemController extends AbstractSystemController {
 
         merge.loadingChildEntities.delete(mergeChildEntity);
         if (merge.loadingChildEntities.size > 0) {
-            console.log("merge child entities still loading: " + merge.loadingChildEntities.size);
+            //console.log("merge child entities still loading: " + merge.loadingChildEntities.size);
             return;
         }
 
         console.log("merge child entities loaded.");
-        this.merge(merge);
+
+        merge.lastModificationTimeMillis = new Date().getTime();
+
+        if (merge.lastMergeTimeMillis == 0) {
+            this.merge(merge);
+        }
 
     }
 
     private merge(merge: MergeData) {
+
+        merge.lastMergeTimeMillis = new Date().getTime();
         console.log("merging...");
 
         const startTimeMillis = new Date().getTime();
@@ -82,10 +96,9 @@ export class MergeSystemController extends AbstractSystemController {
 
         // Collect objects to merge.
         const objectsToMerge = new Array<Object3D>();
-        console.log("child entities size: " + merge.childEntities.size);
+        console.log("child entities to merge size: " + merge.childEntities.size);
         for (const entity of merge.childEntities) {
             const originalObject = entity.object3D;
-            console.log("entity to merge: " + entity.outerHTML);
             //entity.removeObject3D("mesh");
             // Set original hidden.
             originalObject.visible = false;
@@ -120,7 +133,7 @@ export class MergeSystemController extends AbstractSystemController {
     }
 
     removeMergeChild(mergeEntity: Entity, mergeChildEntity: Entity) {
-        console.log("merge child remove.");
+        //console.log("merge child remove.");
         if (this.merges.has(mergeEntity)) {
             const merge = this.merges.get(mergeEntity)!!;
             merge.childEntities.delete(mergeChildEntity);

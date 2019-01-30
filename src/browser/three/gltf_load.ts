@@ -34,12 +34,12 @@ export function getGltfModel(src: string): Promise<GLTF> {
                     console.error("GLTF manager - reporting to waiter that loading failed: " + src);
                     reject(new Error("Loading has failed: " + src));
                 } else {
-                    console.info("GLTF manager - providing from loading result: " + src);
+                    //console.info("GLTF manager - providing from loading result: " + src);
                     resolve(models.get(src)!!);
                 }
             });
         } else {
-            console.info("GLTF manager - providing from cache: " + src);
+            //console.info("GLTF manager - providing from cache: " + src);
             resolve(models.get(src)!!);
         }
 

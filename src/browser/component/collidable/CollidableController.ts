@@ -16,7 +16,7 @@ export class CollidableController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.interface.addCollidable(this.entity.object3D);
     }
 
