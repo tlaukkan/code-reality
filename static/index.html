@@ -22,11 +22,20 @@
                 <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
                 <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
 
-                <a-asset-item id="cube" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.3/primitives/cube.glb"></a-asset-item>
-                <a-asset-item id="cube_wood" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.3/primitives/cube_wood.glb"></a-asset-item>
-                <a-asset-item id="cube_brick" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.3/primitives/cube_brick.glb"></a-asset-item>
-                <a-asset-item id="cube_grass" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.3/primitives/cube_grass.glb"></a-asset-item>
-                <a-asset-item id="cube_marble" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.3/primitives/cube_marble.glb"></a-asset-item>
+                <img id="sky" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/environments/desert/gradient_env_equirectangular.png">
+
+
+                <a-asset-item id="cube" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube.glb"></a-asset-item>
+                <a-asset-item id="cube_wood" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube_wood.glb"></a-asset-item>
+                <a-asset-item id="cube_brick" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube_brick.glb"></a-asset-item>
+                <a-asset-item id="cube_grass" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube_grass.glb"></a-asset-item>
+                <a-asset-item id="cube_marble" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube_marble.glb"></a-asset-item>
+                <a-asset-item id="cube_sand" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube_sand.glb"></a-asset-item>
+                <a-asset-item id="cube_stone" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube_stone.glb"></a-asset-item>
+
+                <a-asset-item id="slab_marble" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/slab_marble.glb"></a-asset-item>
+                <a-asset-item id="slab_stone" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/slab_stone.glb"></a-asset-item>
+                <a-asset-item id="slab_sand" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/slab_sand.glb"></a-asset-item>
 
                 <a-asset-item id="tool-selector" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/selector.glb"></a-asset-item>
                 <a-asset-item id="add-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/add-object-tool.glb"></a-asset-item>
@@ -44,7 +53,9 @@
             <a-entity light="type: directional; color: #FFFFFF; intensity: 0.4" position="0.1 0.6 -0.3"></a-entity>
 
             <!-- Sky -->
-            <a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>
+            <a-sky src="#sky" segments-height="8" segments-width="16"></a-sky>
+
+            <!--<a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>-->
 
             <!-- Terrain -->
             <!--<a-tiny-terrain id="terrain" collidable position="0 -20 0" height-function="custom" radius-edge-count="25" edge-length = "1.5" palette = "#8EA604" palette-accuracy="3" palette-range-min="0" palette-range-max="20" ></a-tiny-terrain>-->

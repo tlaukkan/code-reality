@@ -23,10 +23,15 @@ export class AddObjectTool extends PointerTool {
     entityTemplateScale = 1;
     entityReviewScale = 0.05;
     entityTemplates: Array<string> = [
-        '<a-entity model="#cube" collidable/>',
         '<a-entity model="#cube_wood" collidable/>',
         '<a-entity model="#cube_brick" collidable/>',
-        '<a-entity model="#cube_grass" collidable/>'
+        '<a-entity model="#cube_grass" collidable/>',
+        '<a-entity model="#cube_sand" collidable/>',
+        '<a-entity model="#cube_marble" collidable/>',
+        '<a-entity model="#cube_stone" collidable/>',
+        '<a-entity model="#slab_sand" collidable/>',
+        '<a-entity model="#slab_marble" collidable/>',
+        '<a-entity model="#slab_stone" collidable/>'
     ];
     entityTemplateIndex = 0;
     entityTemplate: string = this.entityTemplates[this.entityTemplateIndex];
@@ -87,6 +92,7 @@ export class AddObjectTool extends PointerTool {
         }
         this.reviewEntity = createElement(this.entityTemplate) as Entity;
         this.reviewEntity.setAttribute("scale", this.entityReviewScale + " " + this.entityReviewScale + " " + this.entityReviewScale);
+        this.reviewEntity.setAttribute("rotation", "60 0 0");
         this.reviewEntity.setAttribute("position", "0 0 -0.1");
         toolSelectorTool.entity.appendChild(this.reviewEntity);
     }

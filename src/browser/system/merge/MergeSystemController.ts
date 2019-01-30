@@ -74,6 +74,9 @@ export class MergeSystemController extends AbstractSystemController {
         // Remove old merge object.
         if (merge.mergeObject) {
             merge.entity.object3D.remove(merge.mergeObject);
+            for (const child of merge.mergeObject.children) {
+                (child as Mesh).geometry.dispose();
+            }
             //(merge.mergeObject as Mesh).geometry.dispose();
         }
 
