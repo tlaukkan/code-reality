@@ -81,7 +81,7 @@
     "jsonwebtoken": "^8.4.0",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
-    "reality-space": "0.0.9",
+    "reality-space": "0.0.10",
     "serve-static": "^1.13.2",
     "typescript-collections": "^1.3.2",
     "websocket": "^1.0.26",
