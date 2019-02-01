@@ -15,7 +15,9 @@ export class IdentityController extends AbstractComponentController {
 
     init(): void {
         //console.log(this.componentName + " init");
-        fetch('/api/users/current')
+        fetch('/api/users/current', {
+            credentials: 'same-origin'
+        })
         .then((response) => {
             response.json().then((data) => {
                 //console.log(data);

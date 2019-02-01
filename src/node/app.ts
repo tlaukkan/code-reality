@@ -1,32 +1,19 @@
-import {initializeAuthentication} from "./express/authentication";
-import {initializeSession} from "./express/session";
-import {initializeRoutes} from "./express/routes";
+import config from 'config';
+import {newServer} from "./server";
 
-import express = require('express');
-import config = require('config');
+start().then().catch(e => console.log('code reality - startup error: ', e));
 
-const port = config.get('Server.port') as number;
-const host = config.get('Server.host') as string;
+async function start() {
 
-const app = express();
+    console.log("code reality - starting up version='" + config.get('Software.version') + "'");
 
-initializeSession(app);
+    const port = config.get('Server.port') as number;
+    const host = config.get('Server.host') as string;
 
-app.use(function (req, res, next) {
-    if (req.query.space) {
-        console.log("set current space according to query parameter to: " + req.query.space);
-        (req as any).session.space = req.query.space;
-    }
-    next();
-});
+    const server = await newServer(host, port);
+    process.on('exit', async () => {
+        console.log("code reality - exiting version='" + config.get('Software.version') + "'");
+        await server.close();
+    });
 
-app.use(express.static('static'));
-app.use(express.static('dist'));
-
-//initializeAuthentication(app, config);
-initializeRoutes(app);
-
-app.listen(port, host, function () {
-    console.log('Your app is listening on port ' + port);
-});
-
+}

@@ -1,4 +1,3 @@
-import {ClusterClient, Decode, Encode} from "reality-space";
 import uuid = require("uuid");
 import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
 import {Entity, Scene, System} from "aframe";
@@ -8,13 +7,13 @@ import {DynamicSpace} from "./DynamicSpace";
 import {StaticSpace} from "./StaticSpace";
 import {AbstractSystemController} from "../AbstractSystemController";
 import {SystemControllerDefinition} from "../../AFrame";
-import {getClusterConfiguration} from "reality-space/lib/src/common/reality/Configuration";
 import {createElement} from "../../util";
+import {ClusterClient, Decode, Encode} from "reality-space";
 
 export class SpaceSystemController extends AbstractSystemController {
 
     public static DEFINITION = new SystemControllerDefinition(
-        "space", {type: 'string', default: '?'},
+        "space", {},
         (system: System, scene: Scene, data: any) => new SpaceSystemController(system, scene, data)
     );
 
@@ -50,28 +49,34 @@ export class SpaceSystemController extends AbstractSystemController {
         this.dynamicSpace = new DynamicSpace(this.scene!!, this.avatarId);
         this.staticSpace = new StaticSpace(this.scene!!);
 
-        fetch('/api/users/current/cluster-url')
+        fetch('/api/users/current/cluster-url', {
+            credentials: 'same-origin'
+        })
             .then((response) => {
-                response.text().then((data) => {
-                    this.clusterUrl = data;
+                response.text().then((responseData) => {
+                    this.clusterUrl = responseData;
                     console.log("cluster URL: " + this.clusterUrl);
                 });
             }).catch((err) => {
             console.error(err);
         });
-        fetch('/api/users/current/space')
+        fetch('/api/users/current/space', {
+            credentials: 'same-origin'
+        })
             .then((response) => {
-                response.text().then((data) => {
-                    this.space = data;
+                response.text().then((responseData) => {
+                    this.space = responseData;
                     console.log("current space: " + this.space);
                 });
             }).catch((err) => {
             console.error(err);
         });
-        fetch('/api/users/current/id-token')
+        fetch('/api/users/current/id-token', {
+            credentials: 'same-origin'
+        })
             .then((response) => {
-                response.text().then((data) => {
-                    this.idToken = data;
+                response.text().then((responseData) => {
+                    this.idToken = responseData;
                 });
             }).catch((err) => {
             console.error(err);

@@ -14,7 +14,7 @@ module.exports = {
     module: {
         rules: [ {
             test: /\.js$/,
-            exclude: /(node_modules)/,
+            exclude: [/(node_modules)/,/(node)/,/(lib)/],
             use: {
                 loader: 'babel-loader',
                 options: {
@@ -23,6 +23,7 @@ module.exports = {
             }
         }, {
             test: /\.ts?$/,
+            exclude: [/(node_modules)/,/(node)/,/(lib)/],
             loader: "ts-loader"
         }
         ]
@@ -47,5 +48,5 @@ module.exports = {
             '/api': 'http://localhost:3000'
         }
     },
-    mode: "production"
+    mode: "development"
 };

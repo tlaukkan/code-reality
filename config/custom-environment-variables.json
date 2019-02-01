@@ -18,9 +18,13 @@
   "IdToken" : {
     "issuer": "ID_TOKEN_ISSUER",
     "privateKey": "ID_TOKEN_PRIVATE_KEY",
-    "publicKey": "ID_TOKEN_PUBLIC_KEY"
+    "publicKey": "ID_TOKEN_PUBLIC_KEY",
+    "privateKeyPassword": "ID_TOKEN_PRIVATE_KEY_PASSWORD"
   },
   "Cluster": {
     "configurationUrl": "CLUSTER_CONFIGURATION_URL"
+  },
+  "Software" : {
+    "version": "VERSION"
   }
 }
