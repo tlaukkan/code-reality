@@ -23,6 +23,8 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
     const morphAttributes: { [name: string]: Array<Array<BufferAttribute|InterleavedBufferAttribute>>; } = {};
 
 
+
+
     let offset = 0;
 
     for (let i = 0; i < geometries.length; ++i) {
@@ -107,8 +109,8 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
     // merge attributes
 
     for (const name in attributes) {
-        const mergedAttribute = mergeBufferAttributes(attributes[name]);
-        mergedGeometry.addAttribute(name, mergedAttribute);
+        const mergedAttribute = mergeBufferAttributes(name, attributes[name]);
+        mergedGeometry.addAttribute(name, mergedAttribute.attribute);
     }
 
     // merge morph attributes
@@ -132,8 +134,8 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
 
             }
 
-            const mergedMorphAttribute = mergeBufferAttributes(morphAttributesToMerge);
-            mergedGeometry.morphAttributes[name].push(mergedMorphAttribute);
+            const mergedMorphAttribute = mergeBufferAttributes(name, morphAttributesToMerge);
+            mergedGeometry.morphAttributes[name].push(mergedMorphAttribute.attribute);
 
         }
 
@@ -143,11 +145,22 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
 
 }
 
+class BufferAttributeMerge {
+    offset: number;
+    attribute: BufferAttribute;
+
+
+    constructor(attribute: BufferAttribute, offset: number) {
+        this.offset = offset;
+        this.attribute = attribute;
+    }
+}
+
 /**
  * @param {Array<THREE.BufferAttribute>} attributes
  * @return {THREE.BufferAttribute}
  */
-function mergeBufferAttributes(attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+function mergeBufferAttributesOld(attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
 
     let TypedArray: any;
     let itemSize: any;
@@ -184,7 +197,48 @@ function mergeBufferAttributes(attributes: Array<BufferAttribute|InterleavedBuff
 
     }
 
-    return new BufferAttribute(array, itemSize, normalized);
+    return new BufferAttributeMerge(new BufferAttribute(array, itemSize, normalized), offset);
+}
 
+function mergeBufferAttributes(name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+
+    const arrayLength = sumArrayLength(attributes);
+
+    console.log("Merging attribute: " + name + " with ");
+
+    const merge = createBufferAttributeMerge(attributes, arrayLength);
+    for (const attribute of attributes) {
+        if ((attribute as any).isInterleavedBufferAttribute) throw new Error("Attributes had interleaved attributes..");
+        mergeBufferAttribute(merge, attribute as BufferAttribute);
+    }
+    return merge;
+}
+
+function createBufferAttributeMerge(attributes: Array<BufferAttribute|InterleavedBufferAttribute>, arrayLength: number) {
+    const array = new (attributes[0].array.constructor as any)(arrayLength);
+    const merge = new BufferAttributeMerge(new BufferAttribute(array, attributes[0].itemSize, attributes[0].normalized), 0);
+    // Zero as no attributes added yet.
+    merge.attribute.count = 0;
+    return merge;
+}
+
+function sumArrayLength(attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+    let arrayLength = 0;
+
+    for (let i = 0; i < attributes.length; ++i) {
+        arrayLength += attributes[i].array.length;
+    }
+
+    return arrayLength;
+}
+
+function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
+    if (merge.attribute.itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
+    if (merge.attribute.normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
+
+    (merge.attribute.array as any).set(attribute.array, merge.offset);
+    // Increase merge attribute count by 1.
+    merge.attribute.count = merge.attribute.count + 1;
+    merge.offset += attribute.array.length;
 }
 
