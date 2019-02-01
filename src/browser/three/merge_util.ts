@@ -1,5 +1,5 @@
 import {BufferGeometry, BufferGeometryUtils, Group, Material, Mesh, Object3D} from "three";
-import {BufferGeometryMerge, mergeBufferGeometries} from "./BufferGeometryUtils";
+import {BufferGeometryMerge, mergeBufferGeometries} from "./geometry_merge_util";
 
 export class ObjectMerge {
 
