@@ -253,7 +253,7 @@ function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttr
 
     (merge.attribute.array as any).set(attribute.array, merge.offset);
     // Increase merge attribute count by 1.
-    merge.attribute.count = merge.attribute.count + 1;
+    merge.attribute.count = merge.attribute.count + attribute.array.length / attribute.itemSize;
     merge.offset += attribute.array.length;
 }
 
