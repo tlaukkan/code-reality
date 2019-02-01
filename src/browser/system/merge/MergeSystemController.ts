@@ -64,6 +64,7 @@ export class MergeSystemController extends AbstractSystemController {
         }
 
         merge.loadingChildEntities.delete(mergeChildEntity);
+        merge.mergingChildEntities.add(mergeChildEntity);
         if (merge.loadingChildEntities.size > 0) {
             //console.log("merge child entities still loading: " + merge.loadingChildEntities.size);
             return;
@@ -73,9 +74,9 @@ export class MergeSystemController extends AbstractSystemController {
 
         merge.lastModificationTimeMillis = new Date().getTime();
 
-        if (merge.lastMergeTimeMillis == 0) {
+        //if (merge.lastMergeTimeMillis == 0) {
             this.merge(merge);
-        }
+        //}
 
     }
 
@@ -96,8 +97,8 @@ export class MergeSystemController extends AbstractSystemController {
 
         // Collect objects to merge.
         const objectsToMerge = new Array<Object3D>();
-        console.log("child entities to merge size: " + merge.childEntities.size);
-        for (const entity of merge.childEntities) {
+        console.log("child entities to merge size: " + merge.mergingChildEntities.size);
+        for (const entity of merge.mergingChildEntities) {
             const originalObject = entity.object3D;
             //entity.removeObject3D("mesh");
             // Set original hidden.
@@ -123,8 +124,9 @@ export class MergeSystemController extends AbstractSystemController {
 
             objectsToMerge.push(objectToMerge);
         }
+        merge.mergingChildEntities.clear();
 
-        const mergeObject = mergeObject3Ds(objectsToMerge);
+        const mergeObject = mergeObject3Ds(merge.objectMerge, objectsToMerge);
 
         merge.mergeObject = mergeObject;
         merge.entity.object3D.add(mergeObject);

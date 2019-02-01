@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import {getGltfModel} from "../../../src/browser/three/gltf_load";
 import {BufferGeometry, GeometryUtils, Group, Material, Mesh, Object3D} from "three";
-import {cloneObject3D, mergeObject3Ds} from "../../../src/browser/three/merge_util";
+import {cloneObject3D, mergeObject3Ds, ObjectMerge} from "../../../src/browser/three/merge_util";
 
 describe('GLTF model loading tests.', () => {
 
@@ -17,7 +17,8 @@ describe('GLTF model loading tests.', () => {
         const objects = new Array<Object3D>();
         objects.push(scene);
         objects.push(scene2);
-        const group = mergeObject3Ds(objects);
+        const merge = new ObjectMerge();
+        const group = mergeObject3Ds(merge, objects);
 
         console.log(group.children.length);
 

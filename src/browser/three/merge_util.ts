@@ -1,36 +1,62 @@
 import {BufferGeometry, BufferGeometryUtils, Group, Material, Mesh, Object3D} from "three";
-import {mergeBufferGeometries} from "./BufferGeometryUtils";
+import {BufferGeometryMerge, mergeBufferGeometries} from "./BufferGeometryUtils";
 
-export function mergeObject3Ds(objects: Array<Object3D>) {
+export class ObjectMerge {
+
+    group: Group | undefined;
+    geometryMerges: Map<string, BufferGeometryMerge> = new Map();
+
+}
+
+export function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>) {
     const geometryDataMap = new Map<string, Array<GeometryData>>();
     for (const object of objects) {
         collectBufferGeometries(object, geometryDataMap);
     }
 
-    const mergedGeometries = new Array<GeometryData>();
+    const allGeometryIds: Set<string> = new Set();
     for (const geometryId of geometryDataMap.keys()) {
-        const geometryDataArray = geometryDataMap.get(geometryId)!!;
-        console.log(geometryId + ": " + geometryDataMap.get(geometryId)!!.length);
-        const material = geometryDataArray[0].material;
+        allGeometryIds.add(geometryId);
+    }
+
+    for (const geometryId of merge.geometryMerges.keys()) {
+        allGeometryIds.add(geometryId);
+    }
+
+    const mergedGeometries = new Array<GeometryData>();
+    for (const geometryId of allGeometryIds) {
+
         const geometries = new Array<BufferGeometry>();
-        for (const geometryData of geometryDataArray) {
-            geometries.push(geometryData.geometry);
+
+        const geometryDataArray = geometryDataMap.get(geometryId);
+        if (geometryDataArray) {
+            console.log(geometryId + ": " + geometryDataMap.get(geometryId)!!.length);
+            const material = geometryDataArray[0].material;
+            for (const geometryData of geometryDataArray) {
+                geometries.push(geometryData.geometry);
+            }
+            if (!merge.geometryMerges.has(geometryId)) {
+                console.log("adding geometry merge: " + geometryId);
+                merge.geometryMerges.set(geometryId, new BufferGeometryMerge(material));
+            }
         }
 
-        const mergedGeometry = mergeBufferGeometries(geometries, false);
+        const geometryMerge = merge.geometryMerges.get(geometryId)!!;
+        const mergedGeometry = mergeBufferGeometries(geometryMerge, geometries, false);
         if (mergedGeometry === null) {
             console.warn("Merge buffer geometry failed: " + geometryId);
         } else {
-            mergedGeometries.push(new GeometryData(mergedGeometry, material));
+            mergedGeometries.push(new GeometryData(mergedGeometry, geometryMerge.material));
         }
     }
 
-    console.log(mergedGeometries.length);
+    //console.log(mergedGeometries.length);
 
     const group = new Group();
     for (const geometryData of mergedGeometries) {
         group.add(new Mesh(geometryData.geometry, geometryData.material));
     }
+    merge.group = group;
     return group;
 }
 

@@ -3,130 +3,147 @@
  */
 
 
-import {BufferAttribute, BufferGeometry, InterleavedBufferAttribute} from "three";
+import {BufferAttribute, BufferGeometry, InterleavedBufferAttribute, Material} from "three";
 
-/**
- * @param  {Array<THREE.BufferGeometry>} geometries
- * @param  {Boolean} useGroups
- * @return {THREE.BufferGeometry}
- */
-export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGroups: boolean): BufferGeometry | null {
+export class BufferGeometryMerge {
+    groupOffset = 0;
+    indexOffset = 0;
+    readonly indexMerge = new Array<number>();
+    readonly attributeMerges: Map<string, BufferAttributeMerge> = new Map();
+    material: Material | Material [];
+    mergedGeometry = new BufferGeometry();
+    vertexCount = 0;
 
-    const mergedGeometry = new BufferGeometry();
-
-    const isIndexed = geometries[0].index !== null;
-
-    console.log("INDEXED!");
-
-
-    const attributeMerges: Map<string, BufferAttributeMerge> = new Map();
-    let groupOffset = 0;
-    let indexOffset = 0;
-    const mergedIndex = [];
-
-    //const morphAttributesUsed = new Set(Object.keys(geometries[0].morphAttributes));
-    //const morphAttributes: { [name: string]: Array<Array<BufferAttribute|InterleavedBufferAttribute>>; } = {};
-    //const morphAttributesMerges: Map<string, Array<BufferAttributeMerge>> = new Map();
-
-    const attributeNames = new Set(Object.keys(geometries[0].attributes));
-    const attributes: { [name: string]: Array<BufferAttribute|InterleavedBufferAttribute>; } = {};
-
-    for (let i = 0; i < geometries.length; ++i) {
-
-        const geometry = geometries[i];
-
-        // ensure that all geometries are indexed, or none
-
-        if (isIndexed !== (geometry.index !== null)) throw new Error("Inconsistent indexed in merged geometries.");
-
-        // gather attributes, exit early if they're different
-
-        for (const name in geometry.attributes) {
-
-            if (!attributeNames.has(name)) throw new Error("Inconsistent attributes in merged geometries.");
-
-            if (attributes[name] === undefined) attributes[name] = [];
-
-            attributes[name].push(geometry.attributes[name]);
-
-        }
-
-        // gather morph attributes, exit early if they're different
-
-        /*for (const name in geometry.morphAttributes) {
-
-            if (!morphAttributesUsed.has(name)) throw new Error("Inconsistent morph attributes in merged geometries.");
-
-            if (morphAttributes[name] === undefined) morphAttributes[name] = [];
-
-            morphAttributes[name].push(geometry.morphAttributes[name]);
-
-        }*/
-
-        // gather .userData
-
-        (mergedGeometry as any).userData.mergedUserData = (mergedGeometry as any).userData.mergedUserData || [];
-        (mergedGeometry as any).userData.mergedUserData.push((mergedGeometry as any).userData);
-
-        if (useGroups) {
-            let count;
-
-            if (isIndexed) {
-                count = geometry.index.count;
-            } else if (geometry.attributes.position !== undefined) {
-                count = geometry.attributes.position.count;
-            } else {
-                throw new Error("Groups used in geometry merging but group count could not be resolved");
-            }
-
-            mergedGeometry.addGroup(groupOffset, count, i);
-            groupOffset += count;
-        }
-
+    constructor(material: Material | Material[]) {
+        this.material = material;
     }
+}
 
-    // merge indices
+export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>, useGroups: boolean): BufferGeometry | null {
 
-    if (isIndexed) {
+    const mergedGeometry = merge.mergedGeometry;
+
+    if (geometries.length > 0) {
+        const isIndexed = geometries[0].index !== null;
+
+        //const merge = new BufferGeometryMerge();
+
+        //let groupOffset = 0;
+        //let indexOffset = 0;
+        //const indexMerge = [];
+        //const attributeMerges: Map<string, BufferAttributeMerge> = new Map();
+
+        //const morphAttributesUsed = new Set(Object.keys(geometries[0].morphAttributes));
+        //const morphAttributes: { [name: string]: Array<Array<BufferAttribute|InterleavedBufferAttribute>>; } = {};
+        //const morphAttributesMerges: Map<string, Array<BufferAttributeMerge>> = new Map();
+
+        const attributeNames = new Set(Object.keys(geometries[0].attributes));
+        const attributes: { [name: string]: Array<BufferAttribute | InterleavedBufferAttribute>; } = {};
 
         for (let i = 0; i < geometries.length; ++i) {
 
-            const index = geometries[i].index;
+            const geometry = geometries[i];
 
-            for (let j = 0; j < index.count; ++j) {
+            // ensure that all geometries are indexed, or none
 
-                mergedIndex.push(index.getX(j) + indexOffset);
+            if (isIndexed !== (geometry.index !== null)) throw new Error("Inconsistent indexed in merged geometries.");
+
+            // gather attributes, exit early if they're different
+
+            for (const name in geometry.attributes) {
+
+                if (!attributeNames.has(name)) throw new Error("Inconsistent attributes in merged geometries.");
+
+                if (attributes[name] === undefined) attributes[name] = [];
+
+                attributes[name].push(geometry.attributes[name]);
 
             }
 
-            indexOffset += geometries[i].attributes.position.count;
+            // gather morph attributes, exit early if they're different
+
+            /*for (const name in geometry.morphAttributes) {
+
+                if (!morphAttributesUsed.has(name)) throw new Error("Inconsistent morph attributes in merged geometries.");
+
+                if (morphAttributes[name] === undefined) morphAttributes[name] = [];
+
+                morphAttributes[name].push(geometry.morphAttributes[name]);
+
+            }*/
+
+            // gather .userData
+
+            (mergedGeometry as any).userData.mergedUserData = (mergedGeometry as any).userData.mergedUserData || [];
+            (mergedGeometry as any).userData.mergedUserData.push((mergedGeometry as any).userData);
+
+            if (useGroups) {
+                let count;
+
+                if (isIndexed) {
+                    count = geometry.index.count;
+                } else if (geometry.attributes.position !== undefined) {
+                    count = geometry.attributes.position.count;
+                } else {
+                    throw new Error("Groups used in geometry merging but group count could not be resolved");
+                }
+
+                mergedGeometry.addGroup(merge.groupOffset, count, i);
+                merge.groupOffset += count;
+            }
 
         }
 
-        mergedGeometry.setIndex(mergedIndex);
+        // merge indices
 
-    }
+        if (isIndexed) {
+
+            for (let i = 0; i < geometries.length; ++i) {
+
+                const index = geometries[i].index;
+
+                for (let j = 0; j < index.count; ++j) {
+
+                    const x = 0;
+                    merge.indexMerge.push(index.getX(j) + merge.indexOffset);
+                    //merge.indexMerge.push(index.getX(j) + x);
+                }
+
+                merge.indexOffset += geometries[i].attributes.position.count;
+
+            }
+
+            mergedGeometry.setIndex(merge.indexMerge);
+
+        }
 
 
-    for (const name in attributes) {
-        const arrayLength = sumArrayLength(attributes[name]);
-        if (!attributeMerges.has(name)) {
-            const merge = createBufferAttributeMerge(attributes[name], arrayLength);
-            attributeMerges.set(name, merge);
-        } else {
-            const merge = attributeMerges.get(name)!!;
-            if (merge.offset + arrayLength >= merge.attribute.array.length) {
-                throw new Error("merge out of capacity");
+        for (const name in attributes) {
+            const arrayLength = sumArrayLength(attributes[name]);
+            if (!merge.attributeMerges.has(name)) {
+                // Lets add build capacity for 1000 more geometries.
+                const extendedArrayLength = arrayLength + attributes[name][0].array.length * 1000;
+                const attributeMerge = createBufferAttributeMerge(attributes[name], extendedArrayLength);
+                merge.attributeMerges.set(name, attributeMerge);
+            } else {
+                const attributeMerge = merge.attributeMerges.get(name)!!;
+                if (attributeMerge.offset + arrayLength >= attributeMerge.attribute.array.length) {
+                    throw new Error("merge out of capacity");
+                }
+            }
+        }
+
+        for (const name in attributes) {
+            const mergedAttribute = mergeBufferAttributes(merge.attributeMerges.get(name)!!, name, attributes[name]);
+            if (!mergedGeometry.attributes[name]) {
+                mergedGeometry.addAttribute(name, mergedAttribute.attribute);
             }
         }
     }
 
     // merge attributes
 
-    for (const name in attributes) {
-        const mergedAttribute = mergeBufferAttributes(attributeMerges.get(name)!!, name, attributes[name]);
-        mergedGeometry.addAttribute(name, mergedAttribute.attribute);
-    }
+
 
     // merge morph attributes
 
@@ -155,6 +172,14 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
         }
 
     }*/
+
+    /*for (const attributeName in mergedGeometry.attributes) {
+        mergedGeometry.attributes[attributeName].
+    }*/
+
+    merge.vertexCount = merge.attributeMerges.get("position")!!.attribute.array.length / merge.attributeMerges.get("position")!!.attribute.itemSize;
+    mergedGeometry.setDrawRange(0, merge.vertexCount);
+    console.log("merged vertex count: "+ merge.vertexCount);
 
     return mergedGeometry;
 
@@ -254,6 +279,7 @@ function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttr
     (merge.attribute.array as any).set(attribute.array, merge.offset);
     // Increase merge attribute count by 1.
     merge.attribute.count = merge.attribute.count + attribute.array.length / attribute.itemSize;
+    //console.log(merge.attribute.count);
     merge.offset += attribute.array.length;
 }
 
