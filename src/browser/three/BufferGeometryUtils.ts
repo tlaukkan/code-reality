@@ -177,10 +177,12 @@ export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
         mergedGeometry.attributes[attributeName].
     }*/
 
-    merge.vertexCount = merge.attributeMerges.get("position")!!.attribute.array.length / merge.attributeMerges.get("position")!!.attribute.itemSize;
-    mergedGeometry.setDrawRange(0, merge.vertexCount);
-    console.log("merged vertex count: "+ merge.vertexCount);
-
+    for (const attributeMerge of merge.attributeMerges.values()) {
+        attributeMerge.attribute.needsUpdate = true;
+    }
+    //mergedGeometry.setDrawRange(0, merge.vertexCount);
+    //mergedGeometry.computeVertexNormals();
+    //console.log("merged vertex count: "+ merge.vertexCount);
     return mergedGeometry;
 
 }

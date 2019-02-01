@@ -1,5 +1,5 @@
 import {Entity} from "aframe";
-import {Object3D} from "three";
+import {Group, Object3D} from "three";
 import {ObjectMerge} from "../../three/merge_util";
 
 export class MergeData {
@@ -11,7 +11,7 @@ export class MergeData {
 
     mergingChildEntities: Set<Entity> = new Set<Entity>();
 
-    mergeObject: Object3D | undefined;
+    group: Group | undefined;
 
     objectMerge: ObjectMerge = new ObjectMerge();
 
