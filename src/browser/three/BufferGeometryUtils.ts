@@ -11,7 +11,7 @@ export class BufferGeometryMerge {
     readonly indexMerge = new Array<number>();
     readonly attributeMerges: Map<string, BufferAttributeMerge> = new Map();
     material: Material | Material [];
-    mergedGeometry = new BufferGeometry();
+    geometry = new BufferGeometry();
     vertexCount = 0;
 
     constructor(material: Material | Material[]) {
@@ -19,9 +19,9 @@ export class BufferGeometryMerge {
     }
 }
 
-export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>, useGroups: boolean): BufferGeometry | null {
+export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>, useGroups: boolean): BufferGeometry {
 
-    const mergedGeometry = merge.mergedGeometry;
+    const mergedGeometry = merge.geometry;
 
     if (geometries.length > 0) {
         const isIndexed = geometries[0].index !== null;

@@ -87,13 +87,12 @@ export class MergeSystemController extends AbstractSystemController {
 
         const startTimeMillis = new Date().getTime();
         // Remove old merge object.
-        if (merge.group) {
+        /*if (merge.group) {
             merge.entity.object3D.remove(merge.group);
-            /*for (const child of merge.mergeObject.children) {
+            for (const child of merge.mergeObject.children) {
                 (child as Mesh).geometry.dispose();
-            }*/
             //(merge.mergeObject as Mesh).geometry.dispose();
-        }
+        }*/
 
         // Collect objects to merge.
         const objectsToMerge = new Array<Object3D>();
@@ -126,10 +125,14 @@ export class MergeSystemController extends AbstractSystemController {
         }
         merge.mergingChildEntities.clear();
 
-        const mergeObject = mergeObject3Ds(merge.objectMerge, objectsToMerge);
+        mergeObject3Ds(merge.objectMerge, objectsToMerge);
 
-        merge.group = mergeObject;
-        merge.entity.object3D.add(mergeObject);
+        if (merge.group) {
+            merge.entity.object3D.remove(merge.group);
+        }
+
+        merge.group = merge.objectMerge.group;
+        merge.entity.object3D.add(merge.group);
 
         console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
     }

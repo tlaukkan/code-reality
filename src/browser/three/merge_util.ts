@@ -3,12 +3,12 @@ import {BufferGeometryMerge, mergeBufferGeometries} from "./BufferGeometryUtils"
 
 export class ObjectMerge {
 
-    group: Group | undefined;
+    group: Group = new Group();
     geometryMerges: Map<string, BufferGeometryMerge> = new Map();
 
 }
 
-export function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>) {
+export function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): void {
     const geometryDataMap = new Map<string, Array<GeometryData>>();
     for (const object of objects) {
         collectBufferGeometries(object, geometryDataMap);
@@ -23,7 +23,6 @@ export function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>) {
         allGeometryIds.add(geometryId);
     }
 
-    const mergedGeometries = new Array<GeometryData>();
     for (const geometryId of allGeometryIds) {
 
         const geometries = new Array<BufferGeometry>();
@@ -37,27 +36,15 @@ export function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>) {
             }
             if (!merge.geometryMerges.has(geometryId)) {
                 console.log("adding geometry merge: " + geometryId);
-                merge.geometryMerges.set(geometryId, new BufferGeometryMerge(material));
+                const gemetryMerge = new BufferGeometryMerge(material);
+                merge.geometryMerges.set(geometryId, gemetryMerge);
+                merge.group.add(new Mesh(gemetryMerge.geometry, gemetryMerge.material));
             }
         }
 
         const geometryMerge = merge.geometryMerges.get(geometryId)!!;
-        const mergedGeometry = mergeBufferGeometries(geometryMerge, geometries, false);
-        if (mergedGeometry === null) {
-            console.warn("Merge buffer geometry failed: " + geometryId);
-        } else {
-            mergedGeometries.push(new GeometryData(mergedGeometry, geometryMerge.material));
-        }
+        mergeBufferGeometries(geometryMerge, geometries, false);
     }
-
-    //console.log(mergedGeometries.length);
-
-    const group = new Group();
-    for (const geometryData of mergedGeometries) {
-        group.add(new Mesh(geometryData.geometry, geometryData.material));
-    }
-    merge.group = group;
-    return group;
 }
 
 class GeometryData {
