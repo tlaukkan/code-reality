@@ -127,12 +127,14 @@ export class MergeSystemController extends AbstractSystemController {
 
         mergeObject3Ds(merge.objectMerge, objectsToMerge);
 
-        if (merge.group) {
+        /*if (merge.group) {
             merge.entity.object3D.remove(merge.group);
-        }
+        }*/
 
-        merge.group = merge.objectMerge.group;
-        merge.entity.object3D.add(merge.group);
+        if (!merge.group) {
+            merge.group = merge.objectMerge.group;
+            merge.entity.object3D.add(merge.group);
+        }
 
         console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
     }
