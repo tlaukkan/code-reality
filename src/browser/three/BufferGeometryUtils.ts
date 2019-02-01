@@ -25,9 +25,9 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
 
     let offset = 0;
 
-    for (var i = 0; i < geometries.length; ++i) {
+    for (let i = 0; i < geometries.length; ++i) {
 
-        var geometry = geometries[i];
+        const geometry = geometries[i];
 
         // ensure that all geometries are indexed, or none
 
@@ -35,7 +35,7 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
 
         // gather attributes, exit early if they're different
 
-        for (var name in geometry.attributes) {
+        for (const name in geometry.attributes) {
 
             if (!attributesUsed.has(name)) throw new Error("Inconsistent attributes in merged geometries.");
 
@@ -47,7 +47,7 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
 
         // gather morph attributes, exit early if they're different
 
-        for (var name in geometry.morphAttributes) {
+        for (const name in geometry.morphAttributes) {
 
             if (!morphAttributesUsed.has(name)) throw new Error("Inconsistent morph attributes in merged geometries.");
 
@@ -63,27 +63,18 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
         (mergedGeometry as any).userData.mergedUserData.push((mergedGeometry as any).userData);
 
         if (useGroups) {
-
-            var count;
+            let count;
 
             if (isIndexed) {
-
                 count = geometry.index.count;
-
             } else if (geometry.attributes.position !== undefined) {
-
                 count = geometry.attributes.position.count;
-
             } else {
-
                 throw new Error("Groups used in geometry merging but group count could not be resolved");
-
             }
 
             mergedGeometry.addGroup(offset, count, i);
-
             offset += count;
-
         }
 
     }
@@ -92,14 +83,14 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
 
     if (isIndexed) {
 
-        var indexOffset = 0;
-        var mergedIndex = [];
+        let indexOffset = 0;
+        const mergedIndex = [];
 
-        for (var i = 0; i < geometries.length; ++i) {
+        for (let i = 0; i < geometries.length; ++i) {
 
-            var index = geometries[i].index;
+            const index = geometries[i].index;
 
-            for (var j = 0; j < index.count; ++j) {
+            for (let j = 0; j < index.count; ++j) {
 
                 mergedIndex.push(index.getX(j) + indexOffset);
 
@@ -115,33 +106,33 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
 
     // merge attributes
 
-    for (var name in attributes) {
-        var mergedAttribute = mergeBufferAttributes(attributes[name]);
+    for (const name in attributes) {
+        const mergedAttribute = mergeBufferAttributes(attributes[name]);
         mergedGeometry.addAttribute(name, mergedAttribute);
     }
 
     // merge morph attributes
 
-    for (var name in morphAttributes) {
+    for (const name in morphAttributes) {
 
-        var numMorphTargets = morphAttributes[name][0].length;
+        let numMorphTargets = morphAttributes[name][0].length;
 
         if (numMorphTargets === 0) break;
 
         mergedGeometry.morphAttributes = mergedGeometry.morphAttributes || {};
         mergedGeometry.morphAttributes[name] = [];
 
-        for (var i = 0; i < numMorphTargets; ++i) {
+        for (let i = 0; i < numMorphTargets; ++i) {
 
-            var morphAttributesToMerge = [];
+            let morphAttributesToMerge = [];
 
-            for (var j = 0; j < morphAttributes[name].length; ++j) {
+            for (let j = 0; j < morphAttributes[name].length; ++j) {
 
                 morphAttributesToMerge.push(morphAttributes[name][j][i]);
 
             }
 
-            var mergedMorphAttribute = mergeBufferAttributes(morphAttributesToMerge);
+            const mergedMorphAttribute = mergeBufferAttributes(morphAttributesToMerge);
             mergedGeometry.morphAttributes[name].push(mergedMorphAttribute);
 
         }
@@ -158,14 +149,14 @@ export function mergeBufferGeometries(geometries: Array<BufferGeometry>, useGrou
  */
 function mergeBufferAttributes(attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
 
-    var TypedArray: any;
-    var itemSize: any;
-    var normalized;
-    var arrayLength = 0;
+    let TypedArray: any;
+    let itemSize: any;
+    let normalized;
+    let arrayLength = 0;
 
-    for (var i = 0; i < attributes.length; ++i) {
+    for (let i = 0; i < attributes.length; ++i) {
 
-        var attribute = attributes[i];
+        const attribute = attributes[i];
 
         if ((attribute as any).isInterleavedBufferAttribute) throw new Error("Attributes had interleaved attributes..");
 
@@ -182,10 +173,10 @@ function mergeBufferAttributes(attributes: Array<BufferAttribute|InterleavedBuff
 
     }
 
-    var array = new TypedArray(arrayLength);
-    var offset = 0;
+    const array = new TypedArray(arrayLength);
+    let offset = 0;
 
-    for (var i = 0; i < attributes.length; ++i) {
+    for (let i = 0; i < attributes.length; ++i) {
 
         array.set(attributes[i].array, offset);
 
