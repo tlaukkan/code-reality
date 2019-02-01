@@ -1,5 +1,5 @@
 import {BufferGeometry, BufferGeometryUtils, Group, Material, Mesh, Object3D} from "three";
-require('./BufferGeometryUtils.js');
+import {mergeBufferGeometries} from "./BufferGeometryUtils";
 
 export function mergeObject3Ds(objects: Array<Object3D>) {
     const geometryDataMap = new Map<string, Array<GeometryData>>();
@@ -17,8 +17,12 @@ export function mergeObject3Ds(objects: Array<Object3D>) {
             geometries.push(geometryData.geometry);
         }
 
-        const mergedGeometry = mergeBufferGeometries(geometries);
-        mergedGeometries.push(new GeometryData(mergedGeometry, material));
+        const mergedGeometry = mergeBufferGeometries(geometries, false);
+        if (mergedGeometry === null) {
+            console.warn("Merge buffer geometry failed: " + geometryId);
+        } else {
+            mergedGeometries.push(new GeometryData(mergedGeometry, material));
+        }
     }
 
     console.log(mergedGeometries.length);
@@ -49,6 +53,7 @@ function collectBufferGeometries(child: Object3D, geometries: Map<string, Array<
         const mesh = child as Mesh;
         const geometryUuid = mesh.geometry.uuid;
         const geometry = mesh.geometry.clone();
+        //const geometry = mesh.geometry;
 
         //console.log(geometry.type);
         if (geometry.type == "BufferGeometry") {
@@ -113,9 +118,5 @@ function cloneObject3DCore(source: Object3D): Object3D {
     } else {
         return new (source as any).constructor();
     }
-}
-
-function mergeBufferGeometries(geometries: Array<BufferGeometry>): BufferGeometry {
-    return BufferGeometryUtils.mergeBufferGeometries(geometries);
 }
 
