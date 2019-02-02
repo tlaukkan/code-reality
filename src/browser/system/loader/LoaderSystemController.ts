@@ -14,7 +14,7 @@ export class LoaderSystemController extends AbstractSystemController {
     added = false;
 
     loaderGeometry= new SphereGeometry(1, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
-    loaderMaterial= new MeshBasicMaterial({color: 'white', side: DoubleSide});
+    loaderMaterial= new MeshBasicMaterial({color: 'white', side: DoubleSide, depthTest: false});
     loaderObject= new Mesh(this.loaderGeometry, this.loaderMaterial);
     sphereGeometry = new SphereGeometry(0.01, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
     sphereMaterial= new MeshBasicMaterial({color: 'gray'});
