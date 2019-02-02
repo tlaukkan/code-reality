@@ -18,7 +18,7 @@ describe('GLTF model loading tests.', () => {
         objects.push(scene);
         objects.push(scene2);
         const merge = new ObjectMerge();
-        mergeObject3Ds(merge, objects);
+        await mergeObject3Ds(merge, objects);
 
         //console.log(group.children.length);
 

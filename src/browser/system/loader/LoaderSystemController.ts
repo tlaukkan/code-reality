@@ -57,7 +57,11 @@ export class LoaderSystemController extends AbstractSystemController {
     play(): void {
     }
 
+    progressTime: number = 0;
+
     tick(time: number, timeDelta: number): void {
+
+        this.progressTime += timeDelta < 25 ? timeDelta : 25;
 
         if (this.enabled) {
             if (!this.added) {
@@ -65,9 +69,9 @@ export class LoaderSystemController extends AbstractSystemController {
                 this.sceneEl.camera.add(this.loaderObject);
             }
 
-            this.sphereMesh1.visible = Math.floor(time / 500) % 3 == 0;
-            this.sphereMesh2.visible = Math.floor(time / 500) % 3 == 1;
-            this.sphereMesh3.visible = Math.floor(time / 500) % 3 == 2;
+            this.sphereMesh1.visible = Math.floor(this.progressTime / 150) % 3 == 0;
+            this.sphereMesh2.visible = Math.floor(this.progressTime / 150) % 3 == 1;
+            this.sphereMesh3.visible = Math.floor(this.progressTime / 150) % 3 == 2;
         }  else {
             if (this.added) {
                 this.added = false;

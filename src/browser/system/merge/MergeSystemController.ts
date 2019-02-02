@@ -41,14 +41,14 @@ export class MergeSystemController extends AbstractSystemController {
             }
         }
         */
-        let merging = new Date().getTime() - this.startTime < 3000;
+        let loading = new Date().getTime() - this.startTime < 3000;
 
         for (const merge of this.merges.values()) {
-            if (merge.loadingChildEntities.size > 0 || merge.mergingChildEntities.size > 0) {
-                merging = true;
+            if (this.merging ||merge.loadingChildEntities.size > 0 || merge.mergingChildEntities.size > 0) {
+                loading = true;
             }
         }
-        if (!merging) {
+        if (!loading) {
             (this.getSystemController("loader-system") as LoaderSystemController).disable();
         }
 
@@ -90,12 +90,20 @@ export class MergeSystemController extends AbstractSystemController {
 
 
         //if (merge.lastMergeTimeMillis == 0) {
-            this.merge(merge);
+        this.merge(merge);
         //}
 
     }
 
+    merging = false;
+
     private merge(merge: MergeData) {
+
+        if (this.merging) {
+            return;
+        }
+
+        this.merging = true;
 
         console.log("merging...");
 
@@ -134,17 +142,20 @@ export class MergeSystemController extends AbstractSystemController {
         }
         merge.mergingChildEntities.clear();
 
-        mergeObject3Ds(merge.objectMerge, objectsToMerge);
+        mergeObject3Ds(merge.objectMerge, objectsToMerge).then(() => {
+            if (!merge.group) {
+                merge.group = merge.objectMerge.group;
+                merge.entity.object3D.add(merge.group);
+            }
 
-        if (!merge.group) {
-            merge.group = merge.objectMerge.group;
-            merge.entity.object3D.add(merge.group);
-        }
+            merge.lastMergeTimeMillis = new Date().getTime();
+            console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
 
-        merge.lastMergeTimeMillis = new Date().getTime();
-        console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
+            this.merging = false;
 
-        (this.getSystemController("loader-system") as LoaderSystemController).disable();
+            (this.getSystemController("loader-system") as LoaderSystemController).disable();
+        });
+
     }
 
     private allocateMergeObjectIndex(objectMerge: ObjectMerge, object: Object3D) {

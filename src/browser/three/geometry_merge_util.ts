@@ -33,7 +33,7 @@ class BufferAttributeMerge {
     }
 }
 
-export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>, useGroups: boolean): BufferGeometry {
+export async function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>, useGroups: boolean): Promise<BufferGeometry> {
 
     const mergedGeometry = merge.geometry;
 
@@ -118,7 +118,7 @@ export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
         }
 
         for (const name in attributes) {
-            const mergedAttribute = mergeBufferAttributes(merge.attributeMerges.get(name)!!, name, attributes[name]);
+            const mergedAttribute = await mergeBufferAttributes(merge.attributeMerges.get(name)!!, name, attributes[name]);
             if (!mergedGeometry.attributes[name]) {
                 mergedGeometry.addAttribute(name, mergedAttribute.attribute);
             }
@@ -148,15 +148,15 @@ function sumArrayLength(attributes: Array<BufferAttribute|InterleavedBufferAttri
     return arrayLength;
 }
 
-function mergeBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+async function mergeBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
     for (const attribute of attributes) {
         if ((attribute as any).isInterleavedBufferAttribute) throw new Error("Attributes had interleaved attributes..");
-        mergeBufferAttribute(merge, attribute as BufferAttribute);
+        await mergeBufferAttribute(merge, attribute as BufferAttribute);
     }
     return merge;
 }
 
-function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
+async function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
     if (merge.attribute.itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
     if (merge.attribute.normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
     const mergeObjectIndex = (attribute as any).mergeObjectIndex;

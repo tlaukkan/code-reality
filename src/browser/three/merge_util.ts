@@ -9,7 +9,7 @@ export class ObjectMerge {
     objectOffset = 0;
 }
 
-export function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): void {
+export async function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): Promise<void> {
     const geometryDataMap = new Map<string, Array<GeometryData>>();
     for (const object of objects) {
         collectBufferGeometries(merge, object, geometryDataMap);
@@ -44,7 +44,7 @@ export function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): vo
         }
 
         const geometryMerge = merge.geometryMerges.get(geometryId)!!;
-        mergeBufferGeometries(geometryMerge, geometries, false);
+        await mergeBufferGeometries(geometryMerge, geometries, false);
     }
 }
 
