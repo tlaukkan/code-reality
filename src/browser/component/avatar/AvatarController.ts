@@ -6,10 +6,7 @@ import {ComponentControllerDefinition} from "../../AFrame";
 
 export class AvatarController extends CompositeComponentController {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "avatar", {}, false,
-        (component: Component, entity: Entity, data: any) => new AvatarController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("avatar", {}, false, true, (component: Component, entity: Entity, data: any) => new AvatarController(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

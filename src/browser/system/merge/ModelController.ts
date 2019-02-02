@@ -9,13 +9,7 @@ export class ModelController extends AbstractComponentController {
     readonly mergeSystem: MergeSystemController;
     merge: Entity | undefined;
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "model",
-        {type: 'model'},
-        false,
-        (component: Component, entity: Entity, data: any) => new ModelController(component, entity, data),
-        false
-    );
+    public static DEFINITION = new ComponentControllerDefinition("model", {type: 'model'}, false, false, (component: Component, entity: Entity, data: any) => new ModelController(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

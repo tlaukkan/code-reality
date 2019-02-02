@@ -4,13 +4,10 @@ import {AbstractComponentController} from "../AbstractComponentController";
 
 export class LabelController extends AbstractComponentController {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "label", {
-            text: {type: 'string', default: '?'},
-            height: {type: 'number', default: 1.2}
-        }, false,
-        (component: Component, entity: Entity, data: any) => new LabelController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("label", {
+        text: {type: 'string', default: '?'},
+        height: {type: 'number', default: 1.2}
+    }, false, false, (component: Component, entity: Entity, data: any) => new LabelController(component, entity, data));
 
     labelElement: Element | undefined;
 

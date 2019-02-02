@@ -14,17 +14,14 @@ import {raycast} from "../../../three/raycast";
 
 export class WalkTool extends AbstractComponentController implements Tool {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "walk-tool", {
-            movementSpeed: {type: 'number', default: 2}, // Meters per second
-            rotationSpeed: {type: 'number', default: 1}, // Radians per second
-            height: {type: 'number', default: 2},
-            width: {type: 'number', default: 0.5},
-            jumpStartSpeed: {type: 'number', default: 5.0},
-            minY: {type: 'number', default: -1}
-        }, false,
-        (component: Component, entity: Entity, data: any) => new WalkTool(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("walk-tool", {
+        movementSpeed: {type: 'number', default: 2}, // Meters per second
+        rotationSpeed: {type: 'number', default: 1}, // Radians per second
+        height: {type: 'number', default: 2},
+        width: {type: 'number', default: 0.5},
+        jumpStartSpeed: {type: 'number', default: 5.0},
+        minY: {type: 'number', default: -1}
+    }, false, true, (component: Component, entity: Entity, data: any) => new WalkTool(component, entity, data));
 
     movementSpeed: number = 0;
     rotationSpeed: number = 0;

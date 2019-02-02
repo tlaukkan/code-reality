@@ -5,10 +5,7 @@ import {ComponentControllerDefinition} from "../../AFrame";
 
 export class AnimatorController extends CompositeComponentController {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "animator", {}, false,
-        (component: Component, entity: Entity, data: any) => new AnimatorController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("animator", {}, false, true, (component: Component, entity: Entity, data: any) => new AnimatorController(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

@@ -11,10 +11,7 @@ import {raycast} from "../../../three/raycast";
 
 export class PointerTool extends AbstractComponentController implements Tool {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "pointer-tool", {}, false,
-        (component: Component, entity: Entity, data: any) => new PointerTool(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("pointer-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new PointerTool(component, entity, data));
 
     readonly pointerMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
 

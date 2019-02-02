@@ -14,9 +14,7 @@ import {ToolSelectorTool} from "./ToolSelectorTool";
 
 export class AddObjectTool extends PointerTool {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "add-object-tool", {}, false, (component: Component, entity: Entity, data: any) => new AddObjectTool(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("add-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new AddObjectTool(component, entity, data));
 
     reviewEntity: Entity | undefined;
 

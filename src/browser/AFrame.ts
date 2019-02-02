@@ -9,7 +9,7 @@ export class ComponentControllerDefinition {
     readonly tick: boolean;
     readonly constructComponentController: ConstructComponentController;
 
-    constructor(componentName: string, schema: any, multiple: boolean, constructComponentController: ConstructComponentController, tick: boolean = true) {
+    constructor(componentName: string, schema: any, multiple: boolean, tick: boolean, constructComponentController: ConstructComponentController) {
         this.componentName = componentName;
         this.schema = schema;
         this.multiple = multiple;

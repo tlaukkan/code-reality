@@ -4,12 +4,9 @@ import {AbstractComponentController} from "../AbstractComponentController";
 
 export class QuaternionController extends AbstractComponentController {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "quaternion", {
-            type: 'vec4'
-        }, false,
-        (component: Component, entity: Entity, data: any) => new QuaternionController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("quaternion", {
+        type: 'vec4'
+    }, false, false, (component: Component, entity: Entity, data: any) => new QuaternionController(component, entity, data));
 
     labelElement: Element | undefined;
 

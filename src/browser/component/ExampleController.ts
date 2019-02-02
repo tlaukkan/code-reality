@@ -4,12 +4,7 @@ import {ComponentControllerDefinition} from "../AFrame";
 
 export class ExampleController extends AbstractComponentController {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "example",
-        {},
-        false,
-        (component: Component, entity: Entity, data: any) => new ExampleController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("example", {}, false, false, (component: Component, entity: Entity, data: any) => new ExampleController(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

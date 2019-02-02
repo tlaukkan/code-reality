@@ -8,12 +8,7 @@ export class MergeController extends AbstractComponentController {
 
     readonly mergeSystem: MergeSystemController;
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "merge",
-        {},
-        false,
-        (component: Component, entity: Entity, data: any) => new MergeController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("merge", {}, false, false, (component: Component, entity: Entity, data: any) => new MergeController(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

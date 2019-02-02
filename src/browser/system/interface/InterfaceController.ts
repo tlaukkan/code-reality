@@ -4,10 +4,7 @@ import {ComponentControllerDefinition} from "../../AFrame";
 
 export class InterfaceController extends AbstractComponentController {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "interface", {}, false,
-        (component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("interface", {}, false, false, (component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

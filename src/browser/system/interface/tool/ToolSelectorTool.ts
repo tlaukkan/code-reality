@@ -11,10 +11,7 @@ import {SlotListener} from "../SlotListener";
 
 export class ToolSelectorTool extends AbstractComponentController implements Tool, SlotListener {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "tool-selector-tool", {}, false,
-        (component: Component, entity: Entity, data: any) => new ToolSelectorTool(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("tool-selector-tool", {}, false, false, (component: Component, entity: Entity, data: any) => new ToolSelectorTool(component, entity, data));
 
     toolSymbolEntities: Map<String, Entity> = new Map();
     currentToolName: string | undefined;

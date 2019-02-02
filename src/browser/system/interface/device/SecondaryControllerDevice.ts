@@ -10,10 +10,7 @@ import {AbstractControllerDevice} from "./AbstractControllerDevice";
 
 export class SecondaryControllerDevice extends AbstractControllerDevice implements Device {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "secondary-controller", {}, false,
-        (component: Component, entity: Entity, data: any) => new SecondaryControllerDevice(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("secondary-controller", {}, false, false, (component: Component, entity: Entity, data: any) => new SecondaryControllerDevice(component, entity, data));
 
 
     constructor(component: Component, entity: Entity, data: any) {

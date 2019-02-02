@@ -4,12 +4,7 @@ import {ComponentControllerDefinition} from "../../AFrame";
 
 export class CollidableController extends AbstractComponentController {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "collidable",
-        {},
-        false,
-        (component: Component, entity: Entity, data: any) => new CollidableController(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("collidable", {}, false, false, (component: Component, entity: Entity, data: any) => new CollidableController(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

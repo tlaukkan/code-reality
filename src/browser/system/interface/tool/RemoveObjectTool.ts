@@ -10,9 +10,7 @@ import {SpaceSystemController} from "../../../..";
 
 export class RemoveObjectTool extends PointerTool {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "remove-object-tool", {}, false, (component: Component, entity: Entity, data: any) => new RemoveObjectTool(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("remove-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new RemoveObjectTool(component, entity, data));
 
     entityTemplateScale = 1;
     entityTemplate: string = '<a-entity gltf-model="#cube" collidable/>';

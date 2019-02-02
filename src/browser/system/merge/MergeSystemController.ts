@@ -31,12 +31,13 @@ export class MergeSystemController extends AbstractSystemController {
     }
 
     tick(time: number, timeDelta: number): void {
-        const timeMillis = new Date().getTime();
+        /*const timeMillis = new Date().getTime();
         for (const merge of this.merges.values()) {
             if (merge.lastMergeTimeMillis != 0 && merge.lastModificationTimeMillis > merge.lastMergeTimeMillis && timeMillis - merge.lastModificationTimeMillis > 60000) {
                 this.merge(merge);
             }
         }
+        */
     }
 
     addMerge(mergeEntity: Entity) {

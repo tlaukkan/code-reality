@@ -9,9 +9,7 @@ import {PointerTool} from "./PointerTool";
 
 export class MoveObjectTool extends PointerTool {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "move-object-tool", {}, false, (component: Component, entity: Entity, data: any) => new MoveObjectTool(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("move-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new MoveObjectTool(component, entity, data));
 
     entityTemplateScale = 0.5;
     entityTemplate: string = "<a-box/>";

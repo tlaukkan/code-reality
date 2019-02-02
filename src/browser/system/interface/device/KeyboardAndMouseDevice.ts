@@ -9,10 +9,7 @@ import {addDocumentEventListener, addEntityEventListener} from "../../../util";
 
 export class KeyboardAndMouseDevice extends AbstractComponentController implements Device {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "keyboard-and-mouse", {}, false,
-        (component: Component, entity: Entity, data: any) => new KeyboardAndMouseDevice(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("keyboard-and-mouse", {}, false, false, (component: Component, entity: Entity, data: any) => new KeyboardAndMouseDevice(component, entity, data));
 
     movementForwardKey: string = 'w';
     movementBackwardKey: string = 's';

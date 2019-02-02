@@ -9,9 +9,7 @@ import {WalkTool} from "./WalkTool";
 
 export class TeleportTool extends PointerTool {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "teleport-tool", {}, false, (component: Component, entity: Entity, data: any) => new TeleportTool(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("teleport-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new TeleportTool(component, entity, data));
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);

@@ -8,10 +8,7 @@ import {ComponentControllerDefinition} from "../../../AFrame";
 
 export class PrimaryControllerDevice extends AbstractComponentController implements Device {
 
-    public static DEFINITION = new ComponentControllerDefinition(
-        "primary-controller", {}, false,
-        (component: Component, entity: Entity, data: any) => new PrimaryControllerDevice(component, entity, data)
-    );
+    public static DEFINITION = new ComponentControllerDefinition("primary-controller", {}, false, false, (component: Component, entity: Entity, data: any) => new PrimaryControllerDevice(component, entity, data));
 
     private controllerName: string = "";
     private axis: Array<number> | undefined;
