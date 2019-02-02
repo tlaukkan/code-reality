@@ -6,12 +6,14 @@ export class ComponentControllerDefinition {
     readonly componentName: string;
     readonly schema: any;
     readonly multiple: boolean;
+    readonly tick: boolean;
     readonly constructComponentController: ConstructComponentController;
 
-    constructor(componentName: string, schema: any, multiple: boolean, constructComponentController: ConstructComponentController) {
+    constructor(componentName: string, schema: any, multiple: boolean, constructComponentController: ConstructComponentController, tick: boolean = true) {
         this.componentName = componentName;
         this.schema = schema;
         this.multiple = multiple;
+        this.tick = tick;
         this.constructComponentController = constructComponentController;
     }
 }
@@ -56,19 +58,54 @@ export function registerSystemController(definition: SystemControllerDefinition)
 
 export function registerComponentController(definition: ComponentControllerDefinition) {
     if (typeof AFRAME !== 'undefined') {
-        AFRAME.registerComponent(definition.componentName, {
-            schema: definition.schema,
-            multiple: definition.multiple,
-            init: function () {
-                (this as any).controller = definition.constructComponentController(this as Component, this.el!!, this.data);
-                (this as any).controller.init();
-            },
-            update: function (oldData) { (this as any).controller.setData(this.data); (this as any).controller.update(this.data, oldData); },
-            remove: function () { (this as any).controller.remove(); },
-            tick: function (time: number, timeDelta: number) {  (this as any).controller.tick(time, timeDelta); },
-            pause: function () { (this as any).controller.pause(); },
-            play: function () { (this as any).controller.play(); }
-        });
+        if (definition.tick) {
+            AFRAME.registerComponent(definition.componentName, {
+                schema: definition.schema,
+                multiple: definition.multiple,
+                init: function () {
+                    (this as any).controller = definition.constructComponentController(this as Component, this.el!!, this.data);
+                    (this as any).controller.init();
+                },
+                update: function (oldData) {
+                    (this as any).controller.setData(this.data);
+                    (this as any).controller.update(this.data, oldData);
+                },
+                remove: function () {
+                    (this as any).controller.remove();
+                },
+                tick: function (time: number, timeDelta: number) {
+                    (this as any).controller.tick(time, timeDelta);
+                },
+                pause: function () {
+                    (this as any).controller.pause();
+                },
+                play: function () {
+                    (this as any).controller.play();
+                }
+            });
+        } else {
+            AFRAME.registerComponent(definition.componentName, {
+                schema: definition.schema,
+                multiple: definition.multiple,
+                init: function () {
+                    (this as any).controller = definition.constructComponentController(this as Component, this.el!!, this.data);
+                    (this as any).controller.init();
+                },
+                update: function (oldData) {
+                    (this as any).controller.setData(this.data);
+                    (this as any).controller.update(this.data, oldData);
+                },
+                remove: function () {
+                    (this as any).controller.remove();
+                },
+                pause: function () {
+                    (this as any).controller.pause();
+                },
+                play: function () {
+                    (this as any).controller.play();
+                }
+            });
+        }
     }
 }
 

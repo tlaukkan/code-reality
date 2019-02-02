@@ -13,7 +13,8 @@ export class ModelController extends AbstractComponentController {
         "model",
         {type: 'model'},
         false,
-        (component: Component, entity: Entity, data: any) => new ModelController(component, entity, data)
+        (component: Component, entity: Entity, data: any) => new ModelController(component, entity, data),
+        false
     );
 
     constructor(component: Component, entity: Entity, data: any) {
@@ -55,6 +56,7 @@ export class ModelController extends AbstractComponentController {
     }
 
     tick(time: number, timeDelta: number): void {
+        console.error("model tick should not happen.");
     }
 
     recursiveFindMergeParent(entity: Entity) : Entity | undefined {
