@@ -23,7 +23,9 @@ import {RemoveObjectTool} from "./system/interface/tool/RemoveObjectTool";
 import {ModelController} from "./system/merge/ModelController";
 import {MergeController} from "./system/merge/MergeController";
 import {MergeSystemController} from "./system/merge/MergeSystemController";
+import {LoaderSystemController} from "./system/loader/LoaderSystemController";
 
+registerSystemController(LoaderSystemController.DEFINITION);
 registerSystemController(ExampleSystemController.DEFINITION);
 registerSystemController(InterfaceSystemController.DEFINITION);
 registerSystemController(StateSystemController.DEFINITION);
