@@ -24,6 +24,7 @@ export class MergeSystemController extends AbstractSystemController {
     }
 
     init(): void {
+        (this.getSystemController("loader-system") as LoaderSystemController).enable();
     }
 
     pause(): void {
@@ -48,7 +49,7 @@ export class MergeSystemController extends AbstractSystemController {
             }
         }
         if (!merging) {
-            (this.getSystemController("loader-system") as LoaderSystemController).remove();
+            (this.getSystemController("loader-system") as LoaderSystemController).disable();
         }
 
     }
@@ -143,7 +144,7 @@ export class MergeSystemController extends AbstractSystemController {
         merge.lastMergeTimeMillis = new Date().getTime();
         console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
 
-        (this.getSystemController("loader-system") as LoaderSystemController).remove();
+        (this.getSystemController("loader-system") as LoaderSystemController).disable();
     }
 
     private allocateMergeObjectIndex(objectMerge: ObjectMerge, object: Object3D) {

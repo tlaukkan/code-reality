@@ -10,7 +10,7 @@ export class LoaderSystemController extends AbstractSystemController {
 
     sceneEl: Scene;
 
-    enabled = true;
+    enabled = false;
     added = false;
 
     loaderGeometry= new SphereGeometry(1, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
@@ -77,7 +77,11 @@ export class LoaderSystemController extends AbstractSystemController {
 
     }
 
-    remove() {
+    enable() {
+        this.enabled = true;
+    };
+
+    disable() {
         this.enabled = false;
     };
 
