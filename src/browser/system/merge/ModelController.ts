@@ -28,8 +28,8 @@ export class ModelController extends AbstractComponentController {
         //console.log(this.componentName + " update: " + JSON.stringify(this.data));
         setEntityGltfModel(this.entity, data).then(() => {
             //console.log("Static model loaded: " + data);
-            this.entity.object3D.visible = false;
             if (this.merge) {
+                this.entity.object3D.visible = false;
                 this.mergeSystem.setMergeChildLoaded(this.merge!!, this.entity);
             }
         }).catch((error) => {

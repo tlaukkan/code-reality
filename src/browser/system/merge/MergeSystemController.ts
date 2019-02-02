@@ -5,10 +5,12 @@ import List = Mocha.reporters.List;
 import {MergeData} from "./MergeData";
 import {Mesh, Object3D, Vector3} from "three";
 import {clearObject3Ds, cloneObject3D, mergeObject3Ds, ObjectMerge} from "../../three/merge_util";
+import {LoaderSystemController} from "../loader/LoaderSystemController";
 
 export class MergeSystemController extends AbstractSystemController {
 
     readonly merges = new Map<Entity, MergeData>();
+    private startTime = new Date().getTime();
 
     public static DEFINITION = new SystemControllerDefinition(
         "merge",
@@ -38,6 +40,17 @@ export class MergeSystemController extends AbstractSystemController {
             }
         }
         */
+        let merging = new Date().getTime() - this.startTime < 3000;
+
+        for (const merge of this.merges.values()) {
+            if (merge.lastModificationTimeMillis > merge.lastMergeTimeMillis) {
+                merging = true;
+            }
+        }
+        if (!merging) {
+            (this.getSystemController("loader-system") as LoaderSystemController).remove();
+        }
+
     }
 
     addMerge(mergeEntity: Entity) {
@@ -53,6 +66,7 @@ export class MergeSystemController extends AbstractSystemController {
             this.merges.set(mergeEntity, new MergeData(mergeEntity));
         }
         const merge = this.merges.get(mergeEntity)!!;
+        merge.lastModificationTimeMillis = new Date().getTime();
         merge.childEntities.add(mergeChildEntity);
         merge.loadingChildEntities.add(mergeChildEntity);
     }
@@ -73,7 +87,6 @@ export class MergeSystemController extends AbstractSystemController {
 
         console.log("merge child entities loaded.");
 
-        merge.lastModificationTimeMillis = new Date().getTime();
 
         //if (merge.lastMergeTimeMillis == 0) {
             this.merge(merge);
@@ -83,7 +96,6 @@ export class MergeSystemController extends AbstractSystemController {
 
     private merge(merge: MergeData) {
 
-        merge.lastMergeTimeMillis = new Date().getTime();
         console.log("merging...");
 
         const startTimeMillis = new Date().getTime();
@@ -128,7 +140,10 @@ export class MergeSystemController extends AbstractSystemController {
             merge.entity.object3D.add(merge.group);
         }
 
+        merge.lastMergeTimeMillis = new Date().getTime();
         console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
+
+        (this.getSystemController("loader-system") as LoaderSystemController).remove();
     }
 
     private allocateMergeObjectIndex(objectMerge: ObjectMerge, object: Object3D) {

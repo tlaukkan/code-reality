@@ -15,7 +15,7 @@ export class MergeData {
 
     objectMerge: ObjectMerge = new ObjectMerge();
 
-    lastModificationTimeMillis = 0;
+    lastModificationTimeMillis = 1;
     lastMergeTimeMillis = 0;
 
     constructor(entity: Entity) {
