@@ -4,7 +4,7 @@ import {SystemControllerDefinition} from "../../AFrame";
 import List = Mocha.reporters.List;
 import {MergeData} from "./MergeData";
 import {Mesh, Object3D, Vector3} from "three";
-import {clearObject3Ds, cloneObject3D, mergeObject3Ds} from "../../three/merge_util";
+import {clearObject3Ds, cloneObject3D, mergeObject3Ds, ObjectMerge} from "../../three/merge_util";
 
 export class MergeSystemController extends AbstractSystemController {
 
@@ -92,6 +92,7 @@ export class MergeSystemController extends AbstractSystemController {
         console.log("child entities to merge size: " + merge.mergingChildEntities.size);
         for (const entity of merge.mergingChildEntities) {
             const originalObject = entity.object3D;
+            this.allocateMergeObjectIndex(merge.objectMerge, originalObject);
             //entity.removeObject3D("mesh");
             // Set original hidden.
             originalObject.visible = false;
@@ -127,6 +128,18 @@ export class MergeSystemController extends AbstractSystemController {
         }
 
         console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
+    }
+
+    private allocateMergeObjectIndex(objectMerge: ObjectMerge, object: Object3D) {
+        object.userData.mergeObjectIndex = objectMerge.objectOffset;
+        objectMerge.objectOffset++;
+
+        if (object.children) {
+            for (const child of object.children) {
+                this.allocateMergeObjectIndex(objectMerge, child);
+            }
+        }
+
     }
 
     private remove(merge: MergeData) {

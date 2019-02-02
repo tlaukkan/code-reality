@@ -83,9 +83,6 @@ class GeometryData {
 }
 
 function collectBufferGeometries(merge: ObjectMerge, object: Object3D, geometries: Map<string, Array<GeometryData>>) {
-    (object as any).mergeObjectIndex = merge.objectOffset;
-    merge.objectOffset++;
-
     object.updateMatrix();
     object.updateMatrixWorld(true);
     //console.log(child.type);
@@ -93,10 +90,10 @@ function collectBufferGeometries(merge: ObjectMerge, object: Object3D, geometrie
         const mesh = object as Mesh;
         const geometryUuid = mesh.geometry.uuid;
         const geometry = mesh.geometry.clone();
-        if ((object as any).mergeObjectIndex === undefined) {
+        if (object.userData.mergeObjectIndex === undefined) {
             throw new Error("Merge object index of merging object is undefined.");
         }
-        (geometry as any).mergeObjectIndex = (object as any).mergeObjectIndex;
+        (geometry as any).mergeObjectIndex = object.userData.mergeObjectIndex;
         //const geometry = mesh.geometry;
 
         //console.log(geometry.type);
