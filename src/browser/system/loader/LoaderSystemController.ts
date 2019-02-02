@@ -9,13 +9,18 @@ export class LoaderSystemController extends AbstractSystemController {
 
 
     sceneEl: Scene;
-    enabled = false;
 
-    sphereGeometry= new SphereGeometry(1, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
-    sphereMaterial= new MeshBasicMaterial({color: 'white', side: DoubleSide});
+    enabled = true;
+    added = false;
+
+    loaderGeometry= new SphereGeometry(1, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
+    loaderMaterial= new MeshBasicMaterial({color: 'white', side: DoubleSide});
+    loaderObject= new Mesh(this.loaderGeometry, this.loaderMaterial);
+    sphereGeometry = new SphereGeometry(0.01, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
+    sphereMaterial= new MeshBasicMaterial({color: 'gray'});
     sphereMesh1= new Mesh(this.sphereGeometry, this.sphereMaterial);
-    //sphereMesh2= this.sphereMesh1.clone();
-    //sphereMesh3= this.sphereMesh1.clone();
+    sphereMesh2= this.sphereMesh1.clone();
+    sphereMesh3= this.sphereMesh1.clone();
 
     public static DEFINITION = new SystemControllerDefinition(
         "loader-system",
@@ -27,7 +32,17 @@ export class LoaderSystemController extends AbstractSystemController {
         super(system, scene, data);
 
         this.sceneEl = scene;
-        this.sphereMesh1.renderOrder = 1;
+        this.loaderObject.renderOrder = 1;
+
+        this.loaderObject.position.set(0, 0, 0);
+        this.sphereMesh1.position.set(-0.05, 0, -0.3);
+        this.sphereMesh2.position.set(0, 0, -0.3);
+        this.sphereMesh3.position.set(0.05, 0, -0.3);
+
+        this.loaderObject.add(this.sphereMesh1);
+        this.loaderObject.add(this.sphereMesh2);
+        this.loaderObject.add(this.sphereMesh3);
+
     }
 
     init(): void {
@@ -43,23 +58,27 @@ export class LoaderSystemController extends AbstractSystemController {
     }
 
     tick(time: number, timeDelta: number): void {
-        if (!this.enabled) {
-            this.enabled = true;
 
-            this.sphereMesh1.position.set(0, 0, 0);
-            //this.sphereMesh2.position.set(0, 0, -15);
-            //this.sphereMesh3.position.set(1, 0, -15);
-            this.sceneEl.camera.add(this.sphereMesh1);
-            //this.sceneEl.camera.add(this.sphereMesh2);
-            //this.sceneEl.camera.add(this.sphereMesh3);
+        if (this.enabled) {
+            if (!this.added) {
+                this.added = true;
+                this.sceneEl.camera.add(this.loaderObject);
+            }
 
+            this.sphereMesh1.visible = Math.floor(time / 500) % 3 == 0;
+            this.sphereMesh2.visible = Math.floor(time / 500) % 3 == 1;
+            this.sphereMesh3.visible = Math.floor(time / 500) % 3 == 2;
+        }  else {
+            if (this.added) {
+                this.added = false;
+                this.sceneEl.camera.remove(this.loaderObject);
+            }
         }
+
     }
 
     remove() {
-        this.sceneEl.camera.remove(this.sphereMesh1);
-        //this.sceneEl.camera.remove(this.sphereMesh2);
-        //this.sceneEl.camera.remove(this.sphereMesh3);
+        this.enabled = false;
     };
 
 
