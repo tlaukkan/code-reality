@@ -164,7 +164,7 @@ function mergeBufferAttributeWithDelay(merge: BufferAttributeMerge, attribute: B
     return new Promise(function (resolve, reject) {
         mergeBufferAttribute(merge, attribute).then(() => {
            niceTimeoutCounter++;
-           if (niceTimeoutCounter % 50 == 0) {
+           if (niceTimeoutCounter % 100 == 0) {
                setTimeout(() => {
                    resolve();
                }, 1);

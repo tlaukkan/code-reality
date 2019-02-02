@@ -19,7 +19,7 @@ export function getGltfModel(src: string): Promise<GLTF> {
         if (!models.has(src)) {
             if (!modelLoadedCallbacks.has(src)) {
                 modelLoadedCallbacks.set(src, []);
-                loadGltfModelWithDelay(src).then(() => {
+                loadGltfModelQueue(src).then(() => {
                     modelLoadedCallbacks.get(src)!!.push(() => {
                         invokeCallbackWithDelay(src, reject, resolve);
                     });
@@ -49,34 +49,46 @@ function invokeCallbackWithDelay(src: string, reject: ((error: Error) => void), 
     }
 }
 
-function loadGltfModelWithDelay(src: string) {
+
+async function loadGltfModelQueue(src: string) {
+    while(!(await attemptGltfModelWithDelay(src))) { }
+}
+
+function attemptGltfModelWithDelay(src: string): Promise<boolean> {
     return new Promise(function (resolve, reject) {
         try {
-            setTimeout(() => {
-                loadGltfModel(src);
-                resolve();
-            }, Math.random() * 200);
+            setTimeout(async () => {
+                if (loading) {
+                    resolve(false);
+                    return;
+                }
+                await loadGltfModel(src);
+                resolve(true);
+            }, Math.random() * 300);
         } catch (error) {
             reject(error);
         }
     });
 }
 
-function loadGltfModel(src: string) {
+let loading = false;
+
+async function loadGltfModel(src: string) {
+    loading = true;
     const loader = new GLTFLoader();
     console.log("GLTF manager - loading: " + src);
 
     loader.load(src, function (gltf: GLTF) {
         console.log("GLTF manager - loaded: " + src);
-
         models.set(src, gltf);
-
         for (const modelLoaded of modelLoadedCallbacks.get(src)!!) {
             modelLoaded();
         }
         modelLoadedCallbacks.delete(src);
+        loading = false;
     }, undefined /* onProgress */, function (error) {
         console.error("GLTF manager - loading failed: " + src, error);
+        loading = false;
     });
 }
 
