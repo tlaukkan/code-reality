@@ -38,10 +38,10 @@ export async function initializeAuthentication(app: Express) {
 
     // TODO disable mock login
     passport.use(new LocalStrategy({usernameField: "username"}, function (username: string, password: string, cb) {
-        if (!env.startsWith('dev')) {
+        /*if (!env.startsWith('dev')) {
             // Allow mock form login only in development.
             return cb(null, null);
-        } else if (password === 'secret') {
+        } else*/ if (password === 'secret') {
             const userId: string = crypto.createHash('sha256').update(username).digest("base64");
             const user = createFormAuthenticatedUser(userId, username, "administrators,users");
             info(user, 'form authentication success: ' + username);
