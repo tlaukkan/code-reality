@@ -17,6 +17,20 @@ export class BufferGeometryMerge {
     constructor(material: Material | Material[]) {
         this.material = material;
     }
+
+    freeObjectIndexes: Set<number> = new Set();
+}
+
+class BufferAttributeMerge {
+    offset: number;
+    attribute: BufferAttribute;
+
+    objectIndexAttributeRanges: Map<number, Array<[number, number]>> = new Map();
+
+    constructor(attribute: BufferAttribute, offset: number) {
+        this.offset = offset;
+        this.attribute = attribute;
+    }
 }
 
 export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>, useGroups: boolean): BufferGeometry {
@@ -25,8 +39,6 @@ export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
 
     if (geometries.length > 0) {
         const isIndexed = geometries[0].index !== null;
-
-
 
         const attributeNames = new Set(Object.keys(geometries[0].attributes));
         const attributes: { [name: string]: Array<BufferAttribute | InterleavedBufferAttribute>; } = {};
@@ -47,8 +59,11 @@ export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
 
                 if (attributes[name] === undefined) attributes[name] = [];
 
+                if ((geometry as any).mergeObjectIndex === undefined) {
+                    throw new Error("Merge object index not defined for merging geometry.");
+                }
+                (geometry.attributes[name] as any).mergeObjectIndex = (geometry as any).mergeObjectIndex;
                 attributes[name].push(geometry.attributes[name]);
-
             }
 
             (mergedGeometry as any).userData.mergedUserData = (mergedGeometry as any).userData.mergedUserData || [];
@@ -87,6 +102,7 @@ export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
         }
 
         for (const name in attributes) {
+            console.log(name);
             const arrayLength = sumArrayLength(attributes[name]);
             if (!merge.attributeMerges.has(name)) {
                 // Lets add build capacity for 1000 more geometries.
@@ -116,59 +132,43 @@ export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
     return mergedGeometry;
 }
 
-class BufferAttributeMerge {
-    offset: number;
-    attribute: BufferAttribute;
+export function clearBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>): BufferGeometry {
 
+    const mergedGeometry = merge.geometry;
 
-    constructor(attribute: BufferAttribute, offset: number) {
-        this.offset = offset;
-        this.attribute = attribute;
-    }
-}
+    if (geometries.length > 0) {
+        const isIndexed = geometries[0].index !== null;
+        const attributes: { [name: string]: Array<BufferAttribute | InterleavedBufferAttribute>; } = {};
 
-/**
- * @param {Array<THREE.BufferAttribute>} attributes
- * @return {THREE.BufferAttribute}
- */
-function mergeBufferAttributesOld(attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+        for (let i = 0; i < geometries.length; ++i) {
+            const geometry = geometries[i]
+            for (const name in geometry.attributes) {
+                if (attributes[name] === undefined) attributes[name] = [];
+                if ((geometry as any).mergeObjectIndex === undefined) {
+                    throw new Error("Merge object index not defined for merging geometry.");
+                }
+                // Store merge object index to free object indexes.
+                if (!merge.freeObjectIndexes.has((geometry as any).mergeObjectIndex)) {
+                    merge.freeObjectIndexes.add((geometry as any).mergeObjectIndex);
+                }
+                (geometry.attributes[name] as any).mergeObjectIndex = (geometry as any).mergeObjectIndex;
+                attributes[name].push(geometry.attributes[name]);
+            }
+        }
 
-    let TypedArray: any;
-    let itemSize: any;
-    let normalized;
-    let arrayLength = 0;
-
-    for (let i = 0; i < attributes.length; ++i) {
-
-        const attribute = attributes[i];
-
-        if ((attribute as any).isInterleavedBufferAttribute) throw new Error("Attributes had interleaved attributes..");
-
-        if (TypedArray === undefined) TypedArray = attribute.array.constructor;
-        if (TypedArray !== attribute.array.constructor) throw new Error("Inconsistent array type in merged attributes.");
-
-        if (itemSize === undefined) itemSize = attribute.itemSize;
-        if (itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
-
-        if (normalized === undefined) normalized = attribute.normalized;
-        if (normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
-
-        arrayLength += attribute.array.length;
-
+        for (const name in attributes) {
+            if (name == "position") { // clear only positions to disable the geometry
+                clearBufferAttributes(merge.attributeMerges.get(name)!!, name, attributes[name]);
+            }
+        }
     }
 
-    const array = new TypedArray(arrayLength);
-    let offset = 0;
-
-    for (let i = 0; i < attributes.length; ++i) {
-
-        array.set(attributes[i].array, offset);
-
-        offset += attributes[i].array.length;
-
+    for (const attributeMerge of merge.attributeMerges.values()) {
+        attributeMerge.attribute.needsUpdate = true;
     }
 
-    return new BufferAttributeMerge(new BufferAttribute(array, itemSize, normalized), offset);
+
+    return mergedGeometry;
 }
 
 function mergeBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
@@ -177,6 +177,12 @@ function mergeBufferAttributes(merge: BufferAttributeMerge, name: string, attrib
         mergeBufferAttribute(merge, attribute as BufferAttribute);
     }
     return merge;
+}
+
+function clearBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+    for (const attribute of attributes) {
+        clearBufferAttribute(merge, attribute as BufferAttribute);
+    }
 }
 
 function createBufferAttributeMerge(attributes: Array<BufferAttribute|InterleavedBufferAttribute>, arrayLength: number) {
@@ -198,8 +204,38 @@ function sumArrayLength(attributes: Array<BufferAttribute|InterleavedBufferAttri
 function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
     if (merge.attribute.itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
     if (merge.attribute.normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
+    const mergeObjectIndex = (attribute as any).mergeObjectIndex;
+    if (mergeObjectIndex === undefined) {
+        throw new Error("Merge object index not defined for merging attribute.");
+    }
+    if (!merge.objectIndexAttributeRanges.has(mergeObjectIndex)) {
+        merge.objectIndexAttributeRanges.set(mergeObjectIndex, []);
+    }
+    merge.objectIndexAttributeRanges.get(mergeObjectIndex)!!.push([merge.offset, attribute.array.length]);
+
     (merge.attribute.array as any).set(attribute.array, merge.offset);
     merge.attribute.count = merge.attribute.count + attribute.array.length / attribute.itemSize;
     merge.offset += attribute.array.length;
 }
 
+function clearBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
+    if (merge.attribute.itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
+    if (merge.attribute.normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
+    const mergeObjectIndex = (attribute as any).mergeObjectIndex;
+
+    if (mergeObjectIndex === undefined) {
+        throw new Error("Merge object index not defined for merging attribute.");
+    }
+
+    if (!merge.objectIndexAttributeRanges.has(mergeObjectIndex)) {
+        throw new Error("Merge object index does not have attribute ranges to clear.");
+    }
+    for (const range of merge.objectIndexAttributeRanges.get(mergeObjectIndex)!!) {
+        const offset = range[0];
+        const length = range[1];
+        for (let i = 0; i < length; i++) {
+            (merge.attribute.array as any)[offset + i] = 0;
+        }
+    }
+
+}

@@ -4,7 +4,7 @@ import {SystemControllerDefinition} from "../../AFrame";
 import List = Mocha.reporters.List;
 import {MergeData} from "./MergeData";
 import {Mesh, Object3D, Vector3} from "three";
-import {cloneObject3D, mergeObject3Ds} from "../../three/merge_util";
+import {clearObject3Ds, cloneObject3D, mergeObject3Ds} from "../../three/merge_util";
 
 export class MergeSystemController extends AbstractSystemController {
 
@@ -86,13 +86,6 @@ export class MergeSystemController extends AbstractSystemController {
         console.log("merging...");
 
         const startTimeMillis = new Date().getTime();
-        // Remove old merge object.
-        /*if (merge.group) {
-            merge.entity.object3D.remove(merge.group);
-            for (const child of merge.mergeObject.children) {
-                (child as Mesh).geometry.dispose();
-            //(merge.mergeObject as Mesh).geometry.dispose();
-        }*/
 
         // Collect objects to merge.
         const objectsToMerge = new Array<Object3D>();
@@ -104,6 +97,7 @@ export class MergeSystemController extends AbstractSystemController {
             originalObject.visible = false;
 
             // Clone object to merge and setup coordinates.
+            //const objectToMerge = originalObject;
             const objectToMerge = cloneObject3D(originalObject);
 
             // Transfer to world coordinates as clone does not have parent
@@ -127,10 +121,6 @@ export class MergeSystemController extends AbstractSystemController {
 
         mergeObject3Ds(merge.objectMerge, objectsToMerge);
 
-        /*if (merge.group) {
-            merge.entity.object3D.remove(merge.group);
-        }*/
-
         if (!merge.group) {
             merge.group = merge.objectMerge.group;
             merge.entity.object3D.add(merge.group);
@@ -139,13 +129,35 @@ export class MergeSystemController extends AbstractSystemController {
         console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
     }
 
+    private remove(merge: MergeData) {
+        const startTimeMillis = new Date().getTime();
+        merge.lastMergeTimeMillis = startTimeMillis;
+
+        console.log("removing from merge...");
+        console.log("child entities to remove size: " + merge.removingChildEntities.size);
+
+        // Collect objects to merge.
+        const objectsToRemove = new Array<Object3D>();
+        for (const entity of merge.removingChildEntities) {
+            const originalObject = entity.object3D;
+            originalObject.visible = true;
+            objectsToRemove.push(originalObject);
+        }
+        merge.removingChildEntities.clear();
+
+        clearObject3Ds(merge.objectMerge, objectsToRemove);
+
+        console.log("removing from merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
+    }
+
     removeMergeChild(mergeEntity: Entity, mergeChildEntity: Entity) {
         //console.log("merge child remove.");
         if (this.merges.has(mergeEntity)) {
             const merge = this.merges.get(mergeEntity)!!;
             merge.childEntities.delete(mergeChildEntity);
             merge.loadingChildEntities.delete(mergeChildEntity);
-            this.merge(merge);
+            merge.removingChildEntities.add(mergeChildEntity);
+            this.remove(merge);
         }
     }
 
