@@ -17,7 +17,7 @@ export class LoaderSystemController extends AbstractSystemController {
     loaderMaterial= new MeshBasicMaterial({color: 'white', side: DoubleSide, depthTest: false});
     loaderObject= new Mesh(this.loaderGeometry, this.loaderMaterial);
     sphereGeometry = new SphereGeometry(0.01, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
-    sphereMaterial= new MeshBasicMaterial({color: 'gray'});
+    sphereMaterial= new MeshBasicMaterial({color: 'gray', depthTest: false});
     sphereMesh1= new Mesh(this.sphereGeometry, this.sphereMaterial);
     sphereMesh2= this.sphereMesh1.clone();
     sphereMesh3= this.sphereMesh1.clone();
@@ -36,8 +36,11 @@ export class LoaderSystemController extends AbstractSystemController {
 
         this.loaderObject.position.set(0, 0, 0);
         this.sphereMesh1.position.set(-0.05, 0, -0.3);
+        this.sphereMesh1.renderOrder = 2;
         this.sphereMesh2.position.set(0, 0, -0.3);
+        this.sphereMesh2.renderOrder = 2;
         this.sphereMesh3.position.set(0.05, 0, -0.3);
+        this.sphereMesh3.renderOrder = 2;
 
         this.loaderObject.add(this.sphereMesh1);
         this.loaderObject.add(this.sphereMesh2);
