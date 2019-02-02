@@ -110,52 +110,83 @@ export class MergeSystemController extends AbstractSystemController {
         const startTimeMillis = new Date().getTime();
 
         // Collect objects to merge.
-        const objectsToMerge = new Array<Object3D>();
-        console.log("child entities to merge size: " + merge.mergingChildEntities.size);
-        for (const entity of merge.mergingChildEntities) {
-            const originalObject = entity.object3D;
-            this.allocateMergeObjectIndex(merge.objectMerge, originalObject);
-            //entity.removeObject3D("mesh");
-            // Set original hidden.
-            originalObject.visible = false;
+        this.collectObjectsToMerge(merge).then((objectsToMerge) => {
+            merge.mergingChildEntities.clear();
 
-            // Clone object to merge and setup coordinates.
-            //const objectToMerge = originalObject;
-            const objectToMerge = cloneObject3D(originalObject);
+            console.log("merging object...");
+            mergeObject3Ds(merge.objectMerge, objectsToMerge).then(() => {
+                if (!merge.group) {
+                    merge.group = merge.objectMerge.group;
+                    merge.entity.object3D.add(merge.group);
+                }
 
-            // Transfer to world coordinates as clone does not have parent
+                merge.lastMergeTimeMillis = new Date().getTime();
+                console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
 
-            // get world position
-            let position = new Vector3();
-            originalObject.updateMatrixWorld(true)
-            position.setFromMatrixPosition(originalObject.matrixWorld);
+                this.merging = false;
 
-            // convert to merge entity world local coordinates
-            merge.entity.object3D.updateMatrixWorld(true)
-            position = merge.entity.object3D.worldToLocal(position);
-
-            objectToMerge.position.x = position.x;
-            objectToMerge.position.y = position.y;
-            objectToMerge.position.z = position.z;
-
-            objectsToMerge.push(objectToMerge);
-        }
-        merge.mergingChildEntities.clear();
-
-        mergeObject3Ds(merge.objectMerge, objectsToMerge).then(() => {
-            if (!merge.group) {
-                merge.group = merge.objectMerge.group;
-                merge.entity.object3D.add(merge.group);
-            }
-
-            merge.lastMergeTimeMillis = new Date().getTime();
-            console.log("merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
-
-            this.merging = false;
-
-            (this.getSystemController("loader-system") as LoaderSystemController).disable();
+                (this.getSystemController("loader-system") as LoaderSystemController).disable();
+            });
         });
 
+
+    }
+
+    private async collectObjectsToMerge(merge: MergeData) {
+        const objectsToMerge = new Array<Object3D>();
+        console.log("collecting objects to merge from child entities: " + merge.mergingChildEntities.size);
+        for (const entity of merge.mergingChildEntities) {
+            await this.cloneObjectToMergeWithWait(entity, merge, objectsToMerge);
+        }
+        return objectsToMerge;
+    }
+
+    niceTimeoutCounter = 0;
+
+    private cloneObjectToMergeWithWait(entity: Entity, merge: MergeData, objectsToMerge: Array<Object3D>) {
+        return new Promise((resolve, reject) => {
+            this.cloneObjectToMerge(entity, merge, objectsToMerge).then(() => {
+                this.niceTimeoutCounter++;
+                if (this.niceTimeoutCounter % 25 == 0) {
+                    setTimeout(() => {
+                        resolve();
+                    }, 1);
+                } else {
+                    resolve();
+                }
+            }).catch((error) => {
+                reject(error)
+            });
+        });
+    }
+
+    private async cloneObjectToMerge(entity: Entity, merge: MergeData, objectsToMerge: Array<Object3D>) {
+        const originalObject = entity.object3D;
+        this.allocateMergeObjectIndex(merge.objectMerge, originalObject);
+        //entity.removeObject3D("mesh");
+        // Set original hidden.
+        originalObject.visible = false;
+
+        // Clone object to merge and setup coordinates.
+        //const objectToMerge = originalObject;
+        const objectToMerge = cloneObject3D(originalObject);
+
+        // Transfer to world coordinates as clone does not have parent
+
+        // get world position
+        let position = new Vector3();
+        originalObject.updateMatrixWorld(true)
+        position.setFromMatrixPosition(originalObject.matrixWorld);
+
+        // convert to merge entity world local coordinates
+        merge.entity.object3D.updateMatrixWorld(true)
+        position = merge.entity.object3D.worldToLocal(position);
+
+        objectToMerge.position.x = position.x;
+        objectToMerge.position.y = position.y;
+        objectToMerge.position.z = position.z;
+
+        objectsToMerge.push(objectToMerge);
     }
 
     private allocateMergeObjectIndex(objectMerge: ObjectMerge, object: Object3D) {
@@ -186,9 +217,10 @@ export class MergeSystemController extends AbstractSystemController {
         }
         merge.removingChildEntities.clear();
 
-        clearObject3Ds(merge.objectMerge, objectsToRemove);
+        clearObject3Ds(merge.objectMerge, objectsToRemove).then(() => {
+            console.log("removing from merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
+        });
 
-        console.log("removing from merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
     }
 
     removeMergeChild(mergeEntity: Entity, mergeChildEntity: Entity) {

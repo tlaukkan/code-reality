@@ -151,9 +151,30 @@ function sumArrayLength(attributes: Array<BufferAttribute|InterleavedBufferAttri
 async function mergeBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
     for (const attribute of attributes) {
         if ((attribute as any).isInterleavedBufferAttribute) throw new Error("Attributes had interleaved attributes..");
-        await mergeBufferAttribute(merge, attribute as BufferAttribute);
+
+        await mergeBufferAttributeWithDelay(merge, attribute as BufferAttribute);
     }
     return merge;
+
+}
+
+let niceTimeoutCounter = 0;
+
+function mergeBufferAttributeWithDelay(merge: BufferAttributeMerge, attribute: BufferAttribute) : Promise<void> {
+    return new Promise(function (resolve, reject) {
+        mergeBufferAttribute(merge, attribute).then(() => {
+           niceTimeoutCounter++;
+           if (niceTimeoutCounter % 50 == 0) {
+               setTimeout(() => {
+                   resolve();
+               }, 1);
+           } else {
+               resolve();
+           }
+        }).catch((error) => {
+           reject(error)
+        });
+    });
 }
 
 async function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {

@@ -1,4 +1,4 @@
-import {BufferGeometry, BufferGeometryUtils, Group, Material, Mesh, Object3D} from "three";
+import {BufferAttribute, BufferGeometry, BufferGeometryUtils, Group, Material, Mesh, Object3D} from "three";
 import {BufferGeometryMerge, clearBufferGeometries, mergeBufferGeometries} from "./geometry_merge_util";
 
 export class ObjectMerge {
@@ -12,7 +12,7 @@ export class ObjectMerge {
 export async function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): Promise<void> {
     const geometryDataMap = new Map<string, Array<GeometryData>>();
     for (const object of objects) {
-        collectBufferGeometries(merge, object, geometryDataMap);
+        await collectBufferGeometries(merge, object, geometryDataMap);
     }
 
     const allGeometryIds: Set<string> = new Set();
@@ -48,12 +48,12 @@ export async function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D
     }
 }
 
-export function clearObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): void {
+export async function clearObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): Promise<void> {
     const geometryDataMap = new Map<string, Array<GeometryData>>();
 
     // TODO Optimize this for clearing so that geometries are not cloned.
     for (const object of objects) {
-        collectBufferGeometries(merge, object, geometryDataMap);
+        await collectBufferGeometries(merge, object, geometryDataMap);
     }
 
     for (const geometryId of geometryDataMap.keys()) {
@@ -82,7 +82,34 @@ class GeometryData {
     }
 }
 
-function collectBufferGeometries(merge: ObjectMerge, object: Object3D, geometries: Map<string, Array<GeometryData>>) {
+
+async function collectChildBufferGeometries(merge: ObjectMerge, children: Object3D[], geometries: Map<string, Array<GeometryData>>) {
+    for (const child of children) {
+        await collectBufferGeometriesWithDelay(merge, child, geometries);
+    }
+}
+
+let niceTimeoutCounter = 0;
+
+function collectBufferGeometriesWithDelay(merge: ObjectMerge, object: Object3D, geometries: Map<string, Array<GeometryData>>) {
+    return new Promise(function (resolve, reject) {
+        collectBufferGeometries(merge, object, geometries).then(() => {
+            niceTimeoutCounter++;
+            if (niceTimeoutCounter % 50 == 0) {
+                setTimeout(() => {
+                    resolve();
+                }, 1);
+            } else {
+                resolve();
+            }
+        }).catch((error) => {
+            reject(error)
+        });
+    });
+}
+
+async function collectBufferGeometries(merge: ObjectMerge, object: Object3D, geometries: Map<string, Array<GeometryData>>) {
+    //console.log("collecting buffer geometries...");
     object.updateMatrix();
     object.updateMatrixWorld(true);
     //console.log(child.type);
@@ -109,13 +136,7 @@ function collectBufferGeometries(merge: ObjectMerge, object: Object3D, geometrie
     }
 
     if (object.children && object.children.length > 0) {
-        collectChildBufferGeometries(merge, object.children, geometries);
-    }
-}
-
-function collectChildBufferGeometries(merge: ObjectMerge, children: Object3D[], geometries: Map<string, Array<GeometryData>>) {
-    for (const child of children) {
-        collectBufferGeometries(merge, child, geometries);
+        await collectChildBufferGeometries(merge, object.children, geometries);
     }
 }
 

@@ -19,21 +19,46 @@ export function getGltfModel(src: string): Promise<GLTF> {
         if (!models.has(src)) {
             if (!modelLoadedCallbacks.has(src)) {
                 modelLoadedCallbacks.set(src, []);
-                loadGltfModel(src);
+                loadGltfModelWithDelay(src).then(() => {
+                    modelLoadedCallbacks.get(src)!!.push(() => {
+                        invokeCallbackWithDelay(src, reject, resolve);
+                    });
+                });
+            } else {
+                modelLoadedCallbacks.get(src)!!.push(() => {
+                    invokeCallbackWithDelay(src, reject, resolve);
+                });
             }
-
-            modelLoadedCallbacks.get(src)!!.push(() => {
-                if (!models.has(src)) {
-                    console.error("GLTF manager - reporting to waiter that loading failed: " + src);
-                    reject(new Error("Loading has failed: " + src));
-                } else {
-                    resolve(models.get(src)!!);
-                }
-            });
         } else {
-            resolve(models.get(src)!!);
+            setTimeout(() => {
+                resolve(models.get(src)!!);
+            }, 50);
         }
 
+    });
+}
+
+function invokeCallbackWithDelay(src: string, reject: ((error: Error) => void), resolve: ((gltf: GLTF) => void)) {
+    if (!models.has(src)) {
+        console.error("GLTF manager - reporting to waiter that loading failed: " + src);
+        reject(new Error("Loading has failed: " + src));
+    } else {
+        setTimeout(() => {
+            resolve(models.get(src)!!);
+        }, 50);
+    }
+}
+
+function loadGltfModelWithDelay(src: string) {
+    return new Promise(function (resolve, reject) {
+        try {
+            setTimeout(() => {
+                loadGltfModel(src);
+                resolve();
+            }, Math.random() * 200);
+        } catch (error) {
+            reject(error);
+        }
     });
 }
 
@@ -54,3 +79,4 @@ function loadGltfModel(src: string) {
         console.error("GLTF manager - loading failed: " + src, error);
     });
 }
+
