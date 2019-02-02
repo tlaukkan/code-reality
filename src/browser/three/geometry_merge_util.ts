@@ -1,5 +1,5 @@
 /**
- * @author mrdoob, tlaukkan (typescript and extendability, dropped morph attributes support for now)
+ * @author mrdoob, tlaukkan (copied from threejs BufferGeometryUtil.js typescript and added extendability, dropped morph attributes support)
  */
 
 
@@ -132,12 +132,53 @@ export function mergeBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
     return mergedGeometry;
 }
 
+function createBufferAttributeMerge(attributes: Array<BufferAttribute|InterleavedBufferAttribute>, arrayLength: number) {
+    const array = new (attributes[0].array.constructor as any)(arrayLength);
+    const merge = new BufferAttributeMerge(new BufferAttribute(array, attributes[0].itemSize, attributes[0].normalized), 0);
+    // Zero as no attributes added yet.
+    merge.attribute.count = 0;
+    return merge;
+}
+
+function sumArrayLength(attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+    let arrayLength = 0;
+    for (let i = 0; i < attributes.length; ++i) {
+        arrayLength += attributes[i].array.length;
+    }
+    return arrayLength;
+}
+
+function mergeBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+    for (const attribute of attributes) {
+        if ((attribute as any).isInterleavedBufferAttribute) throw new Error("Attributes had interleaved attributes..");
+        mergeBufferAttribute(merge, attribute as BufferAttribute);
+    }
+    return merge;
+}
+
+function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
+    if (merge.attribute.itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
+    if (merge.attribute.normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
+    const mergeObjectIndex = (attribute as any).mergeObjectIndex;
+    if (mergeObjectIndex === undefined) {
+        throw new Error("Merge object index not defined for merging attribute.");
+    }
+    if (!merge.objectIndexAttributeRanges.has(mergeObjectIndex)) {
+        merge.objectIndexAttributeRanges.set(mergeObjectIndex, []);
+    }
+    merge.objectIndexAttributeRanges.get(mergeObjectIndex)!!.push([merge.offset, attribute.array.length]);
+
+    (merge.attribute.array as any).set(attribute.array, merge.offset);
+    merge.attribute.count = merge.attribute.count + attribute.array.length / attribute.itemSize;
+    merge.offset += attribute.array.length;
+}
+
+
 export function clearBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>): BufferGeometry {
 
     const mergedGeometry = merge.geometry;
 
     if (geometries.length > 0) {
-        const isIndexed = geometries[0].index !== null;
         const attributes: { [name: string]: Array<BufferAttribute | InterleavedBufferAttribute>; } = {};
 
         for (let i = 0; i < geometries.length; ++i) {
@@ -171,51 +212,10 @@ export function clearBufferGeometries(merge: BufferGeometryMerge, geometries: Ar
     return mergedGeometry;
 }
 
-function mergeBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
-    for (const attribute of attributes) {
-        if ((attribute as any).isInterleavedBufferAttribute) throw new Error("Attributes had interleaved attributes..");
-        mergeBufferAttribute(merge, attribute as BufferAttribute);
-    }
-    return merge;
-}
-
 function clearBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
     for (const attribute of attributes) {
         clearBufferAttribute(merge, attribute as BufferAttribute);
     }
-}
-
-function createBufferAttributeMerge(attributes: Array<BufferAttribute|InterleavedBufferAttribute>, arrayLength: number) {
-    const array = new (attributes[0].array.constructor as any)(arrayLength);
-    const merge = new BufferAttributeMerge(new BufferAttribute(array, attributes[0].itemSize, attributes[0].normalized), 0);
-    // Zero as no attributes added yet.
-    merge.attribute.count = 0;
-    return merge;
-}
-
-function sumArrayLength(attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
-    let arrayLength = 0;
-    for (let i = 0; i < attributes.length; ++i) {
-        arrayLength += attributes[i].array.length;
-    }
-    return arrayLength;
-}
-
-function mergeBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
-    if (merge.attribute.itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
-    if (merge.attribute.normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
-    const mergeObjectIndex = (attribute as any).mergeObjectIndex;
-    if (mergeObjectIndex === undefined) {
-        throw new Error("Merge object index not defined for merging attribute.");
-    }
-    if (!merge.objectIndexAttributeRanges.has(mergeObjectIndex)) {
-        merge.objectIndexAttributeRanges.set(mergeObjectIndex, []);
-    }
-    merge.objectIndexAttributeRanges.get(mergeObjectIndex)!!.push([merge.offset, attribute.array.length]);
-
-    (merge.attribute.array as any).set(attribute.array, merge.offset);
-    merge.attribute.count = merge.attribute.count + attribute.array.length / attribute.itemSize;
-    merge.offset += attribute.array.length;
 }
 
 function clearBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {

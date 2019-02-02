@@ -94,9 +94,7 @@ function collectBufferGeometries(merge: ObjectMerge, object: Object3D, geometrie
             throw new Error("Merge object index of merging object is undefined.");
         }
         (geometry as any).mergeObjectIndex = object.userData.mergeObjectIndex;
-        //const geometry = mesh.geometry;
 
-        //console.log(geometry.type);
         if (geometry.type == "BufferGeometry") {
             const bufferGeometry = geometry as BufferGeometry;
             const material = mesh.material;
