@@ -129,6 +129,7 @@ export async function mergeBufferGeometries(merge: BufferGeometryMerge, geometri
         attributeMerge.attribute.needsUpdate = true;
     }
 
+    mergedGeometry.computeBoundingSphere();
     return mergedGeometry;
 }
 
