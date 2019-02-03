@@ -24,6 +24,8 @@ import {ModelController} from "./system/merge/ModelController";
 import {MergeController} from "./system/merge/MergeController";
 import {MergeSystemController} from "./system/merge/MergeSystemController";
 import {LoaderSystemController} from "./system/loader/LoaderSystemController";
+import {TextureFilter} from "three";
+import {PictureController} from "./component/texture/PictureController";
 
 registerSystemController(LoaderSystemController.DEFINITION);
 registerSystemController(ExampleSystemController.DEFINITION);
@@ -53,6 +55,7 @@ registerComponentController(QuaternionController.DEFINITION);
 
 registerComponentController(MergeController.DEFINITION);
 registerComponentController(ModelController.DEFINITION);
+registerComponentController(PictureController.DEFINITION);
 
 registerStateFactory(States.STATE_MOVEMENT, () => { return new MovementState() });
 
