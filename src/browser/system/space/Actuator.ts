@@ -138,6 +138,23 @@ export class Actuator {
     described(description: string) : void {
         this.description = description;
 
+        console.log("Described " + this.id + ": " + description);
+
+
+        const tempEntity = createElement(description) as Entity;
+        for (const attributeName of tempEntity.getAttributeNames()) {
+            const attributeValue = tempEntity.getAttribute(attributeName);
+
+            if (attributeName=='gltf-model') {
+                continue;
+            }
+
+            if (attributeName=='avatar') {
+                continue;
+            }
+
+            this.entity.setAttribute(attributeName, attributeValue);
+        }
     }
 
     acted(action: string, description: string) : void {

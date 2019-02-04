@@ -1,10 +1,10 @@
-import {Quaternion, Raycaster, Vector3} from "three";
+import {Raycaster, Vector3} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
-import {createElement, getEntity} from "../../../util";
+import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {SpaceSystemController} from "../../../..";
 
@@ -32,7 +32,11 @@ export class ScaleObjectTool extends PointerTool {
     buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
             if (button == Button.UP) {
-                this.scaleEntityUp();
+                if (this.pressed.has(Button.TRIGGER)) {
+                    this.scaleEntityUp();
+                } else {
+                    this.scaleSelfUp();
+                }
             }
         }
         super.buttonDown(device, toolSlot, button);
@@ -41,55 +45,73 @@ export class ScaleObjectTool extends PointerTool {
     buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == Button.DOWN) {
-                this.scaleEntityDown();
+                if (this.pressed.has(Button.TRIGGER)) {
+                    this.scaleEntityDown();
+                } else {
+                    this.scaleSelfDown();
+                }
             }
         }
         super.buttonUp(device, toolSlot, button);
     }
 
+    private scaleSelfUp() {
+        this.scaleSelf(this.scaleMultiplier);
+    }
+
+    private scaleSelfDown() {
+        this.scaleSelf(1 / this.scaleMultiplier);
+    }
+
+    private scaleSelf(multiplier: number) {
+        this.interface.setSelfScale(this.interface.getSelfScale() * multiplier);
+    }
+
     private scaleEntityUp() {
         console.log("scale entity up");
-        this.scale(this.scaleMultiplier);
+
+        const pointedObject = this.pointedObject;
+        if (pointedObject) {
+            const pointedEntity = getEntity(pointedObject)!!;
+
+            this.scaleEntity(pointedEntity, this.scaleMultiplier);
+        }
     }
 
     private scaleEntityDown() {
         console.log("scale entity down");
-        this.scale(1 / this.scaleMultiplier);
+
+        const pointedObject = this.pointedObject;
+        if (pointedObject) {
+            const pointedEntity = getEntity(pointedObject)!!;
+
+            this.scaleEntity(pointedEntity, 1 / this.scaleMultiplier);
+        }
     }
 
-    private scale(multiplier: number) {
+    private scaleEntity(entity: Entity, multiplier: number) {
         if (this.scaling) {
             return; // One operation at a time.
         }
 
-        const pointedObject = this.pointedObject;
-        const pointerPosition = this.pointedPosition;
-        //const pointedFaceIndex = this.pointedFaceIndex;
-
-        if (pointedObject && pointerPosition) {
             this.scaling = true;
-            const pointedEntity = getEntity(pointedObject)!!;
 
-            const position =  pointedEntity.object3D.getWorldPosition(pointedEntity.object3D.position.clone());
-            const scale = (pointedEntity.getAttribute("scale") as Vector3).clone();
+            const position =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
+            const scale = (entity.getAttribute("scale") as Vector3).clone();
 
             scale.x *= multiplier;
             scale.y *= multiplier;
             scale.z *= multiplier;
 
-            console.log(scale);
+            entity.setAttribute("scale", scale);
+            entity.flushToDOM();
 
-            pointedEntity.setAttribute("scale", scale);
-            pointedEntity.flushToDOM();
-
-            const entityXml = pointedEntity.outerHTML;
-
-            console.log(entityXml);
+            const entityXml = entity.outerHTML;
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
 
             // TODO Replace with update operation when it works.
-            spaceSystem.removeEntity(pointedEntity);
+            spaceSystem.removeEntity(entity);
             setTimeout(() => {
                 spaceSystem.saveEntity(entityXml, position, scale);
                 setTimeout(() => {
@@ -97,7 +119,6 @@ export class ScaleObjectTool extends PointerTool {
                 }, 1000);
             }, 1000);
 
-        }
     }
 }
 

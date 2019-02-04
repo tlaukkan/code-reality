@@ -10,6 +10,7 @@ import {Stick} from "./model/Stick";
 import {SystemControllerDefinition} from "../../AFrame";
 import {Object3D} from "three";
 import {SlotListener} from "./SlotListener";
+import {SpaceSystemController} from "../../..";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
@@ -18,6 +19,7 @@ export class InterfaceSystemController extends AbstractSystemController {
         (system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data)
     );
 
+    private selfScale: number = 1;
     public interfaceEntity: Entity;
     public cameraEntity: Entity;
     public collidables = new Array<Object3D>();
@@ -176,6 +178,21 @@ export class InterfaceSystemController extends AbstractSystemController {
             const previousTool = this.getTool(previousToolName);
             this.slotTool(slot, previousTool);
         }
+    }
+
+    setSelfScale(selfScale: number) {
+        const scale = this.interfaceEntity.getAttribute("scale");
+        this.selfScale = selfScale;
+        scale.x = this.selfScale;
+        scale.y = this.selfScale;
+        scale.z = this.selfScale;
+
+        const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+        spaceSystem.sendAvatarDescriptionUpdate();
+    }
+
+    getSelfScale(): number {
+        return this.selfScale;
     }
 
 }

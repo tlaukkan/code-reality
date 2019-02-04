@@ -9,6 +9,7 @@ import {AbstractSystemController} from "../AbstractSystemController";
 import {SystemControllerDefinition} from "../../AFrame";
 import {createElement} from "../../util";
 import {ClusterClient, Decode, Encode} from "reality-space";
+import {InterfaceSystemController} from "../../..";
 
 export class SpaceSystemController extends AbstractSystemController {
 
@@ -172,7 +173,7 @@ export class SpaceSystemController extends AbstractSystemController {
         if (this.playerObject && this.cameraObject) {
 
             this.client = new ClusterClient(this.clusterUrl!!, this.space, this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
-                this.cameraObject.quaternion.x, this.cameraObject.quaternion.y, this.cameraObject.quaternion.z, this.cameraObject.quaternion.w, '<a-entity gltf-model="#robot" scale="0.3 0.3 0.3" avatar=""></a-entity>', this.idToken!!);
+                this.cameraObject.quaternion.x, this.cameraObject.quaternion.y, this.cameraObject.quaternion.z, this.cameraObject.quaternion.w, this.getAvatarDescription(), this.idToken!!);
             this.client.onReceive = (region: string, type: string, message: string[]) => {
                 //console.log(message);
                 if (type === Encode.ADDED) {
@@ -227,8 +228,25 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
+    public getAvatarDescription(): string {
+        const interfaceSystem = this.getSystemController("interface") as InterfaceSystemController;
+        const selfScale = interfaceSystem ? interfaceSystem.getSelfScale() : 1;
+        const avatarScale = selfScale * 0.3; // TODO fix the model size.
+        return '<a-entity gltf-model="#robot" scale="' + avatarScale + ' ' + avatarScale + ' ' + avatarScale + '" avatar=""></a-entity>';
+    }
+
     public getClusterClient(): ClusterClient | undefined {
         return this.client;
+    }
+
+    public sendAvatarDescriptionUpdate() {
+        if (this.client) {
+            const avatarDescription = this.getAvatarDescription();
+            console.log("Describing avatar: " + avatarDescription);
+            this.client.describe(this.avatarId, this.getAvatarDescription()).catch((error) => {
+                console.log("Error describing avatar: " + error);
+            });
+        }
     }
 
     public saveEntity(template: string, position: Vector3, scale: Vector3) {
@@ -239,10 +257,6 @@ export class SpaceSystemController extends AbstractSystemController {
         localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
         localPosition.z = localPosition.z + 2;
 
-        console.log("t:" + template);
-
-        console.log(scale);
-
         const newEntity = createElement(template) as Entity;
         newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
         newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
@@ -250,8 +264,6 @@ export class SpaceSystemController extends AbstractSystemController {
         if (newEntity.flushToDOM) {
             newEntity.flushToDOM(true);
         }
-        console.log(newEntity);
-        console.log(newEntity.outerHTML);
 
         this.staticSpace!!.regionElements.get(region)!!.appendChild(newEntity);
 
