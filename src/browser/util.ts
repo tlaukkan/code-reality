@@ -19,7 +19,7 @@ export function addDocumentEventListener(type: string, listener: ((detail: any) 
     }) as any);
 }
 
-export function getElement(object: Object3D): Entity | undefined {
+export function getEntity(object: Object3D): Entity | undefined {
     if ((object as any).el) {
         return (object as any).el;
     }

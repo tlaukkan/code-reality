@@ -89,12 +89,7 @@ export class BillboardController extends AbstractComponentController {
 
         const newBillboardQuaternion = quaternion.multiply(this.entity.object3D.quaternion);
 
-
-        this.entity.object3D.quaternion.x = newBillboardQuaternion.x;
-        this.entity.object3D.quaternion.y = newBillboardQuaternion.y;
-        this.entity.object3D.quaternion.z = newBillboardQuaternion.z;
-        this.entity.object3D.quaternion.w = newBillboardQuaternion.w;
-
+        this.entity.object3D.quaternion.copy(newBillboardQuaternion);
     }
 
     applyTransformation() {

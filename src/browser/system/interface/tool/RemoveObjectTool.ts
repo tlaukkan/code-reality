@@ -4,7 +4,7 @@ import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
-import {getElement} from "../../../util";
+import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {SpaceSystemController} from "../../../..";
 
@@ -49,26 +49,16 @@ export class RemoveObjectTool extends PointerTool {
         const pointedObject = this.pointedObject;
         const pointerPosition = this.pointedPosition;
 
+        const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+
         if (pointedObject && pointerPosition) {
-            const pointedEntity = getElement(pointedObject);
+            const pointedEntity = getEntity(pointedObject);
             if (pointedEntity) {
-
-                const entitySid = pointedEntity.getAttribute("sid");
-
-                if (entitySid) {
-                    console.log("removing from storage");
-                    const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-                    const position = pointedEntity.object3D.position.clone();
-                    const worldPosition = pointedEntity.object3D.getWorldPosition(position);
-                    spaceSystem.removeEntity(entitySid, worldPosition.x, worldPosition.y, worldPosition.z);
-                }
-
-                console.log("removing locally");
-                pointedEntity.parentElement!!.removeChild(pointedEntity);
-
+                spaceSystem.removeEntity(pointedEntity);
             }
         }
     }
+
 
 }
 

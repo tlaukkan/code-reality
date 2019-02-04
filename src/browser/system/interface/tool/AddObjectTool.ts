@@ -119,7 +119,7 @@ export class AddObjectTool extends PointerTool {
             const snappedPosition = snapVector3ToAxisAlignedGrid(entityPosition, gridStep);
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-            spaceSystem.saveEntityFromTemplate(snappedPosition, template, templateScale);
+            spaceSystem.saveEntity(template, snappedPosition, new Vector3(templateScale, templateScale, templateScale));
 
         }
     }

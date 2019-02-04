@@ -22,8 +22,8 @@
                 <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
                 <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
 
+                <!--<img id="sky" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.15/environments/space/deep_space_equirectangular.png">-->
                 <img id="sky" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/environments/desert/gradient_env_equirectangular.png">
-
 
                 <a-asset-item id="cube" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube.glb"></a-asset-item>
                 <a-asset-item id="cube_wood" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/primitives/cube_wood.glb"></a-asset-item>
@@ -53,7 +53,7 @@
             <a-entity light="type: directional; color: #FFFFFF; intensity: 0.4" position="0.1 0.6 -0.3"></a-entity>
 
             <!-- Sky -->
-            <a-sky src="#sky" segments-height="8" segments-width="16"></a-sky>
+            <a-sky src="#sky" segments-height="16" segments-width="32"></a-sky>
 
             <!--<a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>-->
 
@@ -67,36 +67,13 @@
                         <a-box color="#8EA604" collidable position="0 0.5 -10" scale="4 0.5 4" ></a-box>
             -->
 
-            <!--<a-entity model="#cube" collidable position="0 1 -5" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="1 1 -5" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="2 1 -5" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="3 1 -5" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="4 1 -5" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="5 1 -5" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
 
-            <a-entity model="#cube" collidable position="0 1 -10" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="1 1 -10" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="2 1 -10" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="3 1 -10" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="4 1 -10" scale="1 1 1" rotation="0 0 0" avatar></a-entity>
-            <a-entity model="#cube" collidable position="5 1 -10" scale="1 1 1" rotation="0 0 0" avatar></a-entity>-->
-
+            <!--
+            <a-entity position="2 1.6 -2" picture="https://66.media.tumblr.com/14a4d4777e95162bfd126f0c99228261/tumblr_n59pgipQxX1t0naplo1_500.jpg"></a-entity>
+            <a-entity position="-2 1.6 -2" billboard="https://66.media.tumblr.com/14a4d4777e95162bfd126f0c99228261/tumblr_n59pgipQxX1t0naplo1_500.jpg"></a-entity>
+            -->
 
             <a-entity model="#cube" collidable position="0 -1 0" scale="2 2 2" rotation="90 0 0" avatar></a-entity>
-            <!--<a-entity gltf-model="#cube" collidable position="0 -0.75 -2" scale="2 2 2" rotation="0 0 90" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="0 -0.5 -4" scale="2 2 2" rotation="-90 0 0" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="0 -0.25 -6" scale="2 2 2" rotation="0 0 -90" avatar></a-entity>
-
-
-            <a-entity gltf-model="#cube" collidable position="-1 0 -8" scale="2 2 2" rotation="90 0 0" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="1 0 -8" scale="2 2 2" rotation="0 0 90" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="-1 0 -10" scale="2 2 2" rotation="-90 0 0" avatar></a-entity>
-            <a-entity gltf-model="#cube" collidable position="1 0 -10" scale="2 2 2" rotation="0 0 -90" avatar></a-entity>-->
-
-            <!--<a-entity gltf-model="#tree" collidable position="-1 1 -10" scale="0.01 0.01 0.01"></a-entity>-->
-            <!--<a-entity gltf-model="#robot" collidable position="1 1 -10" scale="0.3 0.3 0.3" avatar></a-entity>-->
-
-            <!--<a-sphere position="2 0 -3" collidable scale="1 1 1" color="#FFFFFF" identity example></a-sphere>-->
 
             <!-- Interface -->
             <a-entity interface position="0 0 0">
@@ -118,6 +95,7 @@
                 <a-entity walk-tool="minY: -20;"></a-entity>
                 <a-entity add-object-tool></a-entity>
                 <a-entity remove-object-tool></a-entity>
+                <a-entity scale-object-tool></a-entity>
                 <a-entity teleport-tool></a-entity>
 
             </a-entity>

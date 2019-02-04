@@ -231,30 +231,52 @@ export class SpaceSystemController extends AbstractSystemController {
         return this.client;
     }
 
-    public saveEntityFromTemplate(snappedPosition: Vector3, template: string, templateScale: number) {
-        const region = this.getRegion(snappedPosition.x, snappedPosition.y, snappedPosition.z)!!;
+    public saveEntity(template: string, position: Vector3, scale: Vector3) {
+        const region = this.getRegion(position.x, position.y, position.z)!!;
         const regionConfiguration = this.getRegionConfiguration(region);
 
-        const localPosition = snappedPosition.clone();
+        const localPosition = position.clone();
         localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
         localPosition.z = localPosition.z + 2;
 
+        console.log("t:" + template);
+
+        console.log(scale);
+
         const newEntity = createElement(template) as Entity;
-        newEntity.setAttribute("scale", templateScale + " " + templateScale + " " + templateScale);
+        newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
         newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
         newEntity.setAttribute("oid", uuid.v4().toString());
         if (newEntity.flushToDOM) {
             newEntity.flushToDOM(true);
         }
+        console.log(newEntity);
+        console.log(newEntity.outerHTML);
 
         this.staticSpace!!.regionElements.get(region)!!.appendChild(newEntity);
 
-        this.saveEntity(newEntity.outerHTML, snappedPosition.x, snappedPosition.y, snappedPosition.z).catch(error => {
+        this.saveEntityAsync(newEntity.outerHTML, position.x, position.y, position.z).catch(error => {
             console.error("Error saving entity", error);
         });
     }
 
-    public async saveEntity(entityXml: string, x: number, y: number, z: number) {
+    public removeEntity(pointedEntity: Entity) {
+        const entitySid = pointedEntity.getAttribute("sid");
+
+        if (entitySid) {
+            console.log("removing from storage");
+            const position = pointedEntity.object3D.position.clone();
+            const worldPosition = pointedEntity.object3D.getWorldPosition(position);
+            this.removeEntityAsync(entitySid, worldPosition.x, worldPosition.y, worldPosition.z).catch(error => {
+                console.log("Error removing entity.", error);
+            });
+        }
+
+        console.log("removing locally");
+        pointedEntity.parentElement!!.removeChild(pointedEntity);
+    }
+
+    public async saveEntityAsync(entityXml: string, x: number, y: number, z: number) {
         const region = this.getRegion(x, y, z);
         if (region) {
             if (this.client) {
@@ -267,7 +289,7 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
-    public async removeEntity(entitySid: string, x: number, y: number, z: number) {
+    public async removeEntityAsync(entitySid: string, x: number, y: number, z: number) {
         const region = this.getRegion(x, y, z);
         if (region) {
             if (this.client) {
