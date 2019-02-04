@@ -216,7 +216,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
         let position = this.interface.interfaceEntity!!.object3D.position;
 
         if (this.stickTranslation.x != 0 || this.stickTranslation.z != 0) {
-            let delta = this.movementSpeed * timeDelta / 1000.0;
+            let delta = this.interface.getSelfScale() * this.movementSpeed * timeDelta / 1000.0;
             this.computeXZDirectionFromCamera();
             this.centerOfMassPosition.x = this.interface.interfaceEntity!!.object3D.position.x;
             this.centerOfMassPosition.z = this.interface.interfaceEntity!!.object3D.position.z;
@@ -247,7 +247,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
         if (this.pressed.has(this.jumpKey) && !this.jumping && !this.airborne) {
             this.setJumping(true);
-            this.yVelocity = this.jumpStartSpeed
+            this.yVelocity = this.interface.getSelfScale() * this.jumpStartSpeed
         }
 
         let freeDropDelta = this.yVelocity * timeDelta / 1000.0;
@@ -314,7 +314,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
     testCollision(direction: Vector3, objects: Array<Object3D>) {
         let distanceToNearestAhead = this.findDistanceToNearest(direction, objects);
-        let collisionAhead = distanceToNearestAhead && distanceToNearestAhead < this.width / 2;
+        let collisionAhead = distanceToNearestAhead && distanceToNearestAhead < this.interface.getSelfScale() * this.width / 2;
         return collisionAhead;
     }
 }
