@@ -144,6 +144,9 @@ export class PointerTool extends AbstractComponentController implements Tool {
     }
 
     private addCursor(object: Object3D) {
+        this.pointerCursor.scale.x = this.interface.getSelfScale();
+        this.pointerCursor.scale.y = this.interface.getSelfScale();
+        this.pointerCursor.scale.z = this.interface.getSelfScale();
         this.scene.object3D.add(this.pointerCursor);
         console.log("add pointer cursor.");
     }

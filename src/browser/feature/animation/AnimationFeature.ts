@@ -1,5 +1,14 @@
 import {ComponentController} from "../../component/ComponentController";
-import {AnimationAction, AnimationClip, AnimationMixer, Event, LoopOnce, LoopPingPong, LoopRepeat} from "three";
+import {
+    AnimationAction,
+    AnimationClip,
+    AnimationMixer,
+    Event,
+    LoopOnce,
+    LoopPingPong,
+    LoopRepeat,
+    Vector3
+} from "three";
 import {AnimationEventDetail} from "../../model/AnimateEventDetail";
 import {AnimationEndEventDetail} from "../../model/AnimateEndEventDetail";
 import {AnimationFinishedEventDetails} from "../../model/AnimationFinishedEventDetail";
@@ -11,6 +20,7 @@ import {StateSystemController} from "../../system/state/StateSystemController";
 import {getSystemController} from "../../AFrame";
 import {MovementState} from "../../model/MovementState";
 import {States} from "../../model/States";
+import {InterfaceSystemController} from "../../..";
 
 export class AnimationFeature extends AbstractFeature {
 
@@ -55,7 +65,8 @@ export class AnimationFeature extends AbstractFeature {
             if (this.actions.has("walking")) {
                 const walkingAction = this.actions.get("walking")!!;
 
-                const walkingAnimationNormalSpeed = 1.9; // 1 m/s
+                // TODO 0.3 scale factor and 1.9 animation walk speed are model specific
+                const walkingAnimationNormalSpeed =  (this.entity.getAttribute("scale") as Vector3).x / 0.3 * 1.9; // 1 m/s
                 const entityActualSpeed = this.movementState.distanceDelta / this.movementState.timeDeltaSeconds;
                 const timeScale = this.movementState.facing * entityActualSpeed / walkingAnimationNormalSpeed;
 

@@ -52,10 +52,6 @@
             <a-entity light="type: ambient; color: #FFFFFF; intensity: 1.0"></a-entity>
             <a-entity light="type: directional; color: #FFFFFF; intensity: 0.4" position="0.1 0.6 -0.3"></a-entity>
 
-            <!-- Sky -->
-            <a-sky src="#sky" segments-height="16" segments-width="32"></a-sky>
-
-            <!--<a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>-->
 
             <!-- Terrain -->
             <!--<a-tiny-terrain id="terrain" collidable position="0 -20 0" height-function="custom" radius-edge-count="25" edge-length = "1.5" palette = "#8EA604" palette-accuracy="3" palette-range-min="0" palette-range-max="20" ></a-tiny-terrain>-->
@@ -67,7 +63,6 @@
                         <a-box color="#8EA604" collidable position="0 0.5 -10" scale="4 0.5 4" ></a-box>
             -->
 
-
             <!--
             <a-entity position="2 1.6 -2" picture="https://66.media.tumblr.com/14a4d4777e95162bfd126f0c99228261/tumblr_n59pgipQxX1t0naplo1_500.jpg"></a-entity>
             <a-entity position="-2 1.6 -2" billboard="https://66.media.tumblr.com/14a4d4777e95162bfd126f0c99228261/tumblr_n59pgipQxX1t0naplo1_500.jpg"></a-entity>
@@ -77,6 +72,10 @@
 
             <!-- Interface -->
             <a-entity interface position="0 0 0">
+
+                <!-- Sky -->
+                <a-sky src="#sky" segments-height="16" segments-width="32"></a-sky>
+                <!--<a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>-->
 
                 <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0">
                     <a-entity keyboard-and-mouse position="0.25 -0.25 -0.4">

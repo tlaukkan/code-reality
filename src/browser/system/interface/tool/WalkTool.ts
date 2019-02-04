@@ -255,7 +255,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
         if (distanceToNearestBelow && !this.jumping) {
             let distanceFromBottom = distanceToNearestBelow - this.height / 2;
-            if (Math.abs(freeDropDelta) > Math.abs(distanceFromBottom) || Math.abs(distanceFromBottom) < 0.1) {
+            if (Math.abs(freeDropDelta) > Math.abs(distanceFromBottom) || Math.abs(distanceFromBottom) < 0.1 * this.interface.getSelfScale()) {
                 delta = -distanceFromBottom;
                 this.setAirborne(false);
             } else {
