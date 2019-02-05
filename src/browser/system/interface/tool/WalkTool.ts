@@ -272,7 +272,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
         }
 
         if (this.airborne) {
-            this.yVelocity -= 9.81 * timeDelta / 1000.0;
+            this.yVelocity -= this.interface.getSelfScale() * 9.81 * timeDelta / 1000.0;
         } else {
             this.yVelocity = 0;
         }
