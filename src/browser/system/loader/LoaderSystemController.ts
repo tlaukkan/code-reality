@@ -10,7 +10,7 @@ export class LoaderSystemController extends AbstractSystemController {
 
     sceneEl: Scene;
 
-    enabled = false;
+    loadingCounter = 0;
     added = false;
 
     loaderGeometry= new SphereGeometry(1, 36, 18, 0, 2 * Math.PI, 0, Math.PI);
@@ -66,7 +66,7 @@ export class LoaderSystemController extends AbstractSystemController {
 
         this.progressTime += timeDelta < 25 ? timeDelta : 25;
 
-        if (this.enabled) {
+        if (this.loadingCounter > 0) {
             if (!this.added) {
                 this.added = true;
                 this.sceneEl.camera.add(this.loaderObject);
@@ -84,12 +84,15 @@ export class LoaderSystemController extends AbstractSystemController {
 
     }
 
-    enable() {
-        this.enabled = true;
+    increaseLoadingCounter() {
+        this.loadingCounter ++;
     };
 
-    disable() {
-        this.enabled = false;
+    decreaseLoadingCounter() {
+        if (this.loadingCounter == 0) {
+            console.warn("Notify loaded attempting to drop loading counter lower than zero.");
+        }
+        this.loadingCounter --;
     };
 
 

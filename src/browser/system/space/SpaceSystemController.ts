@@ -206,6 +206,9 @@ export class SpaceSystemController extends AbstractSystemController {
             this.client.onStoredEntityRemoved = (region, sid) => {
                 this.staticSpace!!.removeEntity(region, sid);
             };
+            this.client.onLoaded = (region) => {
+                this.staticSpace!!.loaded(region);
+            }
             this.client.onConnect = (region: string) => {
                 console.log("dataspace - connected: " + region);
                 const regionConfiguration = this.getRegionConfiguration(region);

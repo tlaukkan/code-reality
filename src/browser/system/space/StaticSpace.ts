@@ -3,11 +3,13 @@ import {createElement} from "../../util";
 import {StateSystemController} from "../state/StateSystemController";
 import {getSystemController} from "../../AFrame";
 import {Vector3} from "three";
+import {LoaderSystemController} from "../loader/LoaderSystemController";
 
 export class StaticSpace {
 
     scene: Scene;
     regionElements = new Map<string, Element>();
+    loadingRegions: Set<string> = new Set();
 
     constructor(scene: Scene) {
         this.scene = scene;
@@ -19,6 +21,11 @@ export class StaticSpace {
             this.regionElements.set(region, regionElement);
             this.scene.appendChild(regionElement);
         }
+        this.addToLoadingRegions(region);
+    }
+
+    loaded(region: string) {
+        this.removeFromLoadingRegions(region);
     }
 
     disconnected(region: string) {
@@ -29,7 +36,23 @@ export class StaticSpace {
             if (element.parentElement) {
                 element.parentElement.removeChild(element);
             }
-        })
+        });
+
+        this.removeFromLoadingRegions(region);
+    }
+
+    private addToLoadingRegions(region: string) {
+        if (!this.loadingRegions.has(region)) {
+            this.loadingRegions.add(region);
+            (getSystemController(this.scene, "loader-system") as LoaderSystemController).increaseLoadingCounter();
+        }
+    }
+
+    private removeFromLoadingRegions(region: string) {
+        if (this.loadingRegions.has(region)) {
+            this.loadingRegions.delete(region);
+            (getSystemController(this.scene, "loader-system") as LoaderSystemController).decreaseLoadingCounter();
+        }
     }
 
     setRootEntity(region: string, sid: string, entityXml: string) {

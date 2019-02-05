@@ -10,6 +10,7 @@ export class DynamicSpace {
     avatarIndex: number = -1;
     actuatorsMap: Map<string, Map<number, Actuator>> = new Map<string, Map<number, Actuator>>();
 
+
     constructor(scene: Scene, avatarId: string) {
         this.avatarId = avatarId;
         this.scene = scene;

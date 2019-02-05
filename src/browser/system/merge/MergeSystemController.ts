@@ -10,7 +10,8 @@ import {LoaderSystemController} from "../loader/LoaderSystemController";
 export class MergeSystemController extends AbstractSystemController {
 
     readonly merges = new Map<Entity, MergeData>();
-    private startTime = new Date().getTime();
+    startTime = 0;
+    loadingRegistered = false;
 
     public static DEFINITION = new SystemControllerDefinition(
         "merge",
@@ -24,7 +25,8 @@ export class MergeSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        (this.getSystemController("loader-system") as LoaderSystemController).enable();
+        (this.getSystemController("loader-system") as LoaderSystemController).increaseLoadingCounter();
+        this.startTime = new Date().getTime();
     }
 
     pause(): void {
@@ -48,8 +50,16 @@ export class MergeSystemController extends AbstractSystemController {
                 loading = true;
             }
         }
-        if (!loading) {
-            (this.getSystemController("loader-system") as LoaderSystemController).disable();
+        if (loading) {
+            if (!this.loadingRegistered) {
+                this.loadingRegistered = true;
+                (this.getSystemController("loader-system") as LoaderSystemController).increaseLoadingCounter();
+            }
+        } else {
+            if (this.loadingRegistered) {
+                this.loadingRegistered = false;
+                (this.getSystemController("loader-system") as LoaderSystemController).decreaseLoadingCounter();
+            }
         }
 
     }
@@ -125,7 +135,7 @@ export class MergeSystemController extends AbstractSystemController {
 
                 this.merging = false;
 
-                (this.getSystemController("loader-system") as LoaderSystemController).disable();
+                (this.getSystemController("loader-system") as LoaderSystemController).decreaseLoadingCounter();
             });
         });
 
