@@ -99,6 +99,7 @@ export class ScaleObjectTool extends PointerTool {
 
         this.scaling = true;
 
+        const spaceSystem = this.getSystemController("space") as SpaceSystemController;
         const position =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
         const scale = (entity.getAttribute("scale") as Vector3).clone();
 
@@ -106,32 +107,9 @@ export class ScaleObjectTool extends PointerTool {
         scale.y *= multiplier;
         scale.z *= multiplier;
 
-        entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
-        entity.flushToDOM();
+        spaceSystem.updateEntity(entity, position, scale);
 
-        const entityXml = entity.outerHTML;
-
-        console.log("scaling: " + entityXml);
-
-        const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-
-        // TODO Replace with update operation when it works.
-
-
-        const modelController = getComponentController(entity, "model") as ModelController | undefined;
-        if (modelController && modelController.merge) {
-            console.log("updating merge as entity is part of merge.");
-            const mergeSystem = this.getSystemController("merge") as MergeSystemController;
-            mergeSystem.updateMergeChild(modelController.merge!!, entity);
-        }
-
-        //spaceSystem.removeEntity(entity);
-        setTimeout(() => {
-            spaceSystem.updateEntity(entityXml, position, scale);
-            setTimeout(() => {
-                this.scaling = false;
-            }, 1000);
-        }, 1000);
+        this.scaling = false;
 
     }
 }

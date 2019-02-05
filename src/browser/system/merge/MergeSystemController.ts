@@ -46,7 +46,7 @@ export class MergeSystemController extends AbstractSystemController {
         let loading = new Date().getTime() - this.startTime < 3000;
 
         for (const merge of this.merges.values()) {
-            if (this.merging ||merge.loadingChildEntities.size > 0 || merge.mergingChildEntities.size > 0) {
+            if (this.merging ||merge.loadingChildEntities.size > 3 || merge.mergingChildEntities.size > 3) {
                 loading = true;
             }
         }

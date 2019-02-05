@@ -6,10 +6,12 @@ import {Events} from "../../model/Events";
 import {DynamicSpace} from "./DynamicSpace";
 import {StaticSpace} from "./StaticSpace";
 import {AbstractSystemController} from "../AbstractSystemController";
-import {SystemControllerDefinition} from "../../AFrame";
+import {getComponentController, SystemControllerDefinition} from "../../AFrame";
 import {createElement} from "../../util";
 import {ClusterClient, Decode, Encode} from "reality-space";
 import {InterfaceSystemController} from "../../..";
+import {ModelController} from "../merge/ModelController";
+import {MergeSystemController} from "../merge/MergeSystemController";
 
 export class SpaceSystemController extends AbstractSystemController {
 
@@ -273,7 +275,21 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
-    public updateEntity(template: string, position: Vector3, scale: Vector3) {
+    public updateEntity(entity: Entity, position: Vector3, scale: Vector3) {
+        entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
+        entity.flushToDOM();
+
+        const entityXml = entity.outerHTML;
+
+        console.log("scaling: " + entityXml);
+
+        const modelController = getComponentController(entity, "model") as ModelController | undefined;
+        if (modelController && modelController.merge) {
+            console.log("updating merge as entity is part of merge.");
+            const mergeSystem = this.getSystemController("merge") as MergeSystemController;
+            mergeSystem.updateMergeChild(modelController.merge!!, entity);
+        }
+
         if (this.client) {
             const region = this.client.getRegion(position.x, position.y, position.z)!!;
             const regionConfiguration = this.getRegionConfiguration(region);
@@ -282,7 +298,7 @@ export class SpaceSystemController extends AbstractSystemController {
             localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
             localPosition.z = localPosition.z + 2;
 
-            const newEntity = createElement(template) as Entity;
+            const newEntity = createElement(entityXml) as Entity;
             newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
             newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
             newEntity.setAttribute("oid", uuid.v4().toString());
