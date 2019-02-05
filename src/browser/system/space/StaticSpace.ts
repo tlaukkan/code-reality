@@ -6,7 +6,7 @@ import {Vector3} from "three";
 import {LoaderSystemController} from "../loader/LoaderSystemController";
 import {MergeSystemController} from "../merge/MergeSystemController";
 import {ModelController} from "../merge/ModelController";
-
+import {Element as XmlElement, js2xml, xml2js} from "xml-js";
 export class StaticSpace {
 
     scene: Scene;
@@ -58,15 +58,13 @@ export class StaticSpace {
     }
 
     setRootEntity(region: string, sid: string, entityXml: string) {
-        const newElement = createElement(entityXml);
-        const oid = newElement.getAttribute("oid");
-        newElement.setAttribute("server", region);
 
         //console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
         const existingElement = this.getElement(sid);
         if (existingElement) {
             // Remove old element as it is being replaced.
             //existingElement.parentElement!!.removeChild(existingElement);
+            const newElement = xml2js(entityXml).elements[0];
             this.recursiveUpdate(existingElement, newElement);
 
             const modelController = getComponentController(existingElement, "model") as ModelController | undefined;
@@ -77,6 +75,11 @@ export class StaticSpace {
 
         } else {
             // If element exists with oid then update that element.
+
+            const newElement = createElement(entityXml);
+            const oid = newElement.getAttribute("oid");
+            newElement.setAttribute("server", region);
+
             if (oid) {
                 const elements = document.querySelectorAll('[oid="' + oid + '"]');
                 for (const element of elements) {
@@ -91,16 +94,19 @@ export class StaticSpace {
         }
     }
 
-    recursiveUpdate(existingElement: Element, newElement: Element) {
+    recursiveUpdate(existingElement: Element, newElement: XmlElement) {
         const existingAttributeNames = new Set(existingElement.getAttributeNames());
-        for (const attributeName of newElement.getAttributeNames()) {
-            const value = newElement.getAttribute(attributeName);
 
-            if (attributeName != "model") {
-                existingElement.setAttribute(attributeName, value!!);
+        if (newElement.attributes) {
+            for (const attributeName in newElement.attributes) {
+                const value = newElement.attributes[attributeName]!!.toString();
+
+                if (attributeName != "model") {
+                    existingElement.setAttribute(attributeName, value);
+                }
+
+                existingAttributeNames.delete(attributeName);
             }
-
-            existingAttributeNames.delete(attributeName);
         }
 
         // Remove attribute names not present in new element.
@@ -117,16 +123,18 @@ export class StaticSpace {
 
         }
 
-        for (const newChild of newElement.children) {
-            const sid = newChild.getAttribute("sid")!!;
-            if (existingChildElements.has(sid)) {
-                const existingChild = existingChildElements.get("sid")!!;
-                // Update child recursively.
-                this.recursiveUpdate(newChild, existingChild);
-                existingChildElements.delete(sid);
-            } else {
-                // Append child as new element.
-                existingElement.appendChild(createElement(newChild.outerHTML));
+        if (newElement.elements) {
+            for (const newChild of newElement.elements) {
+                const sid = newChild.attributes!!["sid"]!!.toString();
+                if (existingChildElements.has(sid)) {
+                    const existingChild = existingChildElements.get("sid")!!;
+                    // Update child recursively.
+                    this.recursiveUpdate(existingChild, newChild);
+                    existingChildElements.delete(sid);
+                } else {
+                    // Append child as new element.
+                    existingElement.appendChild(createElement(js2xml(newChild)));
+                }
             }
         }
 
