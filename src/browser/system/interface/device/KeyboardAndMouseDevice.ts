@@ -23,6 +23,7 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     downKey = 'ArrowDown';
 
     pointerLock: boolean = false;
+    lastWheelYTimeMillis = 0;
 
 
     constructor(component: Component, entity: Entity, data: any) {
@@ -80,8 +81,25 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             console.log('mouse click ' + e.button);
         });
 
-        (this.entity.sceneEl!! as any).addEventListener('wheel', (e: WheelEvent) => {
+        */
+
+        /*(this.entity.sceneEl!! as any).addEventListener('wheel', (e: WheelEvent) => {
             console.log('wheel: x=' + e.deltaX + ', y=' + e.deltaY + ', z=' + e.deltaZ);
+
+            if (new Date().getTime() - this.lastWheelYTimeMillis > 1000) {
+
+                if (e.deltaY != 0) {
+                    if (e.deltaY > 0) {
+                        this.interface.buttonDown(this, Slot.PRIMARY, Button.UP);
+                        this.interface.buttonUp(this, Slot.PRIMARY, Button.UP);
+                    } else {
+                        this.interface.buttonDown(this, Slot.PRIMARY, Button.DOWN);
+                        this.interface.buttonUp(this, Slot.PRIMARY, Button.DOWN);
+                    }
+
+                    this.lastWheelYTimeMillis = new Date().getTime();
+                }
+            }
         });*/
 
     }
@@ -118,16 +136,16 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             this.interface.buttonDown(this, Slot.WALK, Button.TRIGGER);
         }
 
-        if (key == this.upKey) {
+        if (key == this.upKey || key == 'r') {
             this.interface.buttonDown(this, Slot.PRIMARY, Button.UP);
         }
-        if (key == this.downKey) {
+        if (key == this.downKey || key == 'f') {
             this.interface.buttonDown(this, Slot.PRIMARY, Button.DOWN);
         }
-        if (key == this.rightKey) {
+        if (key == this.rightKey || key == 'e') {
             this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.RIGHT);
         }
-        if (key == this.leftKey) {
+        if (key == this.leftKey || key == 'q') {
             this.interface.buttonDown(this, Slot.PRIMARY_SELECTOR, Button.LEFT);
         }
 
@@ -150,16 +168,16 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             this.interface.buttonUp(this, Slot.WALK, Button.TRIGGER);
         }
 
-        if (key == this.upKey) {
+        if (key == this.upKey || key == 'r') {
             this.interface.buttonUp(this, Slot.PRIMARY, Button.UP);
         }
-        if (key == this.downKey) {
+        if (key == this.downKey || key == 'f') {
             this.interface.buttonUp(this, Slot.PRIMARY, Button.DOWN);
         }
-        if (key == this.rightKey) {
+        if (key == this.rightKey || key == 'e') {
             this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.RIGHT);
         }
-        if (key == this.leftKey) {
+        if (key == this.leftKey || key == 'q') {
             this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.LEFT);
         }
 
