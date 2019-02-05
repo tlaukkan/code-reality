@@ -228,17 +228,6 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
-    public getAvatarDescription(): string {
-        const interfaceSystem = this.getSystemController("interface") as InterfaceSystemController;
-        const selfScale = interfaceSystem ? interfaceSystem.getSelfScale() : 1;
-        const avatarScale = selfScale * 0.3; // TODO fix the model size.
-        return '<a-entity gltf-model="#robot" scale="' + avatarScale + ' ' + avatarScale + ' ' + avatarScale + '" avatar=""></a-entity>';
-    }
-
-    public getClusterClient(): ClusterClient | undefined {
-        return this.client;
-    }
-
     public sendAvatarDescriptionUpdate() {
         if (this.client) {
             const avatarDescription = this.getAvatarDescription();
@@ -249,96 +238,53 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
-    public saveEntity(template: string, position: Vector3, scale: Vector3) {
-        const region = this.getRegion(position.x, position.y, position.z)!!;
-        const regionConfiguration = this.getRegionConfiguration(region);
-
-        const localPosition = position.clone();
-        localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
-        localPosition.z = localPosition.z + 2;
-
-        const newEntity = createElement(template) as Entity;
-        newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
-        newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
-        newEntity.setAttribute("oid", uuid.v4().toString());
-        if (newEntity.flushToDOM) {
-            newEntity.flushToDOM(true);
-        }
-
-        this.staticSpace!!.regionElements.get(region)!!.appendChild(newEntity);
-
-        this.saveEntityAsync(newEntity.outerHTML, position.x, position.y, position.z).catch(error => {
-            console.error("Error saving entity", error);
-        });
+    private getAvatarDescription(): string {
+        const interfaceSystem = this.getSystemController("interface") as InterfaceSystemController;
+        const selfScale = interfaceSystem ? interfaceSystem.getSelfScale() : 1;
+        const avatarScale = selfScale * 0.3; // TODO fix the model size.
+        return '<a-entity gltf-model="#robot" scale="' + avatarScale + ' ' + avatarScale + ' ' + avatarScale + '" avatar=""></a-entity>';
     }
 
-    public removeEntity(pointedEntity: Entity) {
-        const entitySid = pointedEntity.getAttribute("sid");
+    public saveEntity(template: string, position: Vector3, scale: Vector3) {
+        if (this.client) {
+            const region = this.client.getRegion(position.x, position.y, position.z)!!;
+            const regionConfiguration = this.getRegionConfiguration(region);
 
-        if (entitySid) {
-            console.log("removing from storage");
-            const position = pointedEntity.object3D.position.clone();
-            const worldPosition = pointedEntity.object3D.getWorldPosition(position);
-            this.removeEntityAsync(entitySid, worldPosition.x, worldPosition.y, worldPosition.z).catch(error => {
-                console.log("Error removing entity.", error);
+            const localPosition = position.clone();
+            localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
+            localPosition.z = localPosition.z + 2;
+
+            const newEntity = createElement(template) as Entity;
+            newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
+            newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
+            newEntity.setAttribute("oid", uuid.v4().toString());
+            if (newEntity.flushToDOM) {
+                newEntity.flushToDOM(true);
+            }
+
+            this.staticSpace!!.regionElements.get(region)!!.appendChild(newEntity);
+
+            this.client.storeEntity(newEntity.outerHTML, position.x, position.y, position.z).catch(error => {
+                console.error("Error saving entity", error);
             });
         }
-
-        console.log("removing locally");
-        pointedEntity.parentElement!!.removeChild(pointedEntity);
     }
 
-    public async saveEntityAsync(entityXml: string, x: number, y: number, z: number) {
-        const region = this.getRegion(x, y, z);
-        if (region) {
-            if (this.client) {
-                await this.client.storeEntities(region, "<a-entities>" + entityXml + "</a-entities>");
-            } else {
-                console.warn("not connected.");
-            }
-        } else {
-            console.warn("No region found at " + x + "," + y + "," + z);
-        }
-    }
-
-    public async removeEntityAsync(entitySid: string, x: number, y: number, z: number) {
-        const region = this.getRegion(x, y, z);
-        if (region) {
-            if (this.client) {
-                await this.client.removeStoredEntities(region, [entitySid]);
-            } else {
-                console.warn("not connected.");
-            }
-        } else {
-            console.warn("No region found at " + x + "," + y + "," + z);
-        }
-    }
-
-    public getRegion(x: number, y: number, z: number): string | undefined {
+    public removeEntity(entity: Entity) {
         if (this.client) {
-            const regions = Array<string>();
-            let lastD2 = Number.MAX_SAFE_INTEGER;
-            for (let region of this.client.clusterConfiguration!!.regions) {
-                if (x >= region.x - region.edge / 2 && x <= region.x + region.edge / 2 &&
-                    y >= region.y - region.edge / 2 && y <= region.y + region.edge / 2 &&
-                    z >= region.z - region.edge / 2 && z <= region.z + region.edge / 2) {
-                    const d2 = Math.pow(x - region.x, 2) + Math.pow(y - region.y, 2) + Math.pow(z - region.z, 2);
-                    if (d2 < lastD2) {
-                        regions.unshift(region.region);
-                    } else {
-                        regions.push(region.region);
-                    }
-                    lastD2 = d2;
-                }
+            const entitySid = entity.getAttribute("sid");
+
+            if (entitySid) {
+                console.log("removing from storage");
+                const position = entity.object3D.position.clone();
+                const worldPosition = entity.object3D.getWorldPosition(position);
+                this.client.removeStoredEntity(entitySid, worldPosition.x, worldPosition.y, worldPosition.z).catch(error => {
+                    console.log("Error removing entity.", error);
+                });
             }
-            if (regions.length > 0) {
-                return regions[0];
-            } else {
-                return undefined;
-            }
-        } else {
-            console.warn("not connected.");
-            return undefined;
+
+            console.log("removing locally");
+            entity.parentElement!!.removeChild(entity);
         }
     }
 
