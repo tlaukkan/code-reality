@@ -276,17 +276,11 @@ export class SpaceSystemController extends AbstractSystemController {
     }
 
     public updateEntity(entity: Entity, position: Vector3, scale: Vector3) {
-        entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
-        entity.flushToDOM();
-
-        const entityXml = entity.outerHTML;
-
-        console.log("scaling: " + entityXml);
-
         const modelController = getComponentController(entity, "model") as ModelController | undefined;
         if (modelController && modelController.merge) {
             console.log("updating merge as entity is part of merge.");
             const mergeSystem = this.getSystemController("merge") as MergeSystemController;
+            entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
             mergeSystem.updateMergeChild(modelController.merge!!, entity);
         }
 
@@ -298,6 +292,7 @@ export class SpaceSystemController extends AbstractSystemController {
             localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
             localPosition.z = localPosition.z + 2;
 
+            const entityXml = entity.outerHTML;
             const newEntity = createElement(entityXml) as Entity;
             newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
             newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
