@@ -250,7 +250,7 @@ export class SpaceSystemController extends AbstractSystemController {
         return '<a-entity gltf-model="#robot" scale="' + avatarScale + ' ' + avatarScale + ' ' + avatarScale + '" avatar=""></a-entity>';
     }
 
-    public saveEntity(template: string, position: Vector3, scale: Vector3) {
+    public addEntity(template: string, position: Vector3, scale: Vector3) {
         if (this.client) {
             const region = this.client.getRegion(position.x, position.y, position.z)!!;
             const regionConfiguration = this.getRegionConfiguration(region);

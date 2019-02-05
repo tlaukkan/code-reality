@@ -115,7 +115,7 @@ export class AddObjectTool extends PointerTool {
             const newPosition = snapVector3ToAxisAlignedGrid(entityPosition.add(pointedFace.normal.multiplyScalar(this.interface.getSelfScale() * gridStep / 2)), this.interface.getSelfScale() * gridStep);
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-            spaceSystem.saveEntity(template, newPosition, new Vector3(templateScale, templateScale, templateScale));
+            spaceSystem.addEntity(template, newPosition, new Vector3(templateScale, templateScale, templateScale));
 
         }
     }
