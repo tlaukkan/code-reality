@@ -1,4 +1,4 @@
-import {Raycaster, Vector3} from "three";
+import {Quaternion, Raycaster, Vector, Vector3} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
@@ -8,11 +8,11 @@ import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {SpaceSystemController} from "../../../..";
 
-export class ScaleObjectTool extends PointerTool {
+export class RotateObjectTool extends PointerTool {
 
-    public static DEFINITION = new ComponentControllerDefinition("scale-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new ScaleObjectTool(component, entity, data));
+    public static DEFINITION = new ComponentControllerDefinition("rotate-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new RotateObjectTool(component, entity, data));
 
-    scaleMultiplier = 2;
+    rotateDegrees = 22.5;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -31,9 +31,7 @@ export class ScaleObjectTool extends PointerTool {
         if (!this.pressed.has(button)) {
             if (button == Button.UP) {
                 if (this.pressed.has(Button.TRIGGER)) {
-                    this.scaleEntityUp();
-                } else {
-                    this.scaleSelfUp();
+                    this.rotateForward();
                 }
             }
         }
@@ -44,52 +42,53 @@ export class ScaleObjectTool extends PointerTool {
         if (this.pressed.has(button)) {
             if (button == Button.DOWN) {
                 if (this.pressed.has(Button.TRIGGER)) {
-                    this.scaleEntityDown();
-                } else {
-                    this.scaleSelfDown();
+                    this.rotateBackward();
                 }
             }
         }
         super.buttonUp(device, toolSlot, button);
     }
 
-    private scaleSelfUp() {
-        this.scaleSelf(this.scaleMultiplier);
-    }
-
-    private scaleSelfDown() {
-        this.scaleSelf(1 / this.scaleMultiplier);
-    }
-
-    private scaleSelf(multiplier: number) {
-        this.interface.setSelfScale(this.interface.getSelfScale() * multiplier);
-    }
-
-    private scaleEntityUp() {
+    private rotateForward() {
         const object = this.pointedObject;
         if (object) {
             const entity = getEntity(object)!!;
-            this.scaleEntity(entity, this.scaleMultiplier);
+            this.move(entity, this.rotateDegrees);
         }
     }
 
-    private scaleEntityDown() {
+    private rotateBackward() {
         const object = this.pointedObject;
         if (object) {
             const entity = getEntity(object)!!;
-            this.scaleEntity(entity, 1 / this.scaleMultiplier);
+            this.move(entity, -this.rotateDegrees);
         }
     }
 
-    private scaleEntity(entity: Entity, multiplier: number) {
+    private move(entity: Entity, rotateDegrees: number) {
         const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-        const position =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
-        const currentOrientation = entity.object3D.quaternion.clone();
-        const scale = (entity.getAttribute("scale") as Vector3).clone();
 
-        scale.multiplyScalar(multiplier);
+        const gridStep = 1;
+        const pointedObject = this.pointedObject;
+        const pointerPosition = this.pointedPosition;
+        const pointedFace = this.pointedFace;
 
-        spaceSystem.updateEntity(entity, position, currentOrientation, scale);
+        if (pointedObject && pointerPosition && pointedFace) {
+
+            const axis = pointedFace.normal;
+            const angle = rotateDegrees * (2 * Math.PI) / 360;
+
+            const quaternionRotation = new Quaternion();
+            quaternionRotation.setFromAxisAngle(axis, angle);
+
+            const currentPosition =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
+            const currentScale = entity.getAttribute("scale") as Vector3;
+            const currentOrientation = entity.object3D.quaternion.clone();
+
+            const newOrientation = quaternionRotation.multiply(currentOrientation);
+            spaceSystem.updateEntity(entity, currentPosition,  newOrientation, currentScale);
+
+        }
     }
 }
 

@@ -130,6 +130,7 @@ export async function mergeBufferGeometries(merge: BufferGeometryMerge, geometri
     }
 
     mergedGeometry.computeBoundingSphere();
+    mergedGeometry.computeVertexNormals();
     return mergedGeometry;
 }
 
@@ -295,7 +296,8 @@ export function updateBufferGeometries(merge: BufferGeometryMerge, geometries: A
         attributeMerge.attribute.needsUpdate = true;
     }
 
-
+    mergedGeometry.computeBoundingSphere();
+    mergedGeometry.computeVertexNormals();
     return mergedGeometry;
 }
 

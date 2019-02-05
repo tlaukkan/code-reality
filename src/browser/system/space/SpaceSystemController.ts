@@ -275,7 +275,7 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
-    public updateEntity(entity: Entity, position: Vector3, scale: Vector3) {
+    public updateEntity(entity: Entity, position: Vector3, orientation: Quaternion, scale: Vector3) {
         if (this.client) {
             const sid = entity.getAttribute("sid");
             this.staticSpace!!.ignoreNextSetSids.push(sid);
@@ -290,16 +290,18 @@ export class SpaceSystemController extends AbstractSystemController {
             const modelController = getComponentController(entity, "model") as ModelController | undefined;
             if (modelController && modelController.merge) {
                 //console.log("updating merge as entity is part of merge.");
-                entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
                 entity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
+                entity.setAttribute("quaternion", orientation.x + " " + orientation.y + " " + orientation.z + " " + orientation.w);
+                entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
                 const mergeSystem = this.getSystemController("merge") as MergeSystemController;
                 mergeSystem.updateMergeChild(modelController.merge!!, entity);
             }
 
             const entityXml = entity.outerHTML;
             const newEntity = createElement(entityXml) as Entity;
-            newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
             newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
+            newEntity.setAttribute("quaternion", orientation.x + " " + orientation.y + " " + orientation.z + " " + orientation.w);
+            newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
             newEntity.setAttribute("oid", uuid.v4().toString());
             if (newEntity.flushToDOM) {
                 newEntity.flushToDOM(true);
