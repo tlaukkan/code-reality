@@ -12,6 +12,7 @@ export class StaticSpace {
     scene: Scene;
     regionElements = new Map<string, Element>();
     loadingRegions: Set<string> = new Set();
+    ignoreNextSetSids: Array<string> = [];
 
     constructor(scene: Scene) {
         this.scene = scene;
@@ -58,6 +59,11 @@ export class StaticSpace {
     }
 
     setRootEntity(region: string, sid: string, entityXml: string) {
+
+        if (this.ignoreNextSetSids.indexOf(sid) > -1) {
+            this.ignoreNextSetSids.splice(this.ignoreNextSetSids.indexOf(sid), 1);
+            return;
+        }
 
         //console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
         const existingElement = this.getElement(sid);
@@ -146,6 +152,11 @@ export class StaticSpace {
     }
 
     setChildEntity(region: string, parentSid: string, sid: string, entityXml: string) {
+        if (this.ignoreNextSetSids.indexOf(sid) > -1) {
+            this.ignoreNextSetSids.splice(this.ignoreNextSetSids.indexOf(sid), 1);
+            return;
+        }
+
         //console.log("Set child entity " + region + "/" + parentSid + "/" + sid + ": " + entityXml);
         const parentElement = this.getElement(parentSid);
         if (parentElement === undefined) {
