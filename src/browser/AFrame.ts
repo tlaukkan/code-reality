@@ -125,3 +125,12 @@ export function getSystemController<C extends SystemController>(scene: Scene, sy
 
     return (system as any).controller;
 }
+
+export function getComponentController<C extends ComponentController>(entity:Entity, componentName: string): C {
+    const component = entity.components[componentName];
+    if (!component) {
+        throw new Error("Component is not registered to entity: " + componentName);
+    }
+
+    return (component as any).controller;
+}

@@ -39,6 +39,7 @@ export class ModelController extends AbstractComponentController {
 
     remove(): void {
         if (this.merge) {
+            console.log("Removing merge child due to model removal.");
             this.mergeSystem.removeMergeChild(this.merge!!, this.entity);
         }
 

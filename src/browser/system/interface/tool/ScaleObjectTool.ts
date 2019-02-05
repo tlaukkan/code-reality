@@ -3,10 +3,13 @@ import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
+import {ComponentControllerDefinition, getComponentController} from "../../../AFrame";
 import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {SpaceSystemController} from "../../../..";
+import {MergeSystemController} from "../../merge/MergeSystemController";
+import {MergeController} from "../../merge/MergeController";
+import {ModelController} from "../../merge/ModelController";
 
 export class ScaleObjectTool extends PointerTool {
 
@@ -94,30 +97,41 @@ export class ScaleObjectTool extends PointerTool {
             return; // One operation at a time.
         }
 
-            this.scaling = true;
+        this.scaling = true;
 
-            const position =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
-            const scale = (entity.getAttribute("scale") as Vector3).clone();
+        const position =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
+        const scale = (entity.getAttribute("scale") as Vector3).clone();
 
-            scale.x *= multiplier;
-            scale.y *= multiplier;
-            scale.z *= multiplier;
+        scale.x *= multiplier;
+        scale.y *= multiplier;
+        scale.z *= multiplier;
 
-            entity.setAttribute("scale", scale);
-            entity.flushToDOM();
+        entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
+        entity.flushToDOM();
 
-            const entityXml = entity.outerHTML;
+        const entityXml = entity.outerHTML;
 
-            const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+        console.log("scaling: " + entityXml);
 
-            // TODO Replace with update operation when it works.
-            spaceSystem.removeEntity(entity);
+        const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+
+        // TODO Replace with update operation when it works.
+
+
+        const modelController = getComponentController(entity, "model") as ModelController | undefined;
+        if (modelController && modelController.merge) {
+            console.log("updating merge as entity is part of merge.");
+            const mergeSystem = this.getSystemController("merge") as MergeSystemController;
+            mergeSystem.updateMergeChild(modelController.merge!!, entity);
+        }
+
+        //spaceSystem.removeEntity(entity);
+        setTimeout(() => {
+            spaceSystem.updateEntity(entityXml, position, scale);
             setTimeout(() => {
-                spaceSystem.saveEntity(entityXml, position, scale);
-                setTimeout(() => {
-                    this.scaling = false;
-                }, 1000);
+                this.scaling = false;
             }, 1000);
+        }, 1000);
 
     }
 }

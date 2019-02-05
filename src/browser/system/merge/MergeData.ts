@@ -10,6 +10,7 @@ export class MergeData {
     loadingChildEntities: Set<Entity> = new Set<Entity>();
     mergingChildEntities: Set<Entity> = new Set<Entity>();
     removingChildEntities: Set<Entity> = new Set<Entity>();
+    updatingChildEntities: Set<Entity> = new Set<Entity>();
 
     group: Group | undefined;
 

@@ -56,11 +56,11 @@ export class StaticSpace {
     }
 
     setRootEntity(region: string, sid: string, entityXml: string) {
-        //console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
+        console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
         const existingElement = this.getElement(sid);
         if (existingElement) {
             // Remove old element as it is being replaced.
-            this.scene.removeChild(existingElement);
+            existingElement.parentElement!!.removeChild(existingElement);
         }
 
         const newElement = createElement(entityXml);
@@ -118,7 +118,7 @@ export class StaticSpace {
         if (!elements || elements.length == 0) {
             return undefined;
         }
-        if (elements.length == 2) {
+        if (elements.length > 1) {
             console.log("More than one element found with sid: " + sid);
             return undefined;
         }

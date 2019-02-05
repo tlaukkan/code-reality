@@ -273,6 +273,29 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
+    public updateEntity(template: string, position: Vector3, scale: Vector3) {
+        if (this.client) {
+            const region = this.client.getRegion(position.x, position.y, position.z)!!;
+            const regionConfiguration = this.getRegionConfiguration(region);
+
+            const localPosition = position.clone();
+            localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
+            localPosition.z = localPosition.z + 2;
+
+            const newEntity = createElement(template) as Entity;
+            newEntity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
+            newEntity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
+            newEntity.setAttribute("oid", uuid.v4().toString());
+            if (newEntity.flushToDOM) {
+                newEntity.flushToDOM(true);
+            }
+
+            this.client.storeEntity(newEntity.outerHTML, position.x, position.y, position.z).catch(error => {
+                console.error("Error saving entity", error);
+            });
+        }
+    }
+
     public removeEntity(entity: Entity) {
         if (this.client) {
             const entitySid = entity.getAttribute("sid");

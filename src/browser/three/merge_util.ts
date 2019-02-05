@@ -1,5 +1,10 @@
 import {BufferAttribute, BufferGeometry, BufferGeometryUtils, Group, Material, Mesh, Object3D} from "three";
-import {BufferGeometryMerge, clearBufferGeometries, mergeBufferGeometries} from "./geometry_merge_util";
+import {
+    BufferGeometryMerge,
+    clearBufferGeometries,
+    mergeBufferGeometries,
+    updateBufferGeometries
+} from "./geometry_merge_util";
 
 export class ObjectMerge {
 
@@ -68,6 +73,28 @@ export async function clearObject3Ds(merge: ObjectMerge, objects: Array<Object3D
         }
 
         clearBufferGeometries(merge.geometryMerges.get(geometryId)!!, geometries);
+    }
+}
+
+export async function updateObject3Ds(merge: ObjectMerge, objects: Array<Object3D>): Promise<void> {
+    const geometryDataMap = new Map<string, Array<GeometryData>>();
+
+    for (const object of objects) {
+        await collectBufferGeometries(merge, object, geometryDataMap);
+    }
+
+    for (const geometryId of geometryDataMap.keys()) {
+
+        const geometries = new Array<BufferGeometry>();
+
+        const geometryDataArray = geometryDataMap.get(geometryId);
+        if (geometryDataArray) {
+            for (const geometryData of geometryDataArray) {
+                geometries.push(geometryData.geometry);
+            }
+        }
+
+        updateBufferGeometries(merge.geometryMerges.get(geometryId)!!, geometries);
     }
 }
 

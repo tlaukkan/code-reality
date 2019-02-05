@@ -261,3 +261,68 @@ function clearBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttr
     }
 
 }
+
+
+
+export function updateBufferGeometries(merge: BufferGeometryMerge, geometries: Array<BufferGeometry>): BufferGeometry {
+
+    const mergedGeometry = merge.geometry;
+
+    if (geometries.length > 0) {
+        const attributes: { [name: string]: Array<BufferAttribute | InterleavedBufferAttribute>; } = {};
+
+        for (let i = 0; i < geometries.length; ++i) {
+            const geometry = geometries[i]
+            for (const name in geometry.attributes) {
+                if (attributes[name] === undefined) attributes[name] = [];
+                if ((geometry as any).mergeObjectIndex === undefined) {
+                    throw new Error("Merge object index not defined for merging geometry.");
+                }
+
+                (geometry.attributes[name] as any).mergeObjectIndex = (geometry as any).mergeObjectIndex;
+                attributes[name].push(geometry.attributes[name]);
+            }
+        }
+
+        for (const name in attributes) {
+            if (name == "position") { // update only positions to disable the geometry
+                updateBufferAttributes(merge.attributeMerges.get(name)!!, name, attributes[name]);
+            }
+        }
+    }
+
+    for (const attributeMerge of merge.attributeMerges.values()) {
+        attributeMerge.attribute.needsUpdate = true;
+    }
+
+
+    return mergedGeometry;
+}
+
+function updateBufferAttributes(merge: BufferAttributeMerge, name: string, attributes: Array<BufferAttribute|InterleavedBufferAttribute>) {
+    for (const attribute of attributes) {
+        updateBufferAttribute(merge, attribute as BufferAttribute);
+    }
+}
+
+function updateBufferAttribute(merge: BufferAttributeMerge, attribute: BufferAttribute) {
+    if (merge.attribute.itemSize !== attribute.itemSize) throw new Error("Inconsistent item size in merged attributes.");
+    if (merge.attribute.normalized !== attribute.normalized) throw new Error("Inconsistent normalized in merged attributes.");
+    const mergeObjectIndex = (attribute as any).mergeObjectIndex;
+
+    if (mergeObjectIndex === undefined) {
+        throw new Error("Merge object index not defined for merging attribute.");
+    }
+
+    if (!merge.objectIndexAttributeRanges.has(mergeObjectIndex)) {
+        throw new Error("Merge object index does not have attribute ranges to clear.");
+    }
+    for (const range of merge.objectIndexAttributeRanges.get(mergeObjectIndex)!!) {
+        const offset = range[0];
+        const length = range[1];
+        for (let i = 0; i < length; i++) {
+            (merge.attribute.array as any)[offset + i] = attribute.array[i];
+        }
+    }
+
+}

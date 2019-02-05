@@ -4,7 +4,7 @@ import {SystemControllerDefinition} from "../../AFrame";
 import List = Mocha.reporters.List;
 import {MergeData} from "./MergeData";
 import {Mesh, Object3D, Vector3} from "three";
-import {clearObject3Ds, cloneObject3D, mergeObject3Ds, ObjectMerge} from "../../three/merge_util";
+import {clearObject3Ds, cloneObject3D, mergeObject3Ds, ObjectMerge, updateObject3Ds} from "../../three/merge_util";
 import {LoaderSystemController} from "../loader/LoaderSystemController";
 
 export class MergeSystemController extends AbstractSystemController {
@@ -230,7 +230,46 @@ export class MergeSystemController extends AbstractSystemController {
         clearObject3Ds(merge.objectMerge, objectsToRemove).then(() => {
             console.log("removing from merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
         });
+    }
 
+    private update(merge: MergeData) {
+        const startTimeMillis = new Date().getTime();
+        merge.lastMergeTimeMillis = startTimeMillis;
+
+        console.log("updating merge...");
+        console.log("child entities to update size: " + merge.updatingChildEntities.size);
+
+        // Collect objects to merge.
+        const objectsToUpdate = new Array<Object3D>();
+        for (const entity of merge.updatingChildEntities) {
+            const originalObject = entity.object3D;
+
+            // Clone object to merge and setup coordinates.
+            //const objectToMerge = originalObject;
+            const objectToUpdate = cloneObject3D(originalObject);
+
+            // Transfer to world coordinates as clone does not have parent
+
+            // get world position
+            let position = new Vector3();
+            originalObject.updateMatrixWorld(true)
+            position.setFromMatrixPosition(originalObject.matrixWorld);
+
+            // convert to merge entity world local coordinates
+            merge.entity.object3D.updateMatrixWorld(true)
+            position = merge.entity.object3D.worldToLocal(position);
+
+            objectToUpdate.position.x = position.x;
+            objectToUpdate.position.y = position.y;
+            objectToUpdate.position.z = position.z;
+
+            objectsToUpdate.push(objectToUpdate);
+        }
+        merge.updatingChildEntities.clear();
+
+        updateObject3Ds(merge.objectMerge, objectsToUpdate).then(() => {
+            console.log("updating merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
+        });
     }
 
     removeMergeChild(mergeEntity: Entity, mergeChildEntity: Entity) {
@@ -241,6 +280,15 @@ export class MergeSystemController extends AbstractSystemController {
             merge.loadingChildEntities.delete(mergeChildEntity);
             merge.removingChildEntities.add(mergeChildEntity);
             this.remove(merge);
+        }
+    }
+
+    updateMergeChild(mergeEntity: Entity, mergeChildEntity: Entity) {
+        //console.log("merge child remove.");
+        if (this.merges.has(mergeEntity)) {
+            const merge = this.merges.get(mergeEntity)!!;
+            merge.updatingChildEntities.add(mergeChildEntity);
+            this.update(merge);
         }
     }
 
