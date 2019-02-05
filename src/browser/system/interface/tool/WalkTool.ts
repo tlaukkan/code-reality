@@ -136,7 +136,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
     setCenterOfMassFromInterfaceEntity() {
         this.centerOfMassPosition = new Vector3(0, 0, 0); // Center of mass for collision checks
         this.centerOfMassPosition.x = this.interface.interfaceEntity!!!!.object3D.position.x;
-        this.centerOfMassPosition.y = this.interface.interfaceEntity!!!!.object3D.position.y + this.height / 2;
+        this.centerOfMassPosition.y = this.interface.interfaceEntity!!!!.object3D.position.y + this.interface.getSelfScale() * this.height / 2;
         this.centerOfMassPosition.z = this.interface.interfaceEntity!!!!.object3D.position.z;
     }
 
@@ -243,7 +243,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
     updateY(timeDelta: number, collidables: Array<Object3D>) {
         let position = this.interface.interfaceEntity!!.object3D.position;
 
-        var distanceToNearestBelow = this.findDistanceToNearest(this.yAxisNegative, collidables);
+        const distanceToNearestBelow = this.findDistanceToNearest(this.yAxisNegative, collidables);
 
         if (this.pressed.has(this.jumpKey) && !this.jumping && !this.airborne) {
             this.setJumping(true);
@@ -254,7 +254,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
         let delta;
 
         if (distanceToNearestBelow && !this.jumping) {
-            let distanceFromBottom = distanceToNearestBelow - this.height / 2;
+            let distanceFromBottom = distanceToNearestBelow - this.interface.getSelfScale() * this.height / 2;
             if (Math.abs(freeDropDelta) > Math.abs(distanceFromBottom) || Math.abs(distanceFromBottom) < 0.1 * this.interface.getSelfScale()) {
                 delta = -distanceFromBottom;
                 this.setAirborne(false);
@@ -283,11 +283,11 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
         this.centerOfMassPosition.y = this.centerOfMassPosition.y + delta;
 
-        if (this.centerOfMassPosition.y - this.height/2 < this.minY) {
-            this.centerOfMassPosition.y = this.minY + this.height/2;
+        if (this.centerOfMassPosition.y - this.interface.getSelfScale() * this.height/2 < this.minY) {
+            this.centerOfMassPosition.y = this.minY + this.interface.getSelfScale() * this.height/2;
         }
 
-        position.y = this.centerOfMassPosition.y - this.height/2;
+        position.y = this.centerOfMassPosition.y - this.interface.getSelfScale() * this.height/2;
     }
 
     computeXZDirectionFromCamera() {
@@ -299,7 +299,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
     findDistanceToNearest(rayDirection: Vector3, objects: Array<Object3D>) {
         this.raycaster!!.near = 0;
-        this.raycaster!!.far = this.height;
+        this.raycaster!!.far = this.height * this.interface.getSelfScale();
         this.raycaster!!.set(this.centerOfMassPosition, rayDirection);
 
         const caster = this.raycaster!!;
