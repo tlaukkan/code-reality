@@ -146,41 +146,33 @@ export class MergeSystemController extends AbstractSystemController {
         const objectsToMerge = new Array<Object3D>();
         console.log("collecting objects to merge from child entities: " + merge.mergingChildEntities.size);
         for (const entity of merge.mergingChildEntities) {
-            await this.cloneObjectToMergeWithWait(entity, merge, objectsToMerge);
+            const clone = await this.cloneObjectToMergeWithWait(entity, merge);
+            objectsToMerge.push(clone);
         }
         return objectsToMerge;
     }
 
     niceTimeoutCounter = 0;
 
-    private cloneObjectToMergeWithWait(entity: Entity, merge: MergeData, objectsToMerge: Array<Object3D>) {
+    private cloneObjectToMergeWithWait(entity: Entity, merge: MergeData) : Promise<Object3D> {
         return new Promise((resolve, reject) => {
-            this.cloneObjectToMerge(entity, merge, objectsToMerge).then(() => {
-                this.niceTimeoutCounter++;
-                if (this.niceTimeoutCounter % 25 == 0) {
-                    setTimeout(() => {
-                        resolve();
-                    }, 1);
-                } else {
-                    resolve();
-                }
-            }).catch((error) => {
-                reject(error)
-            });
+            const originalObject = entity.object3D;
+            this.allocateMergeObjectIndex(merge.objectMerge, originalObject);
+            originalObject.visible = false;
+            const clone = this.cloneAndSwitchToRegionCoordinates(originalObject, merge);
+
+            this.niceTimeoutCounter++;
+            if (this.niceTimeoutCounter % 25 == 0) {
+                setTimeout(() => {
+                    resolve(clone);
+                }, 1);
+            } else {
+                resolve(clone);
+            }
+
         });
     }
 
-    private async cloneObjectToMerge(entity: Entity, merge: MergeData, objectsToMerge: Array<Object3D>) {
-        const originalObject = entity.object3D;
-        this.allocateMergeObjectIndex(merge.objectMerge, originalObject);
-        //entity.removeObject3D("mesh");
-        // Set original hidden.
-        originalObject.visible = false;
-
-        const objectToMerge = this.cloneAndSwitchToRegionCoordinates(originalObject, merge);
-
-        objectsToMerge.push(objectToMerge);
-    }
 
     private allocateMergeObjectIndex(objectMerge: ObjectMerge, object: Object3D) {
         object.userData.mergeObjectIndex = objectMerge.objectOffset;
