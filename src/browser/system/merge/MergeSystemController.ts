@@ -177,24 +177,7 @@ export class MergeSystemController extends AbstractSystemController {
         // Set original hidden.
         originalObject.visible = false;
 
-        // Clone object to merge and setup coordinates.
-        //const objectToMerge = originalObject;
-        const objectToMerge = cloneObject3D(originalObject);
-
-        // Transfer to world coordinates as clone does not have parent
-
-        // get world position
-        let position = new Vector3();
-        originalObject.updateMatrixWorld(true)
-        position.setFromMatrixPosition(originalObject.matrixWorld);
-
-        // convert to merge entity world local coordinates
-        merge.entity.object3D.updateMatrixWorld(true)
-        position = merge.entity.object3D.worldToLocal(position);
-
-        objectToMerge.position.x = position.x;
-        objectToMerge.position.y = position.y;
-        objectToMerge.position.z = position.z;
+        const objectToMerge = this.cloneAndSwitchToRegionCoordinates(originalObject, merge);
 
         objectsToMerge.push(objectToMerge);
     }
@@ -243,33 +226,37 @@ export class MergeSystemController extends AbstractSystemController {
         const objectsToUpdate = new Array<Object3D>();
         for (const entity of merge.updatingChildEntities) {
             const originalObject = entity.object3D;
+            const objectToMerge = this.cloneAndSwitchToRegionCoordinates(originalObject, merge);
 
-            // Clone object to merge and setup coordinates.
-            //const objectToMerge = originalObject;
-            const objectToUpdate = cloneObject3D(originalObject);
-
-            // Transfer to world coordinates as clone does not have parent
-
-            // get world position
-            let position = new Vector3();
-            originalObject.updateMatrixWorld(true)
-            position.setFromMatrixPosition(originalObject.matrixWorld);
-
-            // convert to merge entity world local coordinates
-            merge.entity.object3D.updateMatrixWorld(true)
-            position = merge.entity.object3D.worldToLocal(position);
-
-            objectToUpdate.position.x = position.x;
-            objectToUpdate.position.y = position.y;
-            objectToUpdate.position.z = position.z;
-
-            objectsToUpdate.push(objectToUpdate);
+            objectsToUpdate.push(objectToMerge);
         }
         merge.updatingChildEntities.clear();
 
         updateObject3Ds(merge.objectMerge, objectsToUpdate).then(() => {
             console.log("updating merge done: " + (new Date().getTime() - startTimeMillis) + " ms.");
         });
+    }
+
+    private cloneAndSwitchToRegionCoordinates(object: Object3D, merge: MergeData) {
+// Clone object to merge and setup coordinates.
+        //const objectToMerge = originalObject;
+        const clone = cloneObject3D(object);
+
+        // Transfer to world coordinates as clone does not have parent
+
+        // get world position
+        let position = new Vector3();
+        object.updateMatrixWorld(true)
+        position.setFromMatrixPosition(object.matrixWorld);
+
+        // convert to merge entity world local coordinates
+        merge.entity.object3D.updateMatrixWorld(true)
+        position = merge.entity.object3D.worldToLocal(position);
+
+        clone.position.x = position.x;
+        clone.position.y = position.y;
+        clone.position.z = position.z;
+        return clone;
     }
 
     removeMergeChild(mergeEntity: Entity, mergeChildEntity: Entity) {
