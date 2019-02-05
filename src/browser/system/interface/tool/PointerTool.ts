@@ -1,5 +1,5 @@
 import {AbstractComponentController} from "../../../component/AbstractComponentController";
-import {Geometry, Line, LineBasicMaterial, Mesh, Object3D, Raycaster, SphereGeometry, Vector3} from "three";
+import {Face3, Geometry, Line, LineBasicMaterial, Mesh, Object3D, Raycaster, SphereGeometry, Vector3} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Tool} from "../Tool";
@@ -29,7 +29,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
     pointedPosition: Vector3 | undefined;
 
     pointedObject: Object3D | undefined;
-    pointedFaceIndex: number | undefined;
+    pointedFace: Face3 | undefined;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -134,7 +134,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
             }
             this.pointedPosition = intersectionPoint;
             this.pointedObject = intersects[0].object;
-            this.pointedFaceIndex = intersects[0].faceIndex;
+            this.pointedFace = (intersects[0] as any).face;
         } else {
             if (this.pointedPosition) {
                 this.removeCursor();
@@ -155,8 +155,8 @@ export class PointerTool extends AbstractComponentController implements Tool {
         this.scene.object3D.remove(this.pointerCursor);
         console.log("remove pointer cursor.");
         this.pointedObject = undefined;
-        this.pointedFaceIndex = undefined;
         this.pointedPosition = undefined;
+        this.pointedFace = undefined;
     }
 
 }

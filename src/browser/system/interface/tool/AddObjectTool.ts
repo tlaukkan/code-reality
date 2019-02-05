@@ -100,26 +100,22 @@ export class AddObjectTool extends PointerTool {
         const gridStep = 1;
         const pointedObject = this.pointedObject;
         const pointerPosition = this.pointedPosition;
-        //const pointedFaceIndex = this.pointedFaceIndex;
+        const pointedFace = this.pointedFace;
 
-        if (pointedObject && pointerPosition) {
+        if (pointedObject && pointerPosition && pointedFace) {
 
-            const pointedObjectPosition = pointedObject.position.clone();
-            pointedObject.getWorldPosition(pointedObjectPosition);
+            //const pointedObjectPosition = pointedObject.position.clone();
+            //pointedObject.getWorldPosition(pointedObjectPosition);
 
             const template = this.entityTemplate;
             const templateScale = this.interface.getSelfScale() * this.entityTemplateScale;
 
             const entityPosition = pointerPosition.clone();
-            entityPosition.sub(pointedObjectPosition);
-            entityPosition.normalize();
-            entityPosition.multiplyScalar(this.interface.getSelfScale() * gridStep / 2);
-            entityPosition.add(pointerPosition);
 
-            const snappedPosition = snapVector3ToAxisAlignedGrid(entityPosition, this.interface.getSelfScale() * gridStep);
+            const newPosition = snapVector3ToAxisAlignedGrid(entityPosition.add(pointedFace.normal.multiplyScalar(this.interface.getSelfScale() * gridStep / 2)), this.interface.getSelfScale() * gridStep);
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-            spaceSystem.saveEntity(template, snappedPosition, new Vector3(templateScale, templateScale, templateScale));
+            spaceSystem.saveEntity(template, newPosition, new Vector3(templateScale, templateScale, templateScale));
 
         }
     }

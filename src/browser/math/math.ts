@@ -20,5 +20,5 @@ export function snapVector3ToAxisAlignedGrid(vector: Vector3, step: number): Vec
  * @param step the grid step
  */
 export function snapNumberToAxisAlignedGrid(number: number, step: number): number {
-    return Math.round(number / step) * step;
+    return Math.floor(number / step) * step + step / 2;
 }
