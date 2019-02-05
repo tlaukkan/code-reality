@@ -76,10 +76,10 @@ let loading = false;
 async function loadGltfModel(src: string) {
     loading = true;
     const loader = new GLTFLoader();
-    console.log("GLTF manager - loading: " + src);
+    //console.log("GLTF manager - loading: " + src);
 
     loader.load(src, function (gltf: GLTF) {
-        console.log("GLTF manager - loaded: " + src);
+        //console.log("GLTF manager - loaded: " + src);
         models.set(src, gltf);
         for (const modelLoaded of modelLoadedCallbacks.get(src)!!) {
             modelLoaded();

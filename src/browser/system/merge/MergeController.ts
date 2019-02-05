@@ -17,7 +17,7 @@ export class MergeController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.mergeSystem.addMerge(this.entity);
     }
 

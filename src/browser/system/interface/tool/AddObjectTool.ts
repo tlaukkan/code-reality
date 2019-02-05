@@ -40,7 +40,7 @@ export class AddObjectTool extends PointerTool {
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
         super.init();
     }
 

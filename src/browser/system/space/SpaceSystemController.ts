@@ -58,7 +58,7 @@ export class SpaceSystemController extends AbstractSystemController {
             .then((response) => {
                 response.text().then((responseData) => {
                     this.clusterUrl = responseData;
-                    console.log("cluster URL: " + this.clusterUrl);
+                    //console.log("cluster URL: " + this.clusterUrl);
                 });
             }).catch((err) => {
             console.error(err);
@@ -69,7 +69,7 @@ export class SpaceSystemController extends AbstractSystemController {
             .then((response) => {
                 response.text().then((responseData) => {
                     this.space = responseData;
-                    console.log("current space: " + this.space);
+                    //console.log("current space: " + this.space);
                 });
             }).catch((err) => {
             console.error(err);
@@ -134,27 +134,27 @@ export class SpaceSystemController extends AbstractSystemController {
         this.cameraElement = this.playerElement!!.querySelector('[camera]') as Entity;
 
         if (!this.playerElement) {
-            console.log("dataspace - did not find player element in dom.");
+            //console.log("dataspace - did not find player element in dom.");
         } else {
             this.playerElement.addEventListener(Events.EVENT_STATE_BEGIN, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
-                    //console.log(e.detail);
+                    ////console.log(e.detail);
                     this.client.act(this.avatarId, Events.EVENT_STATE_BEGIN, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
             this.playerElement.addEventListener(Events.EVENT_STATE_END, ((e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
-                    //console.log(e.detail);
+                    ////console.log(e.detail);
                     this.client.act(this.avatarId, Events.EVENT_STATE_END, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
         }
 
         if (!this.cameraElement) {
-            console.log("dataspace - did not find camera element in dom.");
+            //console.log("dataspace - did not find camera element in dom.");
         }
 
-        console.log(this.systemName + " setting up client...");
+        //console.log(this.systemName + " setting up client...");
 
         if (this.playerElement && this.cameraElement) {
             if (!this.playerObject || !this.cameraObject) {
@@ -164,10 +164,10 @@ export class SpaceSystemController extends AbstractSystemController {
                 }
 
                 if (!this.playerObject) {
-                    console.log("No player object.");
+                    //console.log("No player object.");
                 }
                 if (!this.cameraObject) {
-                    console.log("No camera object.");
+                    //console.log("No camera object.");
                 }
             }
         }
@@ -177,7 +177,7 @@ export class SpaceSystemController extends AbstractSystemController {
             this.client = new ClusterClient(this.clusterUrl!!, this.space, this.avatarId, this.playerObject.position.x, this.playerObject.position.y, this.playerObject.position.z,
                 this.cameraObject.quaternion.x, this.cameraObject.quaternion.y, this.cameraObject.quaternion.z, this.cameraObject.quaternion.w, this.getAvatarDescription(), this.idToken!!);
             this.client.onReceive = (region: string, type: string, message: string[]) => {
-                //console.log(message);
+                ////console.log(message);
                 if (type === Encode.ADDED) {
                     const m = Decode.added(message);
                     this.dynamicSpace!!.added(region, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9]);
@@ -212,7 +212,7 @@ export class SpaceSystemController extends AbstractSystemController {
                 this.staticSpace!!.loaded(region);
             }
             this.client.onConnect = (region: string) => {
-                console.log("dataspace - connected: " + region);
+                //console.log("dataspace - connected: " + region);
                 const regionConfiguration = this.getRegionConfiguration(region);
                 const regionOrigoX = regionConfiguration.x;
                 const regionOrigoY = regionConfiguration.y;
@@ -221,7 +221,7 @@ export class SpaceSystemController extends AbstractSystemController {
                 this.staticSpace!!.connected(region, new Vector3(regionOrigoX, regionOrigoY, regionOrigoZ));
             };
             this.client.onDisconnect = (region: string) => {
-                console.log("dataspace - disconnected: " + region)
+                //console.log("dataspace - disconnected: " + region)
                 this.dynamicSpace!!.disconnected(region);
                 this.staticSpace!!.disconnected(region);
 
@@ -236,9 +236,9 @@ export class SpaceSystemController extends AbstractSystemController {
     public sendAvatarDescriptionUpdate() {
         if (this.client) {
             const avatarDescription = this.getAvatarDescription();
-            console.log("Describing avatar: " + avatarDescription);
+            //console.log("Describing avatar: " + avatarDescription);
             this.client.describe(this.avatarId, this.getAvatarDescription()).catch((error) => {
-                console.log("Error describing avatar: " + error);
+                //console.log("Error describing avatar: " + error);
             });
         }
     }
@@ -278,7 +278,7 @@ export class SpaceSystemController extends AbstractSystemController {
     public updateEntity(entity: Entity, position: Vector3, scale: Vector3) {
         const modelController = getComponentController(entity, "model") as ModelController | undefined;
         if (modelController && modelController.merge) {
-            console.log("updating merge as entity is part of merge.");
+            //console.log("updating merge as entity is part of merge.");
             const mergeSystem = this.getSystemController("merge") as MergeSystemController;
             entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
             mergeSystem.updateMergeChild(modelController.merge!!, entity);
@@ -312,15 +312,15 @@ export class SpaceSystemController extends AbstractSystemController {
             const entitySid = entity.getAttribute("sid");
 
             if (entitySid) {
-                console.log("removing from storage");
+                //console.log("removing from storage");
                 const position = entity.object3D.position.clone();
                 const worldPosition = entity.object3D.getWorldPosition(position);
                 this.client.removeStoredEntity(entitySid, worldPosition.x, worldPosition.y, worldPosition.z).catch(error => {
-                    console.log("Error removing entity.", error);
+                    //console.log("Error removing entity.", error);
                 });
             }
 
-            console.log("removing locally");
+            //console.log("removing locally");
             entity.parentElement!!.removeChild(entity);
         }
     }

@@ -44,21 +44,21 @@ export class StateSystemController extends AbstractSystemController {
         const entityStates = this.states.get(entity)!!;
         if (!entityStates.has(state)) {
             entityStates.set(state, factories.get(state)!!());
-            console.log(entity.tagName + " added state: " + state);
+            //console.log(entity.tagName + " added state: " + state);
         }
         return entityStates.get(state)!!;
     }
 
     removeStates(entity: Entity): void {
         this.states.delete(entity);
-        console.log(entity.tagName + " removed states.");
+        //console.log(entity.tagName + " removed states.");
     }
 
     removeState(entity: Entity, state: string): void {
         if (this.states.has(entity)) {
             this.states.get(entity)!!.delete(state);
         }
-        console.log(entity.tagName + " removed state: " + state);
+        //console.log(entity.tagName + " removed state: " + state);
     }
 
 }

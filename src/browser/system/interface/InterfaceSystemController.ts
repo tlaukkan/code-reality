@@ -84,10 +84,10 @@ export class InterfaceSystemController extends AbstractSystemController {
 
     setDevice(slot: DeviceSlot, device: Device) {
         if (this.devices.has(slot)) {
-            console.log("interface already has controls at: " + DeviceSlot[slot]);
+            console.warn("interface already has controls at: " + DeviceSlot[slot]);
         } else {
             this.devices.set(slot, device);
-            console.log("interface controls " + device.componentName + " set at: " + DeviceSlot[slot]);
+            //console.log("interface controls " + device.componentName + " set at: " + DeviceSlot[slot]);
         }
     }
 
@@ -97,7 +97,7 @@ export class InterfaceSystemController extends AbstractSystemController {
 
     registerTool(tool: Tool) {
         if (!this.tools.has(tool.componentName)) {
-            console.log("interface tool '" + tool.componentName + "' registered.");
+            //console.log("interface tool '" + tool.componentName + "' registered.");
             this.tools.set(tool.componentName, tool);
             this.toolNames.push(tool.componentName);
         }
@@ -126,7 +126,7 @@ export class InterfaceSystemController extends AbstractSystemController {
 
     slotTool(slot: Slot, tool: Tool) {
         this.slots.set(slot, tool);
-        console.log("interface tool " + tool.componentName + " set at: " + Slot[slot]);
+        //console.log("interface tool " + tool.componentName + " set at: " + Slot[slot]);
         if (this.slotListeners.has(slot)) {
             this.slotListeners.get(slot)!!.forEach((slotListener: SlotListener) => {
                slotListener.onToolSlotted(slot, tool.componentName);
@@ -161,8 +161,8 @@ export class InterfaceSystemController extends AbstractSystemController {
             const tool = this.slots.get(slot)!!;
             const toolIndex = this.toolNames.indexOf(tool.componentName);
             const nextToolIndex = (toolIndex == this.toolNames.length - 1) ? 0 : toolIndex + 1;
-            console.log("tool index: " + toolIndex + " next tool index: " + nextToolIndex + " lenght: " + this.toolNames.length);
-            console.log(this.toolNames);
+            //console.log("tool index: " + toolIndex + " next tool index: " + nextToolIndex + " lenght: " + this.toolNames.length);
+            //console.log(this.toolNames);
             const nextToolName = this.toolNames[nextToolIndex];
             const nextTool = this.getTool(nextToolName);
             this.slotTool(slot, nextTool);

@@ -38,7 +38,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
     }
 
 
@@ -148,12 +148,12 @@ export class PointerTool extends AbstractComponentController implements Tool {
         this.pointerCursor.scale.y = this.interface.getSelfScale();
         this.pointerCursor.scale.z = this.interface.getSelfScale();
         this.scene.object3D.add(this.pointerCursor);
-        console.log("add pointer cursor.");
+        //console.log("add pointer cursor.");
     }
 
     private removeCursor() {
         this.scene.object3D.remove(this.pointerCursor);
-        console.log("remove pointer cursor.");
+        //console.log("remove pointer cursor.");
         this.pointedObject = undefined;
         this.pointedPosition = undefined;
         this.pointedFace = undefined;

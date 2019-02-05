@@ -35,7 +35,7 @@ export async function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D
 
         const geometryDataArray = geometryDataMap.get(geometryId);
         if (geometryDataArray) {
-            console.log(geometryId + ": " + geometryDataMap.get(geometryId)!!.length);
+            //console.log(geometryId + ": " + geometryDataMap.get(geometryId)!!.length);
             const material = geometryDataArray[0].material;
             for (const geometryData of geometryDataArray) {
                 geometries.push(geometryData.geometry);

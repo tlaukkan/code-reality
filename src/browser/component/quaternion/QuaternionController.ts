@@ -15,7 +15,7 @@ export class QuaternionController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
 
         const x = this.data.x;
         const y = this.data.y;

@@ -12,16 +12,13 @@ export class RemoveObjectTool extends PointerTool {
 
     public static DEFINITION = new ComponentControllerDefinition("remove-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new RemoveObjectTool(component, entity, data));
 
-    entityTemplateScale = 1;
-    entityTemplate: string = '<a-entity gltf-model="#cube" collidable/>';
-
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
         this.raycaster = new Raycaster();
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
         super.init();
     }
 

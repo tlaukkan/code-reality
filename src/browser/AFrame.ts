@@ -40,16 +40,16 @@ export function registerSystemController(definition: SystemControllerDefinition)
             schema: definition.schema,
             init: function () {
                 (this as any).controller = definition.constructSystemController(this as Component, (this as any)!!.el, this.data);
-                console.log(definition.systemName + " system init");
+                //console.log(definition.systemName + " system init");
                 (this as any).controller.init();
             },
             tick: function (time: number, timeDelta: number) {  (this as any).controller.tick(time, timeDelta); },
             pause: function () {
-                console.log(definition.systemName + " system pause");
+                //console.log(definition.systemName + " system pause");
                 (this as any).controller.pause();
             },
             play: function () {
-                console.log(definition.systemName + " system play");
+                //console.log(definition.systemName + " system play");
                 (this as any).controller.play();
             }
         });

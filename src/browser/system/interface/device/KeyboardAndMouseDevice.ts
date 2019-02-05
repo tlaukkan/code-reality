@@ -32,7 +32,7 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
 
         addDocumentEventListener("pointerlockchange", (detail: any) => {
             this.pointerLock = (document as any).pointerLockElement != null;

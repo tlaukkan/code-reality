@@ -22,7 +22,7 @@ export class BillboardController extends AbstractComponentController {
 
     init(): void {
         const srcUrl = new URL(this.data).toString();
-        console.log(this.componentName + " init: " + srcUrl);
+        //console.log(this.componentName + " init: " + srcUrl);
         this.entity.setAttribute("material", "src: url(" + srcUrl + ");  side: double;");
     }
 
@@ -37,7 +37,7 @@ export class BillboardController extends AbstractComponentController {
                 const width = e.detail.texture.image.videoWidth || e.detail.texture.image.width;
                 const height = e.detail.texture.image.videoHeight || e.detail.texture.image.height;
 
-                console.log("texture loaded: " + width + ", " + height);
+                //console.log("texture loaded: " + width + ", " + height);
 
                 if(width === 0 || height === 0) return;
 

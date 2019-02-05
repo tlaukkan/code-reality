@@ -18,7 +18,7 @@ export class SecondaryControllerDevice extends AbstractControllerDevice implemen
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
 
         this.interface.setDevice(DeviceSlot.SECONDARY_HAND, this);
 

@@ -11,7 +11,7 @@ export class CompositeSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        console.log(this.systemName + " init: " + JSON.stringify(this.data));
+        //console.log(this.systemName + " init: " + JSON.stringify(this.data));
         this.features.forEach(controller => {
             controller.init();
         });
@@ -19,14 +19,14 @@ export class CompositeSystemController extends AbstractSystemController {
     }
 
     pause(): void {
-        console.log(this.systemName + " pause");
+        //console.log(this.systemName + " pause");
         this.features.forEach(controller => {
             controller.pause();
         });
     }
 
     play(): void {
-        console.log(this.systemName + " play");
+        //console.log(this.systemName + " play");
         this.features.forEach(controller => {
             controller.play();
         });

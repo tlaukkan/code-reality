@@ -19,7 +19,7 @@ export class PrimaryControllerDevice extends AbstractComponentController impleme
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
 
         this.interface.setDevice(DeviceSlot.PRIMARY_HAND, this);
 

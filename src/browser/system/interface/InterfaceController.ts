@@ -8,7 +8,7 @@ export class InterfaceController extends AbstractComponentController {
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.interface.setInterfaceController(this);
     }
 
@@ -16,19 +16,19 @@ export class InterfaceController extends AbstractComponentController {
     }
 
     update(data: any, oldData: any): void {
-        console.log(this.componentName + " update: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " update: " + JSON.stringify(this.data));
     }
 
     remove(): void {
-        console.log(this.componentName + " remove");
+        //console.log(this.componentName + " remove");
     }
 
     pause(): void {
-        console.log(this.componentName + " pause");
+        //console.log(this.componentName + " pause");
     }
 
     play(): void {
-        console.log(this.componentName + " play");
+        //console.log(this.componentName + " play");
     }
 
     tick(time: number, timeDelta: number): void {

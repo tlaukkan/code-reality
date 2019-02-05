@@ -68,7 +68,8 @@ function requestIdAndLoggingMiddleware(req: Request, res: Response, next: NextFu
 
 function spaceSelectionMiddleware(req: Request, res: Response, next: NextFunction) {
     if (req.query.space) {
-        console.log("set current space according to query parameter to: " + req.query.space);
+        const requestId = req.headers['request-id'] as string;
+        infoWithRequestId(requestId, "set current space according to query parameter to: " + req.query.space);
         (req as any).session.space = req.query.space;
     }
     next();

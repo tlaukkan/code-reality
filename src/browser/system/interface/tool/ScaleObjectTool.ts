@@ -24,7 +24,7 @@ export class ScaleObjectTool extends PointerTool {
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
         super.init();
     }
 
@@ -71,7 +71,7 @@ export class ScaleObjectTool extends PointerTool {
     }
 
     private scaleEntityUp() {
-        console.log("scale entity up");
+        //console.log("scale entity up");
 
         const pointedObject = this.pointedObject;
         if (pointedObject) {
@@ -82,7 +82,7 @@ export class ScaleObjectTool extends PointerTool {
     }
 
     private scaleEntityDown() {
-        console.log("scale entity down");
+        //console.log("scale entity down");
 
         const pointedObject = this.pointedObject;
         if (pointedObject) {

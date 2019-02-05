@@ -56,7 +56,7 @@ export class StaticSpace {
     }
 
     setRootEntity(region: string, sid: string, entityXml: string) {
-        console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
+        //console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
         const existingElement = this.getElement(sid);
         if (existingElement) {
             // Remove old element as it is being replaced.
@@ -83,10 +83,10 @@ export class StaticSpace {
     }
 
     setChildEntity(region: string, parentSid: string, sid: string, entityXml: string) {
-        console.log("Set child entity " + region + "/" + parentSid + "/" + sid + ": " + entityXml);
+        //console.log("Set child entity " + region + "/" + parentSid + "/" + sid + ": " + entityXml);
         const parentElement = this.getElement(parentSid);
         if (parentElement === undefined) {
-            console.log("Parent element not found sid: " + sid);
+            //console.log("Parent element not found sid: " + sid);
             return;
         }
         const oldElement = this.getElement(sid);
@@ -101,10 +101,10 @@ export class StaticSpace {
     }
 
     removeEntity(region: string, sid: string) {
-        console.log("Removed entity " + region + "/" + sid);
+        //console.log("Removed entity " + region + "/" + sid);
         const element = this.getElement(sid);
         if (element === undefined) {
-            console.log("Element to be removed not found sid: " + sid);
+            //console.log("Element to be removed not found sid: " + sid);
             return;
         }
         if (element.parentElement) {
@@ -119,7 +119,7 @@ export class StaticSpace {
             return undefined;
         }
         if (elements.length > 1) {
-            console.log("More than one element found with sid: " + sid);
+            //console.log("More than one element found with sid: " + sid);
             return undefined;
         }
         return elements.item(0) as Entity;

@@ -21,7 +21,7 @@ export class GrabObjectTool extends PointerTool {
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
         super.init();
     }
 
@@ -60,7 +60,7 @@ export class GrabObjectTool extends PointerTool {
     }
 
     private addEntity(device: Device) {
-        console.log("add object");
+        //console.log("add object");
         this.heldEntity = createElement(this.entityTemplate) as Entity;
         this.heldEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
         this.heldEntity.setAttribute("position", "0 0 -" + this.entityTemplateScale * 2);

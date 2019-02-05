@@ -66,7 +66,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
     }
 
     init(): void {
-        console.log(this.componentName + " init");
+        //console.log(this.componentName + " init");
 
         // Configuration
         this.movementSpeed = this.data.movementSpeed;

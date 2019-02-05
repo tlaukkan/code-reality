@@ -11,7 +11,7 @@ export class ExampleController extends AbstractComponentController {
     }
 
     init(): void {
-        console.log(this.componentName + " init: " + JSON.stringify(this.data));
+        //console.log(this.componentName + " init: " + JSON.stringify(this.data));
     }
 
     update(data: any, oldData: any): void {

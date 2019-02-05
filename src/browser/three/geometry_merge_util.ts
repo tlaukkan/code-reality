@@ -102,7 +102,7 @@ export async function mergeBufferGeometries(merge: BufferGeometryMerge, geometri
         }
 
         for (const name in attributes) {
-            console.log(name);
+            //console.log(name);
             const arrayLength = sumArrayLength(attributes[name]);
             if (!merge.attributeMerges.has(name)) {
                 // Lets add build capacity for 1000 more geometries.
