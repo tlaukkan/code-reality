@@ -27,6 +27,7 @@ import {LoaderSystemController} from "./system/loader/LoaderSystemController";
 import {PictureController} from "./component/texture/PictureController";
 import {BillboardController} from "./component/texture/BillboardController";
 import {ScaleObjectTool} from "./system/interface/tool/ScaleObjectTool";
+import {MoveObjectTool} from "./system/interface/tool/MoveObjectTool";
 
 registerSystemController(LoaderSystemController.DEFINITION);
 registerSystemController(ExampleSystemController.DEFINITION);
@@ -40,6 +41,7 @@ registerComponentController(ToolSelectorTool.DEFINITION);
 
 registerComponentController(AddObjectTool.DEFINITION);
 registerComponentController(ScaleObjectTool.DEFINITION);
+registerComponentController(MoveObjectTool.DEFINITION);
 registerComponentController(RemoveObjectTool.DEFINITION);
 registerComponentController(WalkTool.DEFINITION);
 registerComponentController(TeleportTool.DEFINITION);

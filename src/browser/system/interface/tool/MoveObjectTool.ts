@@ -1,19 +1,19 @@
-import { Quaternion, Raycaster} from "three";
+import {Raycaster, Vector, Vector3} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
-import {createElement} from "../../../util";
+import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
+import {SpaceSystemController} from "../../../..";
+import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
 
 export class MoveObjectTool extends PointerTool {
 
     public static DEFINITION = new ComponentControllerDefinition("move-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new MoveObjectTool(component, entity, data));
 
-    entityTemplateScale = 0.5;
-    entityTemplate: string = "<a-box/>";
-    heldEntity: Entity | undefined;
+    moveStep = 0.25;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -21,7 +21,6 @@ export class MoveObjectTool extends PointerTool {
     }
 
     init(): void {
-        //console.log(this.componentName + " init");
         super.init();
     }
 
@@ -31,13 +30,9 @@ export class MoveObjectTool extends PointerTool {
 
     buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
-            if (button == Button.GRIP) {
-                if (this.pointedObject) {
-
-                } else {
-                    if (!this.heldEntity) {
-                        this.addEntity(device);
-                    }
+            if (button == Button.UP) {
+                if (this.pressed.has(Button.TRIGGER)) {
+                    this.moveForward();
                 }
             }
         }
@@ -46,76 +41,48 @@ export class MoveObjectTool extends PointerTool {
 
     buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
-            if (button == Button.GRIP) {
-                if (this.pointedObject) {
-
-                } else {
-                    if (this.heldEntity) {
-                        this.releaseEntity();
-                    }
+            if (button == Button.DOWN) {
+                if (this.pressed.has(Button.TRIGGER)) {
+                    this.moveBackward();
                 }
             }
         }
         super.buttonUp(device, toolSlot, button);
     }
 
-    private addEntity(device: Device) {
-        //console.log("add object");
-        this.heldEntity = createElement(this.entityTemplate) as Entity;
-        this.heldEntity.setAttribute("scale", this.entityTemplateScale + " " + this.entityTemplateScale + " " + this.entityTemplateScale);
-        this.heldEntity.setAttribute("position", "0 0 -" + this.entityTemplateScale * 2);
-        device.entity.appendChild(this.heldEntity);
+    private moveForward() {
+        const object = this.pointedObject;
+        if (object) {
+            const entity = getEntity(object)!!;
+            this.move(entity, this.moveStep);
+        }
     }
 
-    private releaseEntity() {
-
-        // Extract entity world position
-        //const entityPosition = new Vector3();
-        const entityPosition = (this.heldEntity!!.object3D as any).getWorldPosition();
-        const entityQuaternion = new Quaternion();
-        this.heldEntity!!.object3D.getWorldQuaternion(entityQuaternion);
-        //var entityRotation = (this.heldEntity!!.object3D as any).getWorldRotation();
-
-
-        //(this.heldEntity!! as any).flushToDom();
-        // Extract entity HTML description.
-
-        this.heldEntity!!.flushToDOM();
-        const entityHtml = this.heldEntity!!.outerHTML;
-
-        // Remove entity from current parent.
-        this.heldEntity!!.parentElement!!.removeChild(this.heldEntity!!);
-
-
-
-        // Create new copy of entity
-        this.heldEntity = createElement(entityHtml) as Entity;
-
-        // Set the world position and rotation.
-        this.heldEntity!!.setAttribute("position", entityPosition.x + " " + entityPosition.y + " " + entityPosition.z);
-        this.heldEntity!!.setAttribute("quaternion", entityQuaternion.x + " " + entityQuaternion.y + " " + entityQuaternion.z + " " + entityQuaternion.w);
-        /*this.heldEntity!!.setAttribute("rotation",
-            Math.radToDeg(entityRotation.x) + " " +
-            Math.radToDeg(entityRotation.y) + " " +
-            Math.radToDeg(entityRotation.z));*/
-        this.scene.appendChild(this.heldEntity!!);
-
-        // Add entity to scene.
-        //this.heldEntity!!.setAttribute("position", entityPosition);
-        //this.heldEntity!!.object3D.position.copy(entityPosition);
-        //this.heldEntity!!.object3D.rotation.copy(entityRotation);
-        //this.heldEntity!!.parentElement!!.removeChild(this.heldEntity!!);
-        //this.scene.appendChild(this.heldEntity!!);
-
-        //this.heldEntity!!.object3D.position.copy(entityPosition);
-        //this.heldEntity!!.object3D.rotation.copy(entityRotation);
-        //console.log(entityPosition);
-        //this.heldEntity!!.object3D.position.copy(entityPosition);
-        //this.heldEntity!!.flushToDOM();
-
-        this.heldEntity = undefined;
+    private moveBackward() {
+        const object = this.pointedObject;
+        if (object) {
+            const entity = getEntity(object)!!;
+            this.move(entity, -this.moveStep);
+        }
     }
 
+    private move(entity: Entity, moveStep: number) {
+        const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+
+        const gridStep = 1;
+        const pointedObject = this.pointedObject;
+        const pointerPosition = this.pointedPosition;
+        const pointedFace = this.pointedFace;
+
+        if (pointedObject && pointerPosition && pointedFace) {
+
+            const currentPosition =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
+            const newPosition = currentPosition.add(pointedFace.normal.multiplyScalar(- this.interface.getSelfScale() * gridStep * moveStep));
+            const scale = entity.getAttribute("scale") as Vector3;
+            spaceSystem.updateEntity(entity, newPosition,  scale);
+
+        }
+    }
 }
 
 

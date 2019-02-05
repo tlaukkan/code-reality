@@ -3,20 +3,16 @@ import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition, getComponentController} from "../../../AFrame";
+import {ComponentControllerDefinition} from "../../../AFrame";
 import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {SpaceSystemController} from "../../../..";
-import {MergeSystemController} from "../../merge/MergeSystemController";
-import {MergeController} from "../../merge/MergeController";
-import {ModelController} from "../../merge/ModelController";
 
 export class ScaleObjectTool extends PointerTool {
 
     public static DEFINITION = new ComponentControllerDefinition("scale-object-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new ScaleObjectTool(component, entity, data));
 
     scaleMultiplier = 2;
-    scaling: boolean = false;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -24,7 +20,6 @@ export class ScaleObjectTool extends PointerTool {
     }
 
     init(): void {
-        //console.log(this.componentName + " init");
         super.init();
     }
 
@@ -71,46 +66,29 @@ export class ScaleObjectTool extends PointerTool {
     }
 
     private scaleEntityUp() {
-        //console.log("scale entity up");
-
-        const pointedObject = this.pointedObject;
-        if (pointedObject) {
-            const pointedEntity = getEntity(pointedObject)!!;
-
-            this.scaleEntity(pointedEntity, this.scaleMultiplier);
+        const object = this.pointedObject;
+        if (object) {
+            const entity = getEntity(object)!!;
+            this.scaleEntity(entity, this.scaleMultiplier);
         }
     }
 
     private scaleEntityDown() {
-        //console.log("scale entity down");
-
-        const pointedObject = this.pointedObject;
-        if (pointedObject) {
-            const pointedEntity = getEntity(pointedObject)!!;
-
-            this.scaleEntity(pointedEntity, 1 / this.scaleMultiplier);
+        const object = this.pointedObject;
+        if (object) {
+            const entity = getEntity(object)!!;
+            this.scaleEntity(entity, 1 / this.scaleMultiplier);
         }
     }
 
     private scaleEntity(entity: Entity, multiplier: number) {
-        if (this.scaling) {
-            return; // One operation at a time.
-        }
-
-        this.scaling = true;
-
         const spaceSystem = this.getSystemController("space") as SpaceSystemController;
         const position =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
         const scale = (entity.getAttribute("scale") as Vector3).clone();
 
-        scale.x *= multiplier;
-        scale.y *= multiplier;
-        scale.z *= multiplier;
+        scale.multiplyScalar(multiplier);
 
         spaceSystem.updateEntity(entity, position, scale);
-
-        this.scaling = false;
-
     }
 }
 

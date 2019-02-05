@@ -276,14 +276,6 @@ export class SpaceSystemController extends AbstractSystemController {
     }
 
     public updateEntity(entity: Entity, position: Vector3, scale: Vector3) {
-        const modelController = getComponentController(entity, "model") as ModelController | undefined;
-        if (modelController && modelController.merge) {
-            //console.log("updating merge as entity is part of merge.");
-            entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
-            const mergeSystem = this.getSystemController("merge") as MergeSystemController;
-            mergeSystem.updateMergeChild(modelController.merge!!, entity);
-        }
-
         if (this.client) {
             const region = this.client.getRegion(position.x, position.y, position.z)!!;
             const regionConfiguration = this.getRegionConfiguration(region);
@@ -291,6 +283,15 @@ export class SpaceSystemController extends AbstractSystemController {
             const localPosition = position.clone();
             localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
             localPosition.z = localPosition.z + 2;
+
+            const modelController = getComponentController(entity, "model") as ModelController | undefined;
+            if (modelController && modelController.merge) {
+                //console.log("updating merge as entity is part of merge.");
+                entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
+                entity.setAttribute("position", localPosition.x + " " + localPosition.y + " " + localPosition.z);
+                const mergeSystem = this.getSystemController("merge") as MergeSystemController;
+                mergeSystem.updateMergeChild(modelController.merge!!, entity);
+            }
 
             const entityXml = entity.outerHTML;
             const newEntity = createElement(entityXml) as Entity;
