@@ -8,6 +8,7 @@ import {StateSystemController} from "../state/StateSystemController";
 import {getSystemController} from "../../AFrame";
 import {States} from "../../model/States";
 import {MovementState} from "../../model/MovementState";
+import {Element, js2xml, xml2js} from "xml-js";
 
 export class Actuator {
 
@@ -138,22 +139,22 @@ export class Actuator {
     described(description: string) : void {
         this.description = description;
 
-        console.log("Described " + this.id + ": " + description);
+        const element = (xml2js(description)!!.elements as Array<Element>)[0];
+        if (element.attributes) {
+            // TODO recursive updates.
+            for (const attributeName in element.attributes) {
+                const attributeValue = element.attributes[attributeName];
 
+                if (attributeName == 'gltf-model') {
+                    continue;
+                }
 
-        const tempEntity = createElement(description) as Entity;
-        for (const attributeName of tempEntity.getAttributeNames()) {
-            const attributeValue = tempEntity.getAttribute(attributeName);
+                if (attributeName == 'avatar') {
+                    continue;
+                }
 
-            if (attributeName=='gltf-model') {
-                continue;
+                this.entity.setAttribute(attributeName, attributeValue);
             }
-
-            if (attributeName=='avatar') {
-                continue;
-            }
-
-            this.entity.setAttribute(attributeName, attributeValue);
         }
     }
 
