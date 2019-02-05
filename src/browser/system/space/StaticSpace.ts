@@ -1,9 +1,11 @@
 import {Entity, Scene} from "aframe";
 import {createElement} from "../../util";
 import {StateSystemController} from "../state/StateSystemController";
-import {getSystemController} from "../../AFrame";
+import {getComponentController, getSystemController} from "../../AFrame";
 import {Vector3} from "three";
 import {LoaderSystemController} from "../loader/LoaderSystemController";
+import {MergeSystemController} from "../merge/MergeSystemController";
+import {ModelController} from "../merge/ModelController";
 
 export class StaticSpace {
 
@@ -56,29 +58,82 @@ export class StaticSpace {
     }
 
     setRootEntity(region: string, sid: string, entityXml: string) {
-        //console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
-        const existingElement = this.getElement(sid);
-        if (existingElement) {
-            // Remove old element as it is being replaced.
-            existingElement.parentElement!!.removeChild(existingElement);
-        }
-
         const newElement = createElement(entityXml);
         const oid = newElement.getAttribute("oid");
         newElement.setAttribute("server", region);
 
-        // If element exists with oid then update that element.
-        if (oid) {
-            const elements = document.querySelectorAll('[oid="' + oid + '"]');
-            for (const element of elements) {
-                element.setAttribute("sid", sid);
-                element.setAttribute("server", region);
-                return;
+        //console.log("Set root entity " + region + "/" + sid + ": " + entityXml);
+        const existingElement = this.getElement(sid);
+        if (existingElement) {
+            // Remove old element as it is being replaced.
+            //existingElement.parentElement!!.removeChild(existingElement);
+            this.recursiveUpdate(existingElement, newElement);
+
+            const modelController = getComponentController(existingElement, "model") as ModelController | undefined;
+            if (modelController && modelController.merge) {
+                const mergeSystem = getSystemController(this.scene, "merge") as MergeSystemController;
+                mergeSystem.updateMergeChild(modelController.merge!!, existingElement);
+            }
+
+        } else {
+            // If element exists with oid then update that element.
+            if (oid) {
+                const elements = document.querySelectorAll('[oid="' + oid + '"]');
+                for (const element of elements) {
+                    element.setAttribute("sid", sid);
+                    element.setAttribute("server", region);
+                    return;
+                }
+            }
+
+            // Add element as element does not exist yet.
+            this.regionElements.get(region)!!.appendChild(newElement);
+        }
+    }
+
+    recursiveUpdate(existingElement: Element, newElement: Element) {
+        const existingAttributeNames = new Set(existingElement.getAttributeNames());
+        for (const attributeName of newElement.getAttributeNames()) {
+            const value = newElement.getAttribute(attributeName);
+
+            if (attributeName != "model") {
+                existingElement.setAttribute(attributeName, value!!);
+            }
+
+            existingAttributeNames.delete(attributeName);
+        }
+
+        // Remove attribute names not present in new element.
+        for (const attributeName of existingAttributeNames) {
+            existingElement.removeAttribute(attributeName);
+        }
+
+        const existingChildElements = new Map<string, Element>();
+        for (const child of existingElement.children) {
+            const sid = child.getAttribute("sid");
+            if (sid) {
+                existingChildElements.set(sid, child);
+            }
+
+        }
+
+        for (const newChild of newElement.children) {
+            const sid = newChild.getAttribute("sid")!!;
+            if (existingChildElements.has(sid)) {
+                const existingChild = existingChildElements.get("sid")!!;
+                // Update child recursively.
+                this.recursiveUpdate(newChild, existingChild);
+                existingChildElements.delete(sid);
+            } else {
+                // Append child as new element.
+                existingElement.appendChild(createElement(newChild.outerHTML));
             }
         }
 
-        // Add element as element does not exist yet.
-        this.regionElements.get(region)!!.appendChild(newElement);
+        // Remove existing children with sid not present in new element.
+        for (const existingChild of existingChildElements.values()) {
+            existingElement.removeChild(existingChild);
+        }
 
     }
 

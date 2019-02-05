@@ -279,8 +279,8 @@ export class SpaceSystemController extends AbstractSystemController {
         const modelController = getComponentController(entity, "model") as ModelController | undefined;
         if (modelController && modelController.merge) {
             //console.log("updating merge as entity is part of merge.");
-            const mergeSystem = this.getSystemController("merge") as MergeSystemController;
             entity.setAttribute("scale", scale.x + " " + scale.y + " " + scale.z);
+            const mergeSystem = this.getSystemController("merge") as MergeSystemController;
             mergeSystem.updateMergeChild(modelController.merge!!, entity);
         }
 
