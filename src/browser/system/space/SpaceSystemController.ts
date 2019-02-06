@@ -213,12 +213,12 @@ export class SpaceSystemController extends AbstractSystemController {
             }
             this.client.onConnect = (region: string) => {
                 //console.log("dataspace - connected: " + region);
-                const regionConfiguration = this.getRegionConfiguration(region);
-                const regionOrigoX = regionConfiguration.x;
-                const regionOrigoY = regionConfiguration.y;
-                const regionOrigoZ = regionConfiguration.z - 2; // TODO Remove this test
+                const regionConfiguration = this.client!!.getRegionConfiguration(region);
+                const regionX = regionConfiguration.x;
+                const regionY = regionConfiguration.y;
+                const regionZ = regionConfiguration.z - 2; // TODO Remove this test
                 this.dynamicSpace!!.connected(region);
-                this.staticSpace!!.connected(region, new Vector3(regionOrigoX, regionOrigoY, regionOrigoZ));
+                this.staticSpace!!.connected(region, new Vector3(regionX, regionY, regionZ));
             };
             this.client.onDisconnect = (region: string) => {
                 //console.log("dataspace - disconnected: " + region)
@@ -253,7 +253,7 @@ export class SpaceSystemController extends AbstractSystemController {
     public addEntity(template: string, position: Vector3, scale: Vector3) {
         if (this.client) {
             const region = this.client.getRegion(position.x, position.y, position.z)!!;
-            const regionConfiguration = this.getRegionConfiguration(region);
+            const regionConfiguration = this.client.getRegionConfiguration(region);
 
             const localPosition = position.clone();
             localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
@@ -281,7 +281,7 @@ export class SpaceSystemController extends AbstractSystemController {
             this.staticSpace!!.ignoreNextSetSids.push(sid);
 
             const region = this.client.getRegion(position.x, position.y, position.z)!!;
-            const regionConfiguration = this.getRegionConfiguration(region);
+            const regionConfiguration = this.client.getRegionConfiguration(region);
 
             const localPosition = position.clone();
             localPosition.sub(new Vector3(regionConfiguration.x, regionConfiguration.y, regionConfiguration.z));
@@ -331,15 +331,6 @@ export class SpaceSystemController extends AbstractSystemController {
         }
     }
 
-    public getRegionConfiguration(region: string) {
-        const clusterConfiguration = this.client!!.clusterConfiguration!!;
-        for (const regionConfiguration of clusterConfiguration.regions) {
-            if (regionConfiguration.region == region) {
-                return regionConfiguration;
-            }
-        }
-        throw new Error("Region configuration not found: " + region);
-    }
 }
 
 
