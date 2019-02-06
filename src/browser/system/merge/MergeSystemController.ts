@@ -25,7 +25,7 @@ export class MergeSystemController extends AbstractSystemController {
     }
 
     init(): void {
-        (this.getSystemController("loader-system") as LoaderSystemController).increaseLoadingCounter();
+//        (this.getSystemController("loader-system") as LoaderSystemController).increaseLoadingCounter();
         this.startTime = new Date().getTime();
     }
 
@@ -54,11 +54,13 @@ export class MergeSystemController extends AbstractSystemController {
             if (!this.loadingRegistered) {
                 this.loadingRegistered = true;
                 (this.getSystemController("loader-system") as LoaderSystemController).increaseLoadingCounter();
+                console.log("merge system increases loading counter.");
             }
         } else {
             if (this.loadingRegistered) {
-                this.loadingRegistered = false;
                 (this.getSystemController("loader-system") as LoaderSystemController).decreaseLoadingCounter();
+                this.loadingRegistered = false;
+                console.log("merge system decreases loading counter.");
             }
         }
 
@@ -135,7 +137,7 @@ export class MergeSystemController extends AbstractSystemController {
 
                 this.merging = false;
 
-                (this.getSystemController("loader-system") as LoaderSystemController).decreaseLoadingCounter();
+//                (this.getSystemController("loader-system") as LoaderSystemController).decreaseLoadingCounter();
             });
         });
 

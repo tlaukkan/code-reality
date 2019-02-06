@@ -86,6 +86,7 @@ export class LoaderSystemController extends AbstractSystemController {
 
     increaseLoadingCounter() {
         this.loadingCounter ++;
+        console.log("loading counter increase: " + this.loadingCounter);
     };
 
     decreaseLoadingCounter() {
@@ -93,6 +94,7 @@ export class LoaderSystemController extends AbstractSystemController {
             console.warn("Notify loaded attempting to drop loading counter lower than zero.");
         }
         this.loadingCounter --;
+        console.log("loading counter decrease: " + this.loadingCounter);
     };
 
 

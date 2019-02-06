@@ -48,6 +48,7 @@ export class StaticSpace {
         if (!this.loadingRegions.has(region)) {
             this.loadingRegions.add(region);
             (getSystemController(this.scene, "loader-system") as LoaderSystemController).increaseLoadingCounter();
+            console.log("added to loading regions: " + region);
         }
     }
 
@@ -55,6 +56,7 @@ export class StaticSpace {
         if (this.loadingRegions.has(region)) {
             this.loadingRegions.delete(region);
             (getSystemController(this.scene, "loader-system") as LoaderSystemController).decreaseLoadingCounter();
+            console.log("removed from loading regions: " + region);
         }
     }
 

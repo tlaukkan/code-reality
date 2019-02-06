@@ -87,7 +87,7 @@ export class RotateObjectTool extends PointerTool {
             const currentOrientation = entity.object3D.quaternion.clone();
 
             const newOrientation = quaternionRotation.multiply(currentOrientation);
-            spaceSystem.updateEntity(entity, currentPosition,  newOrientation, currentScale);
+            spaceSystem.updateEntity(entity, currentPosition,  newOrientation.normalize(), currentScale);
         }
     }
 
