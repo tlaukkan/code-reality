@@ -32,7 +32,13 @@ export class StaticSpace {
     }
 
     disconnected(region: string) {
-        this.scene.removeChild(this.regionElements.get(region)!!);
+        if (this.regionElements.has(region)) {
+            const regionElement = this.regionElements.get(region)!!;
+            if (regionElement.parentElement) {
+                regionElement.parentElement!!.removeChild(regionElement);
+            }
+            this.regionElements.delete(region);
+        }
 
         const elements = document.querySelectorAll('[server="' + region + '"]');
         elements.forEach(element => {
