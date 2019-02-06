@@ -112,7 +112,11 @@ export class AddObjectTool extends PointerTool {
             const entity = getEntity(pointedObject)!!;
             const entityXml = entity.outerHTML;
 
+            const currentOrientation = entity.object3D.quaternion.clone();
+            const currentScale = entity.object3D.scale;
+
             const tempEntity = createElement(entityXml) as Entity;
+            tempEntity.setAttribute("quaternion", currentOrientation.x + " " + currentOrientation.y + " " + currentOrientation.z + " " +currentOrientation.w);
             this.recursiveClearSidAndServer(tempEntity);
             //const pointedObjectPosition = pointedObject.position.clone();
             //pointedObject.getWorldPosition(pointedObjectPosition);
@@ -126,7 +130,7 @@ export class AddObjectTool extends PointerTool {
             const newPosition = entityPosition.add(normal.multiplyScalar(templateScale));
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
-            spaceSystem.addEntity(template, newPosition, new Vector3(templateScale, templateScale, templateScale));
+            spaceSystem.addEntity(template, newPosition, currentScale);
 
         }
     }
