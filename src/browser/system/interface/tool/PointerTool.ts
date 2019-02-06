@@ -89,7 +89,7 @@ export class PointerTool extends AbstractComponentController implements Tool {
     }
 
     constructPointerCursor(): Object3D {
-        return new Mesh(new SphereGeometry( 0.2, 32, 32 ), this.pointerMaterial );
+        return new Mesh(new SphereGeometry( 0.01, 32, 32 ), this.pointerMaterial );
     }
 
     pointerOn(device: Device) {

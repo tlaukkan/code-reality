@@ -85,6 +85,7 @@ export class StaticSpace {
             const newElement = createElement(entityXml);
             const oid = newElement.getAttribute("oid");
             newElement.setAttribute("server", region);
+            newElement.setAttribute("collidable", "");
 
             if (oid) {
                 const elements = document.querySelectorAll('[oid="' + oid + '"]');

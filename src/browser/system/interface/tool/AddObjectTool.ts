@@ -4,7 +4,7 @@ import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
-import {createElement} from "../../../util";
+import {createElement, getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
 import {SpaceSystemController} from "../../../..";
@@ -57,16 +57,20 @@ export class AddObjectTool extends PointerTool {
     buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
             if (button == Button.TRIGGER) {
-                this.addEntity(device);
+                this.addEntityFromTemplate();
             }
 
             if (button == Button.UP) {
-                this.entityTemplateIndex++;
-                if (this.entityTemplateIndex >= this.entityTemplates.length) {
-                    this.entityTemplateIndex = 0;
+                if (this.pressed.has(Button.TRIGGER)) {
+                    this.cloneEntity();
+                } else {
+                    this.entityTemplateIndex++;
+                    if (this.entityTemplateIndex >= this.entityTemplates.length) {
+                        this.entityTemplateIndex = 0;
+                    }
+                    this.entityTemplate = this.entityTemplates[this.entityTemplateIndex];
+                    this.setReviewEntity();
                 }
-                this.entityTemplate = this.entityTemplates[this.entityTemplateIndex];
-                this.setReviewEntity();
             }
 
             if (button == Button.DOWN) {
@@ -95,7 +99,68 @@ export class AddObjectTool extends PointerTool {
         toolSelectorTool.entity.appendChild(this.reviewEntity);
     }
 
-    private addEntity(device: Device) {
+    private cloneEntity() {
+
+        //console.log("clone entity.");
+        const gridStep = 1;
+        const pointedObject = this.pointedObject;
+        const pointerPosition = this.pointedPosition;
+        const pointedFace = this.pointedFace;
+
+        if (pointedObject && pointerPosition && pointedFace) {
+
+            const entity = getEntity(pointedObject)!!;
+            const entityXml = entity.outerHTML;
+
+            const tempEntity = createElement(entityXml) as Entity;
+            this.recursiveClearSidAndServer(tempEntity);
+            //const pointedObjectPosition = pointedObject.position.clone();
+            //pointedObject.getWorldPosition(pointedObjectPosition);
+
+            const template = tempEntity.outerHTML;
+            const templateScale = pointedObject.scale.x;
+            const entityPosition = pointedObject.localToWorld(pointedObject.position.clone());
+
+            const normal = pointedObject.localToWorld(pointedFace.normal.clone()).sub(pointedObject.localToWorld(pointedObject.position.clone()));
+
+            const newPosition = entityPosition.add(normal.multiplyScalar(templateScale));
+
+            const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+            spaceSystem.addEntity(template, newPosition, new Vector3(templateScale, templateScale, templateScale));
+
+        }
+    }
+
+    public addEntityFromXml(xml: string) {
+
+        const gridStep = 1;
+        const pointedObject = this.pointedObject;
+        const pointerPosition = this.pointedPosition;
+        const pointedFace = this.pointedFace;
+
+        if (pointedObject && pointerPosition && pointedFace) {
+
+            const entityXml = xml;
+
+            const tempEntity = createElement(entityXml) as Entity;
+            this.recursiveClearSidAndServer(tempEntity);
+
+            const template = tempEntity.outerHTML;
+            const templateScale = this.interface.getSelfScale() * this.entityTemplateScale;
+
+            const entityPosition = pointerPosition.clone();
+
+            const normal = pointedObject.localToWorld(pointedFace.normal.clone()).sub(pointedObject.localToWorld(pointedObject.position.clone()));
+
+            const newPosition = snapVector3ToAxisAlignedGrid(entityPosition.add(normal.multiplyScalar(this.interface.getSelfScale() * gridStep / 2)), this.interface.getSelfScale() * gridStep);
+
+            const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+            spaceSystem.addEntity(template, newPosition, new Vector3(templateScale, templateScale, templateScale));
+
+        }
+    }
+
+    private addEntityFromTemplate() {
 
         const gridStep = 1;
         const pointedObject = this.pointedObject;
@@ -112,7 +177,9 @@ export class AddObjectTool extends PointerTool {
 
             const entityPosition = pointerPosition.clone();
 
-            const newPosition = snapVector3ToAxisAlignedGrid(entityPosition.add(pointedFace.normal.multiplyScalar(this.interface.getSelfScale() * gridStep / 2)), this.interface.getSelfScale() * gridStep);
+            const normal = pointedObject.localToWorld(pointedFace.normal.clone()).sub(pointedObject.localToWorld(pointedObject.position.clone()));
+
+            const newPosition = snapVector3ToAxisAlignedGrid(entityPosition.add(normal.multiplyScalar(this.interface.getSelfScale() * gridStep / 2)), this.interface.getSelfScale() * gridStep);
 
             const spaceSystem = this.getSystemController("space") as SpaceSystemController;
             spaceSystem.addEntity(template, newPosition, new Vector3(templateScale, templateScale, templateScale));
@@ -120,7 +187,15 @@ export class AddObjectTool extends PointerTool {
         }
     }
 
-
+    private recursiveClearSidAndServer(entity: Entity) {
+        entity.removeAttribute("sid");
+        entity.removeAttribute("server");
+        if (entity.children && entity.children.length > 0) {
+            for (const child of entity.children) {
+                this.recursiveClearSidAndServer(child as Entity);
+            }
+        }
+    }
 }
 
 

@@ -6,6 +6,8 @@ import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {ComponentControllerDefinition} from "../../../AFrame";
 import {addDocumentEventListener, addEntityEventListener} from "../../../util";
+import {AddObjectTool} from "../../../..";
+import {js2xml, xml2js} from "xml-js";
 
 export class KeyboardAndMouseDevice extends AbstractComponentController implements Device {
 
@@ -75,6 +77,30 @@ export class KeyboardAndMouseDevice extends AbstractComponentController implemen
             if (e.button == 2) {
                 this.interface.buttonUp(this, Slot.PRIMARY, Button.GRIP);
             }
+        });
+
+        window.addEventListener("paste", (event: any) => {
+            if (this.pointerLock) {
+                for (const item of event.clipboardData.items) {
+                    const itemTyped = item as DataTransferItem;
+                    if (itemTyped.kind == "string") {
+                        itemTyped.getAsString((pasteString) => {
+                            try {
+                                const pasteXml = js2xml(xml2js(pasteString));
+                                if (!pasteXml.startsWith("<html>")) {
+                                    console.log(pasteXml);
+                                    const addObjectTool = this.interface.getTool("add-object-tool") as AddObjectTool;
+                                    addObjectTool.addEntityFromXml(pasteString);
+                                }
+                            } catch (error) {
+                                console.error("Error copy paste adding an object.", error);
+                            }
+                        });
+                        return;
+                    }
+                }
+            }
+            // do something with url here
         });
 
         /*(this.entity.sceneEl!! as any).addEventListener('click', (e: MouseEvent) => {
