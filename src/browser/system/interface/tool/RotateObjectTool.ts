@@ -29,20 +29,20 @@ export class RotateObjectTool extends PointerTool {
 
     buttonDown(device: Device, toolSlot: Slot, button: Button): void {
         if (!this.pressed.has(button)) {
-            if (button == Button.UP) {
-                if (this.pressed.has(Button.TRIGGER)) {
-                    this.rotateForward();
-                }
-            }
         }
         super.buttonDown(device, toolSlot, button);
     }
 
     buttonUp(device: Device, toolSlot: Slot, button: Button): void {
         if (this.pressed.has(button)) {
+            if (button == Button.UP) {
+                if (this.pressed.has(Button.TRIGGER)) {
+                    this.rotateForward();
+                }
+            }
             if (button == Button.DOWN) {
                 if (this.pressed.has(Button.TRIGGER)) {
-                    this.rotateBackward();
+                    this.resetRotation();
                 }
             }
         }
@@ -53,7 +53,7 @@ export class RotateObjectTool extends PointerTool {
         const object = this.pointedObject;
         if (object) {
             const entity = getEntity(object)!!;
-            this.move(entity, this.rotateDegrees);
+            this.rotate(entity, this.rotateDegrees);
         }
     }
 
@@ -61,11 +61,11 @@ export class RotateObjectTool extends PointerTool {
         const object = this.pointedObject;
         if (object) {
             const entity = getEntity(object)!!;
-            this.move(entity, -this.rotateDegrees);
+            this.rotate(entity, -this.rotateDegrees);
         }
     }
 
-    private move(entity: Entity, rotateDegrees: number) {
+    private rotate(entity: Entity, rotateDegrees: number) {
         const spaceSystem = this.getSystemController("space") as SpaceSystemController;
 
         const gridStep = 1;
@@ -74,8 +74,9 @@ export class RotateObjectTool extends PointerTool {
         const pointedFace = this.pointedFace;
 
         if (pointedObject && pointerPosition && pointedFace) {
+            const normal = pointedObject.localToWorld(pointedFace.normal.clone()).sub(pointedObject.localToWorld(pointedObject.position.clone()));
 
-            const axis = pointedFace.normal;
+            const axis = normal;
             const angle = rotateDegrees * (2 * Math.PI) / 360;
 
             const quaternionRotation = new Quaternion();
@@ -87,7 +88,18 @@ export class RotateObjectTool extends PointerTool {
 
             const newOrientation = quaternionRotation.multiply(currentOrientation);
             spaceSystem.updateEntity(entity, currentPosition,  newOrientation, currentScale);
+        }
+    }
 
+    private resetRotation() {
+        const object = this.pointedObject;
+        if (object) {
+            const entity = getEntity(object)!!;
+            const spaceSystem = this.getSystemController("space") as SpaceSystemController;
+            const currentPosition = entity.object3D.getWorldPosition(entity.object3D.position.clone());
+            const currentScale = entity.getAttribute("scale") as Vector3;
+            const newOrientation = new Quaternion(0, 0, 0, 1);
+            spaceSystem.updateEntity(entity, currentPosition, newOrientation, currentScale);
         }
     }
 }

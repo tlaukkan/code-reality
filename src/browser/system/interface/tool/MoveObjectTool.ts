@@ -78,7 +78,9 @@ export class MoveObjectTool extends PointerTool {
 
             const currentPosition =  entity.object3D.getWorldPosition(entity.object3D.position.clone());
             const currentOrientation = entity.object3D.quaternion.clone();
-            const newPosition = currentPosition.add(pointedFace.normal.multiplyScalar(- this.interface.getSelfScale() * gridStep * moveStep));
+            const normal = pointedObject.localToWorld(pointedFace.normal.clone()).sub(pointedObject.localToWorld(pointedObject.position.clone()));
+
+            const newPosition = currentPosition.add(normal.multiplyScalar(- this.interface.getSelfScale() * gridStep * moveStep));
             const scale = entity.getAttribute("scale") as Vector3;
             spaceSystem.updateEntity(entity, newPosition, currentOrientation, scale);
 
