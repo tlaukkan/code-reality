@@ -15,7 +15,7 @@ export function createIdToken(issuer: String, userId: string, userName: string, 
         jti: uuid.v4(),
         name: userName,
         groups: groups,
-        exp: Math.floor(Date.now() / 1000) + (1 * 60),
+        exp: Math.floor(Date.now() / 1000) + (8 * 60 * 60),
     }, {
         key: privateKey,
         passphrase: privateKeyPassword
