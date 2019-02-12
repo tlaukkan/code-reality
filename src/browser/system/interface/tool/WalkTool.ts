@@ -10,6 +10,7 @@ import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
 import {ComponentControllerDefinition} from "../../../AFrame";
 import {raycast} from "../../../three/raycast";
+import {copy} from "typescript-collections/dist/lib/arrays";
 
 
 export class WalkTool extends AbstractComponentController implements Tool {
@@ -49,6 +50,12 @@ export class WalkTool extends AbstractComponentController implements Tool {
     pressed: Map<Button, number> = new Map();
 
     centerOfMassPosition: Vector3 = new Vector3(0, 0, 0);
+    forwardPositionStep: Vector3 = new Vector3(0, 0, 0);
+    rightPositionStep: Vector3 = new Vector3(0, 0, 0);
+    forwardPosition: Vector3 = new Vector3(0, 0, 0);
+    backwardPosition: Vector3 = new Vector3(0, 0, 0);
+    rightPosition: Vector3 = new Vector3(0, 0, 0);
+    leftPosition: Vector3 = new Vector3(0, 0, 0);
 
     stickTranslation: Vector3 = new Vector3(0, 0, 0);
     stickRotation: Vector3 = new Vector3(0, 0, 0);
@@ -149,6 +156,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
         let collidables = this.interface.getCollidables();
         this.updateXZ(timeDelta, collidables);
+
         this.updateY(timeDelta, collidables);
         if (this.stickRotation.x != 0 || this.stickRotation.y != 0 || this.stickRotation.z != 0) {
             let delta = this.rotationSpeed * timeDelta / 1000.0;
@@ -214,10 +222,11 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
     updateXZ(timeDelta: number, collidables: Array<Object3D>) {
         let position = this.interface.interfaceEntity!!.object3D.position;
+        this.computeXZDirectionFromCamera();
 
         if (this.stickTranslation.x != 0 || this.stickTranslation.z != 0) {
             let delta = this.interface.getSelfScale() * this.movementSpeed * timeDelta / 1000.0;
-            this.computeXZDirectionFromCamera();
+
             this.centerOfMassPosition.x = this.interface.interfaceEntity!!.object3D.position.x;
             this.centerOfMassPosition.z = this.interface.interfaceEntity!!.object3D.position.z;
 
@@ -243,7 +252,29 @@ export class WalkTool extends AbstractComponentController implements Tool {
     updateY(timeDelta: number, collidables: Array<Object3D>) {
         let position = this.interface.interfaceEntity!!.object3D.position;
 
-        const distanceToNearestBelow = this.findDistanceToNearest(this.yAxisNegative, collidables);
+        //this.computeXZDirectionFromCamera();
+        this.forwardPositionStep.copy(this.xzCameraDirection);
+
+
+        this.forwardPositionStep.multiplyScalar(0.2 * this.height * this.interface.getSelfScale());
+
+        this.rightPositionStep.copy(this.xzCameraDirection);
+        this.rightPositionStep.cross(this.yAxisPositive);
+        this.rightPositionStep.multiplyScalar(0.2 * this.height * this.interface.getSelfScale());
+
+        this.forwardPosition.copy(this.centerOfMassPosition).add(this.forwardPositionStep);
+        this.backwardPosition.copy(this.centerOfMassPosition).add(this.forwardPositionStep.multiplyScalar(-1));
+        this.rightPosition.copy(this.centerOfMassPosition).add(this.rightPositionStep);
+        this.leftPosition.copy(this.centerOfMassPosition).add(this.rightPositionStep.multiplyScalar(-1));
+
+        const distanceToNearestBelow = this.findDistanceToNearestFromPositions(
+            [this.centerOfMassPosition,
+             this.forwardPosition,
+             this.backwardPosition,
+             this.rightPosition,
+             this.leftPosition
+            ], this.yAxisNegative, collidables);
+        //console.log(distanceToNearestBelow);
 
         if (this.pressed.has(this.jumpKey) && !this.jumping && !this.airborne) {
             this.setJumping(true);
@@ -305,6 +336,36 @@ export class WalkTool extends AbstractComponentController implements Tool {
         const caster = this.raycaster!!;
         const intersects = raycast(objects, caster);
         //var intersects = this.raycaster!!.intersectObjects(objects, true);
+        if (intersects.length > 0) {
+            return intersects[0].distance;
+        } else {
+            return null;
+        }
+
+
+    }
+
+    findDistanceToNearestFromPositions(positions: Array<Vector3>, rayDirection: Vector3, objects: Array<Object3D>): number | undefined {
+        const distances = positions.map(position => {
+            return this.findDistanceToNearestFromPosition(position, rayDirection, objects);
+        }).filter(distance => distance != null);
+        distances.sort(function sortNumber(a,b) {
+            return a!! - b!!;
+        });
+        if (distances.length > 0) {
+            return distances[0]!!;
+        } else {
+            return undefined;
+        }
+    }
+
+    findDistanceToNearestFromPosition(position: Vector3, rayDirection: Vector3, objects: Array<Object3D>) {
+        this.raycaster!!.near = 0;
+        this.raycaster!!.far = this.height * this.interface.getSelfScale();
+        this.raycaster!!.set(position, rayDirection);
+
+        const caster = this.raycaster!!;
+        const intersects = raycast(objects, caster);
         if (intersects.length > 0) {
             return intersects[0].distance;
         } else {
