@@ -210,7 +210,10 @@ export class SpaceSystemController extends AbstractSystemController {
             };
             this.client.onLoaded = (region) => {
                 this.staticSpace!!.loaded(region);
-            }
+            };
+            this.client.onConnectError = (region: string, error: Error) => {
+                document.location!!.href = "/connection_error.html";
+            };
             this.client.onConnect = (region: string) => {
                 //console.log("dataspace - connected: " + region);
                 const regionConfiguration = this.client!!.getRegionConfiguration(region);
