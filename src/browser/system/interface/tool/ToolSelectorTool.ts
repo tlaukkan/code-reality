@@ -99,7 +99,7 @@ export class ToolSelectorTool extends AbstractComponentController implements Too
 
         this.toolSymbolEntities.get(toolName)!!.setAttribute("visible", true);
         this.currentToolName = toolName;
-        this.interface.interfaceEntity.dispatchEvent(new CustomEvent(Events.EVENT_ACTION, {detail: new EntityActionEventDetail("slot-tool", toolName) } ));
+        this.interface.interfaceEntity.dispatchEvent(new CustomEvent(Events.EVENT_ACTION, {detail: new EntityActionEventDetail("change-tool", toolName) } ));
     }
 
 

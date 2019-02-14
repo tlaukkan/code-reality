@@ -1,6 +1,8 @@
 import {Entity, Component, System, Scene, ComponentDefinition} from "aframe";
 import {ComponentController} from "./component/ComponentController";
 import {SystemController} from "./system/SystemController";
+import {AbstractFeature} from "./feature/AbstractFeature";
+import {CompositeComponentController} from "./component/CompositeComponentController";
 
 export class ComponentControllerDefinition {
     readonly componentName: string;
@@ -8,6 +10,7 @@ export class ComponentControllerDefinition {
     readonly multiple: boolean;
     readonly tick: boolean;
     readonly constructComponentController: ConstructComponentController;
+    readonly features: Array<ConstructFeature> = [];
 
     constructor(componentName: string, schema: any, multiple: boolean, tick: boolean, constructComponentController: ConstructComponentController) {
         this.componentName = componentName;
@@ -15,6 +18,11 @@ export class ComponentControllerDefinition {
         this.multiple = multiple;
         this.tick = tick;
         this.constructComponentController = constructComponentController;
+    }
+
+    add(feature: ConstructFeature): ComponentControllerDefinition {
+        this.features.push(feature);
+        return this;
     }
 }
 
@@ -33,6 +41,7 @@ export class SystemControllerDefinition {
 
 interface ConstructComponentController { (component: Component, entity: Entity, data: any): ComponentController }
 interface ConstructSystemController { (system: System, scene: Scene, data: any): SystemController }
+interface ConstructFeature{ (controller: ComponentController, entity: Entity): AbstractFeature }
 
 export function registerSystemController(definition: SystemControllerDefinition) {
     if (typeof AFRAME !== 'undefined') {
@@ -63,7 +72,21 @@ export function registerComponentController(definition: ComponentControllerDefin
                 schema: definition.schema,
                 multiple: definition.multiple,
                 init: function () {
-                    (this as any).controller = definition.constructComponentController(this as Component, this.el!!, this.data);
+                    const controller = definition.constructComponentController(this as Component, this.el!!, this.data);
+
+                    (this as any).controller = controller;
+
+                    if ((controller as CompositeComponentController).addFeature) {
+                        const compositeController = controller as CompositeComponentController;
+                        for (const feature of definition.features) {
+                            compositeController.addFeature(feature(compositeController, controller.entity));
+                        }
+                    } else {
+                        if (definition.features.length > 0) {
+                            throw new Error("Attempt to add features to non composite component controller: " + definition.componentName);
+                        }
+                    }
+
                     (this as any).controller.init();
                 },
                 update: function (oldData) {

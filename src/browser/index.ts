@@ -29,6 +29,7 @@ import {BillboardController} from "./component/texture/BillboardController";
 import {ScaleObjectTool} from "./system/interface/tool/ScaleObjectTool";
 import {MoveObjectTool} from "./system/interface/tool/MoveObjectTool";
 import {RotateObjectTool} from "./system/interface/tool/RotateObjectTool";
+import {AvatarActionLoggerFeature} from "./component/avatar/AvatarActionLoggerFeature";
 
 registerSystemController(LoaderSystemController.DEFINITION);
 registerSystemController(ExampleSystemController.DEFINITION);
@@ -54,7 +55,7 @@ registerComponentController(KeyboardAndMouseDevice.DEFINITION);
 registerComponentController(ExampleController.DEFINITION);
 registerComponentController(CollidableController.DEFINITION);
 registerComponentController(AnimatorController.DEFINITION);
-registerComponentController(AvatarController.DEFINITION);
+registerComponentController(AvatarController.DEFINITION.add(AvatarActionLoggerFeature.DEFINITION));
 registerComponentController(IdentityController.DEFINITION);
 registerComponentController(LabelController.DEFINITION);
 registerComponentController(QuaternionController.DEFINITION);
