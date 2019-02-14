@@ -61,7 +61,7 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "@types/aframe": "^0.8.0",
+    "@types/aframe": "^0.8.2",
     "@types/config": "0.0.34",
     "@types/express": "^4.16.0",
     "@types/jsonwebtoken": "^8.3.0",

@@ -134,7 +134,9 @@ export class Actuator {
     }
 
     removed() : void {
-        this.scene.removeChild(this.entity);
+        if (this.entity.parentElement) {
+            this.entity.parentElement.removeChild(this.entity);
+        }
     }
 
     described(description: string) : void {

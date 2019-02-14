@@ -4,7 +4,7 @@
         <title>Code Reality Test</title>
         <meta name="description" content="Code Reality Test">
 
-        <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@cb4de2e19d577e9b5c34f01efe1c1d96c1d1c2e0/dist/aframe-master.min.js"></script>
+        <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
         <!--<script src="aframe-master.js"></script>-->
         <!--<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@b20527f/dist/aframe-master.min.js"></script>-->
 
@@ -18,7 +18,7 @@
         <a-scene keyboard-shortcuts="enterVR: false" loading-screen="enabled: false" light="defaultLightsEnabled: false" stats space renderer="antialias: true; sortObjects: true; maxCanvasWidth: -1; maxCanvasHeight: -1; gammaOutput: false;">
 
             <!-- Assets -->
-            <a-assets>
+            <a-assets timeout="15000">
                 <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
                 <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
 
