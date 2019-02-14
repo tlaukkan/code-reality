@@ -9,6 +9,7 @@ import {getSystemController} from "../../AFrame";
 import {States} from "../../model/States";
 import {MovementState} from "../../model/MovementState";
 import {Element, js2xml, xml2js} from "xml-js";
+import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
 
 export class Actuator {
 
@@ -159,12 +160,12 @@ export class Actuator {
     }
 
     acted(action: string, description: string) : void {
-        //console.log(action + ":" + description);
         if (action === 'state-begin') {
             this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail(description)}));
-        }
-        if (action === 'state-end') {
+        } else if (action === 'state-end') {
             this.entity.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, {detail: new EntityStateEventDetail(description)}));
+        } else {
+            this.entity.dispatchEvent(new CustomEvent(Events.EVENT_ACTION, {detail: new EntityActionEventDetail(action, description)}));
         }
     }
 

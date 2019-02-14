@@ -12,6 +12,7 @@ import {ClusterClient, Decode, Encode} from "reality-space";
 import {InterfaceSystemController} from "../../..";
 import {ModelController} from "../merge/ModelController";
 import {MergeSystemController} from "../merge/MergeSystemController";
+import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
 
 export class SpaceSystemController extends AbstractSystemController {
 
@@ -136,16 +137,23 @@ export class SpaceSystemController extends AbstractSystemController {
         if (!this.playerElement) {
             //console.log("dataspace - did not find player element in dom.");
         } else {
-            this.playerElement.addEventListener(Events.EVENT_STATE_BEGIN, ((e: CustomEvent) => {
+            this.playerElement.addEventListener(Events.EVENT_STATE_BEGIN, (async (e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
                     ////console.log(e.detail);
-                    this.client.act(this.avatarId, Events.EVENT_STATE_BEGIN, (e.detail as EntityStateEventDetail).state);
+                    await this.client.act(this.avatarId, Events.EVENT_STATE_BEGIN, (e.detail as EntityStateEventDetail).state);
                 }
             }) as any);
-            this.playerElement.addEventListener(Events.EVENT_STATE_END, ((e: CustomEvent) => {
+            this.playerElement.addEventListener(Events.EVENT_STATE_END, (async (e: CustomEvent) => {
                 if (this.client && this.client.clusterConfiguration) {
                     ////console.log(e.detail);
-                    this.client.act(this.avatarId, Events.EVENT_STATE_END, (e.detail as EntityStateEventDetail).state);
+                    await this.client.act(this.avatarId, Events.EVENT_STATE_END, (e.detail as EntityStateEventDetail).state);
+                }
+            }) as any);
+            this.playerElement.addEventListener(Events.EVENT_ACTION, (async (e: CustomEvent) => {
+                if (this.client && this.client.clusterConfiguration) {
+                    ////console.log(e.detail);
+                    const actionEventDetail = e.detail as EntityActionEventDetail;
+                    await this.client.act(this.avatarId, actionEventDetail.action, actionEventDetail.description);
                 }
             }) as any);
         }

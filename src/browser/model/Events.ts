@@ -10,5 +10,7 @@ export class Events {
 
     static EVENT_STATE_END = 'state-end';
 
+    static EVENT_ACTION = 'action';
+
     static EVENT_MODEL_LOADED = 'model-loaded';
 }
