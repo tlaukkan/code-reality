@@ -5,7 +5,7 @@ import {cloneObject3D, mergeObject3Ds, ObjectMerge} from "../../../src/browser/t
 
 describe('GLTF model loading tests.', () => {
 
-    it('Test loading GLTF model.', async () => {
+    /*it('Test loading GLTF model.', async () => {
 
         const src = "https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.3/primitives/cube.glb";
         const gltf = await getGltfModel(src);
@@ -22,7 +22,7 @@ describe('GLTF model loading tests.', () => {
 
         //console.log(group.children.length);
 
-    });
+    });*/
 
 });
 

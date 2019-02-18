@@ -32,8 +32,8 @@
   },
   "homepage": "https://github.com/tlaukkan/aframe-reality#readme",
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
     "@babel/preset-typescript": "^7.1.0",
     "@types/chai": "^4.1.6",
     "@types/es6-promise": "^3.3.0",
