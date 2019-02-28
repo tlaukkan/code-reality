@@ -158,9 +158,18 @@ export class WalkTool extends AbstractComponentController implements Tool {
         }
 
         let collidables = this.interface.getCollidables();
-        this.updateXZ(timeDelta, collidables);
 
-        this.updateY(timeDelta, collidables);
+        let position = this.interface.interfaceEntity!!.object3D.position;
+        const x = position.x;
+        const z = position.z;
+
+        this.updateXZ(timeDelta, collidables);
+        const blocked = this.updateY(timeDelta, collidables);
+        if (blocked) {
+            position.x = x;
+            position.z = z;
+        }
+
         if (this.stickRotation.x != 0 || this.stickRotation.y != 0 || this.stickRotation.z != 0) {
             let delta = this.rotationSpeed * timeDelta / 1000.0;
             this.interface.interfaceEntity!!.object3D.rotation.y -= this.stickRotation.y * delta;
@@ -230,8 +239,8 @@ export class WalkTool extends AbstractComponentController implements Tool {
         if (this.stickTranslation.x != 0 || this.stickTranslation.z != 0) {
             let delta = this.interface.getSelfScale() * this.movementSpeed * timeDelta / 1000.0;
 
-            this.centerOfMassPosition.x = this.interface.interfaceEntity!!.object3D.position.x;
-            this.centerOfMassPosition.z = this.interface.interfaceEntity!!.object3D.position.z;
+            this.centerOfMassPosition.x = position.x;
+            this.centerOfMassPosition.z = position.z;
 
             this.xDirection.copy(this.xzCameraDirection);
 
@@ -247,6 +256,8 @@ export class WalkTool extends AbstractComponentController implements Tool {
             if (!this.testCollision(this.direction, collidables)) {
                 position.x += this.direction.x;
                 position.z += this.direction.z;
+                this.centerOfMassPosition.x = position.x;
+                this.centerOfMassPosition.z = position.z;
             }
         }
 
@@ -294,7 +305,13 @@ export class WalkTool extends AbstractComponentController implements Tool {
                 this.setAirborne(false);
             } else {
                 if (distanceFromBottom && distanceFromBottom < 0) {
-                    delta = -freeDropDelta;
+
+                    if (-distanceFromBottom < this.height * this.interface.getSelfScale() * 0.25) {
+                        delta = -freeDropDelta;
+                    } else {
+                        return true;
+                    }
+
                 } else {
                     delta = freeDropDelta;
                 }
@@ -322,6 +339,7 @@ export class WalkTool extends AbstractComponentController implements Tool {
         }
 
         position.y = this.centerOfMassPosition.y - this.interface.getSelfScale() * this.height/2;
+        return false;
     }
 
     computeXZDirectionFromCamera() {
@@ -378,14 +396,13 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
     testCollision(direction: Vector3, objects: Array<Object3D>) {
         this.highCenterOfMassPosition.copy(this.centerOfMassPosition);
-        this.highCenterOfMassPosition.y += this.height * this.interface.getSelfScale() / 4;
-        this.lowCenterOfMassPosition.copy(this.centerOfMassPosition);
-        this.lowCenterOfMassPosition.y -= this.height * this.interface.getSelfScale() / 4;
+        this.highCenterOfMassPosition.y += this.height * this.interface.getSelfScale() / 2;
+        //this.lowCenterOfMassPosition.copy(this.centerOfMassPosition);
+        //this.lowCenterOfMassPosition.y -= this.height * this.interface.getSelfScale() / 4;
 
 
         let distanceToNearestAhead = this.findDistanceToNearestFromPositions([this.centerOfMassPosition,
             this.highCenterOfMassPosition,
-            this.lowCenterOfMassPosition,
             this.centerOfMassPosition
         ], direction, objects);
 
