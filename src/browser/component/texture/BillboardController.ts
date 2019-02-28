@@ -21,7 +21,7 @@ export class BillboardController extends AbstractComponentController {
     }
 
     init(): void {
-        const srcUrl = new URL(this.data).toString();
+        const srcUrl = this.data;
         //console.log(this.componentName + " init: " + srcUrl);
         this.entity.setAttribute("material", "src: url(" + srcUrl + ");  side: double;");
     }
