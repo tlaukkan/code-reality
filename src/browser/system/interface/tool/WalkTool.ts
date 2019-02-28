@@ -50,6 +50,9 @@ export class WalkTool extends AbstractComponentController implements Tool {
     pressed: Map<Button, number> = new Map();
 
     centerOfMassPosition: Vector3 = new Vector3(0, 0, 0);
+    highCenterOfMassPosition: Vector3 = new Vector3(0, 0, 0);
+    lowCenterOfMassPosition: Vector3 = new Vector3(0, 0, 0);
+
     forwardPositionStep: Vector3 = new Vector3(0, 0, 0);
     rightPositionStep: Vector3 = new Vector3(0, 0, 0);
     forwardPosition: Vector3 = new Vector3(0, 0, 0);
@@ -256,11 +259,11 @@ export class WalkTool extends AbstractComponentController implements Tool {
         this.forwardPositionStep.copy(this.xzCameraDirection);
 
 
-        this.forwardPositionStep.multiplyScalar(0.2 * this.height * this.interface.getSelfScale());
+        this.forwardPositionStep.multiplyScalar(0.25 * this.width * this.interface.getSelfScale());
 
         this.rightPositionStep.copy(this.xzCameraDirection);
         this.rightPositionStep.cross(this.yAxisPositive);
-        this.rightPositionStep.multiplyScalar(0.2 * this.height * this.interface.getSelfScale());
+        this.rightPositionStep.multiplyScalar(0.25 * this.width * this.interface.getSelfScale());
 
         this.forwardPosition.copy(this.centerOfMassPosition).add(this.forwardPositionStep);
         this.backwardPosition.copy(this.centerOfMassPosition).add(this.forwardPositionStep.multiplyScalar(-1));
@@ -374,7 +377,18 @@ export class WalkTool extends AbstractComponentController implements Tool {
     }
 
     testCollision(direction: Vector3, objects: Array<Object3D>) {
-        let distanceToNearestAhead = this.findDistanceToNearest(direction, objects);
+        this.highCenterOfMassPosition.copy(this.centerOfMassPosition);
+        this.highCenterOfMassPosition.y += this.height * this.interface.getSelfScale() / 4;
+        this.lowCenterOfMassPosition.copy(this.centerOfMassPosition);
+        this.lowCenterOfMassPosition.y -= this.height * this.interface.getSelfScale() / 4;
+
+
+        let distanceToNearestAhead = this.findDistanceToNearestFromPositions([this.centerOfMassPosition,
+            this.highCenterOfMassPosition,
+            this.lowCenterOfMassPosition,
+            this.centerOfMassPosition
+        ], direction, objects);
+
         let collisionAhead = distanceToNearestAhead && distanceToNearestAhead < this.interface.getSelfScale() * this.width / 2;
         return collisionAhead;
     }
