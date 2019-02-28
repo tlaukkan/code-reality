@@ -1,4 +1,4 @@
-import {Component, Entity} from "aframe";
+import {Component, Entity, Geometry} from "aframe";
 import {AbstractComponentController} from "../AbstractComponentController";
 import {ComponentControllerDefinition} from "../../AFrame";
 
@@ -63,16 +63,16 @@ export class PictureController extends AbstractComponentController {
     applyTransformation() {
         const heightWithRatio = this.height!! / this.width!!;
 
-        let width = 2;
-        let height = 0;
+        let width = 0;
+        let height = 1.8;
 
         if (width) {
             height = width * heightWithRatio;
         } else if (height) {
             width = height / heightWithRatio;
         } else {
-            width = 2.0;
-            height = width * heightWithRatio;
+            height = 1.8;
+            width = height / heightWithRatio;
         }
 
         this.entity.setAttribute('geometry', 'primitive: plane;width: ' + width + '; height: '+height+ ';');

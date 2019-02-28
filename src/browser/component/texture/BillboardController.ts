@@ -95,19 +95,19 @@ export class BillboardController extends AbstractComponentController {
     applyTransformation() {
         const heightWithRatio = this.height!! / this.width!!;
 
-        let width = 2;
-        let height = 0;
+        let width = 0;
+        let height = 1.8;
 
         if (width) {
             height = width * heightWithRatio;
         } else if (height) {
             width = height / heightWithRatio;
         } else {
-            width = 2.0;
-            height = width * heightWithRatio;
+            height = 1.8;
+            width = height / heightWithRatio;
         }
 
-        this.entity.setAttribute('geometry', 'primitive: plane;width: ' + width + '; height: '+height+ ';');
+        this.entity.setAttribute('geometry', 'primitive: plane;width: ' + width + ';height: '+height+ ';');
 
         if (this.heightCorrection) {
             this.entity.object3D.position.y -= this.heightCorrection;
