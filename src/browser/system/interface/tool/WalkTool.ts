@@ -126,17 +126,20 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
     entityStateChange(state: string, enabled: boolean) {
         if (enabled) {
-            this.interface.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, { detail: new EntityStateEventDetail(state) }));
+            this.interface.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_BEGIN, {detail: new EntityStateEventDetail(state)}));
         } else {
-            this.interface.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, { detail: new EntityStateEventDetail(state) }));
+            this.interface.interfaceEntity!!.dispatchEvent(new CustomEvent(Events.EVENT_STATE_END, {detail: new EntityStateEventDetail(state)}));
         }
     }
 
-    update(data: any, oldData: any): void {}
+    update(data: any, oldData: any): void {
+    }
 
-    remove(): void {}
+    remove(): void {
+    }
 
-    pause(): void {}
+    pause(): void {
+    }
 
     play(): void {
         // Reused vector variables.
@@ -160,14 +163,17 @@ export class WalkTool extends AbstractComponentController implements Tool {
         let collidables = this.interface.getCollidables();
 
         let position = this.interface.interfaceEntity!!.object3D.position;
-        const x = position.x;
-        const z = position.z;
+        const x = this.centerOfMassPosition.x;
+        const z = this.centerOfMassPosition.z;
 
         this.updateXZ(timeDelta, collidables);
         const blocked = this.updateY(timeDelta, collidables);
         if (blocked) {
-            position.x = x;
-            position.z = z;
+            this.centerOfMassPosition.x = x;
+            this.centerOfMassPosition.z = z;
+        } else {
+            position.x = this.centerOfMassPosition.x;
+            position.z = this.centerOfMassPosition.z;
         }
 
         if (this.stickRotation.x != 0 || this.stickRotation.y != 0 || this.stickRotation.z != 0) {
@@ -233,14 +239,10 @@ export class WalkTool extends AbstractComponentController implements Tool {
     }
 
     updateXZ(timeDelta: number, collidables: Array<Object3D>) {
-        let position = this.interface.interfaceEntity!!.object3D.position;
         this.computeXZDirectionFromCamera();
 
         if (this.stickTranslation.x != 0 || this.stickTranslation.z != 0) {
             let delta = this.interface.getSelfScale() * this.movementSpeed * timeDelta / 1000.0;
-
-            this.centerOfMassPosition.x = position.x;
-            this.centerOfMassPosition.z = position.z;
 
             this.xDirection.copy(this.xzCameraDirection);
 
@@ -254,10 +256,8 @@ export class WalkTool extends AbstractComponentController implements Tool {
             this.direction.add(this.zDirection);
 
             if (!this.testCollision(this.direction, collidables)) {
-                position.x += this.direction.x;
-                position.z += this.direction.z;
-                this.centerOfMassPosition.x = position.x;
-                this.centerOfMassPosition.z = position.z;
+                this.centerOfMassPosition.x += this.direction.x;
+                this.centerOfMassPosition.z += this.direction.z;
             }
         }
 
@@ -283,10 +283,10 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
         const distanceToNearestBelow = this.findDistanceToNearestFromPositions(
             [this.centerOfMassPosition,
-             this.forwardPosition,
-             this.backwardPosition,
-             this.rightPosition,
-             this.leftPosition
+                this.forwardPosition,
+                this.backwardPosition,
+                this.rightPosition,
+                this.leftPosition
             ], this.yAxisNegative, collidables);
         //console.log(distanceToNearestBelow);
 
@@ -300,18 +300,18 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
         if (distanceToNearestBelow && !this.jumping) {
             let distanceFromBottom = distanceToNearestBelow - this.interface.getSelfScale() * this.height / 2;
+
+            if (distanceFromBottom < 0 && -distanceFromBottom > this.height * this.interface.getSelfScale() * 0.25) {
+                // Too high obstacle to climb (greater than 0.25 height)
+                return true;
+            }
+
             if (Math.abs(freeDropDelta) > Math.abs(distanceFromBottom) || Math.abs(distanceFromBottom) < 0.1 * this.interface.getSelfScale()) {
                 delta = -distanceFromBottom;
                 this.setAirborne(false);
             } else {
                 if (distanceFromBottom && distanceFromBottom < 0) {
-
-                    if (-distanceFromBottom < this.height * this.interface.getSelfScale() * 0.25) {
-                        delta = -freeDropDelta;
-                    } else {
-                        return true;
-                    }
-
+                    delta = -freeDropDelta;
                 } else {
                     delta = freeDropDelta;
                 }
@@ -334,11 +334,11 @@ export class WalkTool extends AbstractComponentController implements Tool {
 
         this.centerOfMassPosition.y = this.centerOfMassPosition.y + delta;
 
-        if (this.centerOfMassPosition.y - this.interface.getSelfScale() * this.height/2 < this.minY) {
-            this.centerOfMassPosition.y = this.minY + this.interface.getSelfScale() * this.height/2;
+        if (this.centerOfMassPosition.y - this.interface.getSelfScale() * this.height / 2 < this.minY) {
+            this.centerOfMassPosition.y = this.minY + this.interface.getSelfScale() * this.height / 2;
         }
 
-        position.y = this.centerOfMassPosition.y - this.interface.getSelfScale() * this.height/2;
+        position.y = this.centerOfMassPosition.y - this.interface.getSelfScale() * this.height / 2;
         return false;
     }
 
@@ -349,28 +349,11 @@ export class WalkTool extends AbstractComponentController implements Tool {
         this.xzCameraDirection.normalize();
     }
 
-    findDistanceToNearest(rayDirection: Vector3, objects: Array<Object3D>) {
-        this.raycaster!!.near = 0;
-        this.raycaster!!.far = this.height * this.interface.getSelfScale();
-        this.raycaster!!.set(this.centerOfMassPosition, rayDirection);
-
-        const caster = this.raycaster!!;
-        const intersects = raycast(objects, caster);
-        //var intersects = this.raycaster!!.intersectObjects(objects, true);
-        if (intersects.length > 0) {
-            return intersects[0].distance;
-        } else {
-            return null;
-        }
-
-
-    }
-
     findDistanceToNearestFromPositions(positions: Array<Vector3>, rayDirection: Vector3, objects: Array<Object3D>): number | undefined {
         const distances = positions.map(position => {
             return this.findDistanceToNearestFromPosition(position, rayDirection, objects);
         }).filter(distance => distance != null);
-        distances.sort(function sortNumber(a,b) {
+        distances.sort(function sortNumber(a, b) {
             return a!! - b!!;
         });
         if (distances.length > 0) {
@@ -397,13 +380,14 @@ export class WalkTool extends AbstractComponentController implements Tool {
     testCollision(direction: Vector3, objects: Array<Object3D>) {
         this.highCenterOfMassPosition.copy(this.centerOfMassPosition);
         this.highCenterOfMassPosition.y += this.height * this.interface.getSelfScale() / 2;
-        //this.lowCenterOfMassPosition.copy(this.centerOfMassPosition);
-        //this.lowCenterOfMassPosition.y -= this.height * this.interface.getSelfScale() / 4;
+        this.lowCenterOfMassPosition.copy(this.centerOfMassPosition);
+        this.lowCenterOfMassPosition.y -= this.height * this.interface.getSelfScale() / 4;
 
 
         let distanceToNearestAhead = this.findDistanceToNearestFromPositions([this.centerOfMassPosition,
             this.highCenterOfMassPosition,
-            this.centerOfMassPosition
+            this.centerOfMassPosition,
+            this.lowCenterOfMassPosition
         ], direction, objects);
 
         let collisionAhead = distanceToNearestAhead && distanceToNearestAhead < this.interface.getSelfScale() * this.width / 2;
