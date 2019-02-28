@@ -20,7 +20,7 @@ export class PictureController extends AbstractComponentController {
     init(): void {
         const srcUrl = new URL(this.data).toString();
         //console.log(this.componentName + " init: " + srcUrl);
-        this.entity.setAttribute("material", "src: url(" + srcUrl + ");  side: double;");
+        this.entity.setAttribute("material", "src: url(" + srcUrl + ");  side: double; transparent=true;");
     }
 
     update(data: any, oldData: any): void {
