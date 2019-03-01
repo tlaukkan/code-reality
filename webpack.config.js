@@ -30,7 +30,8 @@ module.exports = {
     },
     devtool: 'eval-source-map',
     externals: {
-        three: 'THREE'
+        three: 'THREE',
+        aframe: 'AFRAME'
     },
     plugins: [
         new CopyWebpackPlugin([

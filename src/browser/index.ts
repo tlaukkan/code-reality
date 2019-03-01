@@ -30,6 +30,8 @@ import {ScaleObjectTool} from "./system/interface/tool/ScaleObjectTool";
 import {MoveObjectTool} from "./system/interface/tool/MoveObjectTool";
 import {RotateObjectTool} from "./system/interface/tool/RotateObjectTool";
 import {AvatarActionLoggerFeature} from "./component/avatar/AvatarActionLoggerFeature";
+import "./primitive/billboard";
+import "./primitive/picture";
 
 registerSystemController(LoaderSystemController.DEFINITION);
 registerSystemController(ExampleSystemController.DEFINITION);
