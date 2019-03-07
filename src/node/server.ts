@@ -43,7 +43,6 @@ function requireHttpsMiddleware(req: Request, res: Response, next: NextFunction)
     const env = process.env.NODE_ENV || 'dev';
 
     if (!env.startsWith('dev') && !req.path.startsWith("/https_required.html") && !req.path.startsWith("/css/")) {
-        console.log(req.headers);
         if (req.headers['x-forwarded-proto']) {
             if (req.headers['x-forwarded-proto'] !== 'https') {
                 return res.redirect("/https_required.html");
