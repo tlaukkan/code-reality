@@ -52,10 +52,7 @@
     "mocha": "*",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^5.2.1",
-    "ts-node": "^7.0.1",
     "ts-node-dev": "^1.0.0-pre.30",
-    "typescript": "^3.1.1",
-    "uuid": "^3.2.1",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.2",
     "webpack-dev-server": "^3.1.14"
@@ -87,7 +84,10 @@
     "passport-local": "^1.0.0",
     "reality-space": "0.0.18",
     "serve-static": "^1.13.2",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.1",
     "typescript-collections": "^1.3.2",
+    "uuid": "^3.2.1",
     "websocket": "^1.0.26",
     "ws": "^6.0.0"
   }
