@@ -5,7 +5,8 @@
   },
   "Facebook": {
     "clientId": "FACEBOOK_CLIENT_ID",
-    "clientPassword": "FACEBOOK_CLIENT_SECRET"
+    "clientSecret": "FACEBOOK_CLIENT_SECRET",
+    "callbackUrl": "FACEBOOK_CALLBACK_URL"
   },
   "SMTP" : {
     "host": "SMTP_HOST",

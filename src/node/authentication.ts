@@ -6,6 +6,7 @@ import config from 'config';
 
 import passport from "passport";
 import passportLocal from "passport-local";
+import passportFacebook from "passport-facebook";
 
 import {User} from "./model/User";
 import {getIdTokenIssuers} from "./util/util";
@@ -52,6 +53,17 @@ export async function initializeAuthentication(app: Express) {
         }
     }));
 
+    passport.use(new passportFacebook.Strategy({
+        clientID: config.get('Facebook.clientId'),
+        clientSecret: config.get('Facebook.clientSecret'),
+        callbackURL: config.get('Facebook.callbackUrl'),
+        profileFields: ['id', 'name', 'displayName']
+    }, (accessToken, refreshToken, profile, cb) => {
+        let user = createFormAuthenticatedUser("facebook-" + profile.id, profile.displayName, "administrators,users");
+        console.log(JSON.stringify(user));
+        return cb(null, user);
+    }));
+
     passport.serializeUser(function (user, cb) {
         cb(null, user);
     });
@@ -74,6 +86,7 @@ export async function initializeAuthentication(app: Express) {
         // No authentication for the following paths.
         if (req.path.startsWith("/css/") ||
             req.path.startsWith("/login") ||
+            req.path.startsWith("/api/auth") ||
             req.path.startsWith("/health") ||
             req.path.startsWith("/favicon.ico")) {
             return next();
@@ -97,6 +110,11 @@ export async function initializeAuthentication(app: Express) {
     app.post('/login', passport.authenticate('local', { session: true, failureRedirect: '/login_failed.html' }), function(req, res) {
         res.redirect('/');
     });
+
+    app.get('/api/auth/facebook', passport.authenticate('facebook', {}));
+    app.get('/api/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/api/login_failed.html'}), (req, res) => {
+        res.redirect('/');
+    })
 
 };
 
