@@ -17,6 +17,8 @@ require('console-stamp')(console, {
 export async function newServer(host: string, port: number): Promise<Server> {
     const app = express();
 
+    app.use(requireHttpsMiddleware);
+
     app.use(requestIdAndLoggingMiddleware);
 
     initializeSession(app);
@@ -35,6 +37,18 @@ export async function newServer(host: string, port: number): Promise<Server> {
         console.log('code-reality - http server listening at local URL: http://' + host + ':' + port + '/');
     });
     return server;
+}
+
+function requireHttpsMiddleware(req: Request, res: Response, next: NextFunction) {
+    const env = process.env.NODE_ENV || 'dev';
+
+    if (!env.startsWith('dev')) {
+        if (req.protocol !== 'https') {
+            return res.status(403).send({message: 'SSL required'});
+        }
+    }
+    // allow the request to continue
+    next();
 }
 
 function requestIdAndLoggingMiddleware(req: Request, res: Response, next: NextFunction) {

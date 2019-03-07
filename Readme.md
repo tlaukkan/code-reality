@@ -62,6 +62,8 @@ RSA key pair can be generated as follows:
 
     openssl genrsa -aes128 -out private.pem 2048
     openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+    openssl base64 -in private.pem -out private.base64
+    openssl base64 -in public.pem -out public.base64
 
 Windows base64 encode:
 
