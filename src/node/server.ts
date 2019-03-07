@@ -42,9 +42,14 @@ export async function newServer(host: string, port: number): Promise<Server> {
 function requireHttpsMiddleware(req: Request, res: Response, next: NextFunction) {
     const env = process.env.NODE_ENV || 'dev';
 
-    if (!env.startsWith('dev')) {
+    if (!env.startsWith('dev') && !req.path.startsWith("/https_required.html")) {
+        if (req.headers['x-forwarded-proto']) {
+            if (req.headers['x-forwarded-proto'] !== 'https') {
+                return res.redirect("/https_required.html");
+            }
+        }
         if (req.protocol !== 'https') {
-            return res.status(403).send({message: 'SSL required'});
+            return res.redirect("/https_required.html");
         }
     }
     // allow the request to continue
