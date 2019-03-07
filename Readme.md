@@ -12,6 +12,8 @@ Tested browsers (latest versions):
 
 * Windows / Firefox
 * Windows / Chrome
+* macOS / Firefox
+* macOS / Chrome
 * macOS / Safari
 * iOS / Safari
 
