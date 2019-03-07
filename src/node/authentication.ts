@@ -85,6 +85,7 @@ export async function initializeAuthentication(app: Express) {
 
         // No authentication for the following paths.
         if (req.path.startsWith("/css/") ||
+            req.path.startsWith("/images/") ||
             req.path.startsWith("/login") ||
             req.path.startsWith("/api/auth") ||
             req.path.startsWith("/https_required.html") ||
