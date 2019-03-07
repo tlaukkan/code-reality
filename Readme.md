@@ -6,6 +6,14 @@ Code Reality framework enables building networked extended reality (XR) experien
 
 aframe-dataspace servers provide a shared space to store and transmit scene data between browsers.
 
+## Environments
+
+Production:
+* https://app.codereality.io/
+
+Public test:
+* https://test.codereality.io/
+
 ## Browser support
 
 Tested browsers (latest versions):
