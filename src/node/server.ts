@@ -48,8 +48,7 @@ function requireHttpsMiddleware(req: Request, res: Response, next: NextFunction)
             if (req.headers['x-forwarded-proto'] !== 'https') {
                 return res.redirect("/https_required.html");
             }
-        }
-        if (req.protocol !== 'https') {
+        } else if (req.protocol !== 'https') {
             return res.redirect("/https_required.html");
         }
     }
