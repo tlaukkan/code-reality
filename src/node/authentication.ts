@@ -59,7 +59,7 @@ export async function initializeAuthentication(app: Express) {
         callbackURL: config.get('Facebook.callbackUrl'),
         profileFields: ['id', 'name', 'displayName']
     }, (accessToken, refreshToken, profile, cb) => {
-        let user = createFormAuthenticatedUser("facebook-" + profile.id, profile.displayName, "administrators,users");
+        let user = createFormAuthenticatedUser("fb" + profile.id, profile.displayName, "administrators,users");
         console.log(JSON.stringify(user));
         return cb(null, user);
     }));
