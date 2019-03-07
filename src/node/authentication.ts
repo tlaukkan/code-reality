@@ -87,6 +87,7 @@ export async function initializeAuthentication(app: Express) {
         if (req.path.startsWith("/css/") ||
             req.path.startsWith("/login") ||
             req.path.startsWith("/api/auth") ||
+            req.path.startsWith("/https_required.html") ||
             req.path.startsWith("/health") ||
             req.path.startsWith("/favicon.ico")) {
             return next();
