@@ -42,7 +42,7 @@ export async function newServer(host: string, port: number): Promise<Server> {
 function requireHttpsMiddleware(req: Request, res: Response, next: NextFunction) {
     const env = process.env.NODE_ENV || 'dev';
 
-    if (!env.startsWith('dev') && !req.path.startsWith("/https_required.html")) {
+    if (!env.startsWith('dev') && !req.path.startsWith("/https_required.html") && !req.path.startsWith("/css/")) {
         if (req.headers['x-forwarded-proto']) {
             if (req.headers['x-forwarded-proto'] !== 'https') {
                 return res.redirect("/https_required.html");
