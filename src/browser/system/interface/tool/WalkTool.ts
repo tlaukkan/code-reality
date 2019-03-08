@@ -1,5 +1,4 @@
-import {AbstractComponentController} from "../../../component/AbstractComponentController";
-import {Intersection, Object3D, Plane, Raycaster, Vector3} from "three";
+import {Object3D, Plane, Raycaster, Vector3} from "three";
 import {EntityStateEventDetail} from "../../../model/EntityStateEventDetail";
 import {Events} from "../../../model/Events";
 import {Component, Entity} from "aframe";
@@ -8,12 +7,12 @@ import {Tool} from "../Tool";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
-import {ComponentControllerDefinition} from "../../../AFrame";
 import {raycast} from "../../../three/raycast";
-import {copy} from "typescript-collections/dist/lib/arrays";
+import {AbstractComponentController, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../../../component/CodeRealityComponentController";
 
 
-export class WalkTool extends AbstractComponentController implements Tool {
+export class WalkTool extends CodeRealityComponentController implements Tool {
 
     public static DEFINITION = new ComponentControllerDefinition("walk-tool", {
         movementSpeed: {type: 'number', default: 2}, // Meters per second

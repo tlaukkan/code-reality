@@ -1,15 +1,13 @@
-import {Geometry, Mesh, Quaternion, Raycaster, Vector3} from "three";
+import {Raycaster, Vector3} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
-import {createElement, getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
 import {SpaceSystemController} from "../../../..";
-import uuid = require("uuid");
 import {ToolSelectorTool} from "./ToolSelectorTool";
+import {createElement, getEntity, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 
 
 export class AddObjectTool extends PointerTool {

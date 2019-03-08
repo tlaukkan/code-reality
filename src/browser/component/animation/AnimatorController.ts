@@ -1,7 +1,6 @@
-import {CompositeComponentController} from "../CompositeComponentController";
-import {AnimationFeature} from "../../feature/animation/AnimationFeature";
 import {Component, Entity} from "aframe";
-import {ComponentControllerDefinition} from "../../AFrame";
+import {ComponentControllerDefinition, CompositeComponentController} from "aframe-typescript-boilerplate";
+import {AnimationFeature} from "../../feature/animation/AnimationFeature";
 
 export class AnimatorController extends CompositeComponentController {
 

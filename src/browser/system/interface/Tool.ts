@@ -1,8 +1,8 @@
-import {ComponentController} from "../../component/ComponentController";
 import {Device} from "./Device";
 import {Slot} from "./model/Slot";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
+import {ComponentController} from "aframe-typescript-boilerplate";
 
 export interface Tool extends ComponentController{
 

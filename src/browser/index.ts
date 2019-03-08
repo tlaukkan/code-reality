@@ -1,4 +1,3 @@
-import {registerComponentController, registerSystemController} from "./AFrame";
 import {LabelController} from "./component/label/LabelController";
 import {IdentityController} from "./component/identity/IdentityController";
 import {KeyboardAndMouseDevice} from "./system/interface/device/KeyboardAndMouseDevice";
@@ -12,8 +11,6 @@ import {InterfaceSystemController} from "./system/interface/InterfaceSystemContr
 import {InterfaceController} from "./system/interface/InterfaceController";
 import {WalkTool} from "./system/interface/tool/WalkTool";
 import {PrimaryControllerDevice} from "./system/interface/device/PrimaryControllerDevice";
-import {ExampleController} from "./component/ExampleController";
-import {ExampleSystemController} from "./system/ExampleSystemController";
 import {AddObjectTool} from "./system/interface/tool/AddObjectTool";
 import {CollidableController} from "./component/collidable/CollidableController";
 import {QuaternionController} from "./component/quaternion/QuaternionController";
@@ -32,6 +29,12 @@ import {RotateObjectTool} from "./system/interface/tool/RotateObjectTool";
 import {AvatarActionLoggerFeature} from "./component/avatar/AvatarActionLoggerFeature";
 import "./primitive/billboard";
 import "./primitive/picture";
+import {
+    ExampleController,
+    ExampleSystemController,
+    registerComponentController,
+    registerSystemController
+} from "aframe-typescript-boilerplate";
 
 registerSystemController(LoaderSystemController.DEFINITION);
 registerSystemController(ExampleSystemController.DEFINITION);

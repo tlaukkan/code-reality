@@ -1,12 +1,12 @@
-import {AbstractComponentController} from "../../../component/AbstractComponentController";
 import {Component, Entity} from "aframe";
 import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
+import {ComponentControllerDefinition} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../../../component/CodeRealityComponentController";
 
-export class PrimaryControllerDevice extends AbstractComponentController implements Device {
+export class PrimaryControllerDevice extends CodeRealityComponentController implements Device {
 
     public static DEFINITION = new ComponentControllerDefinition("primary-controller", {}, false, false, (component: Component, entity: Entity, data: any) => new PrimaryControllerDevice(component, entity, data));
 

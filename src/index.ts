@@ -1,4 +1,3 @@
-export {registerComponentController, registerSystemController} from "./browser/AFrame";
 export {LabelController} from "./browser/component/label/LabelController";
 export {IdentityController} from "./browser/component/identity/IdentityController";
 export {KeyboardAndMouseDevice} from "./browser/system/interface/device/KeyboardAndMouseDevice";
@@ -12,8 +11,6 @@ export {InterfaceSystemController} from "./browser/system/interface/InterfaceSys
 export {InterfaceController} from "./browser/system/interface/InterfaceController";
 export {WalkTool} from "./browser/system/interface/tool/WalkTool";
 export {PrimaryControllerDevice} from "./browser/system/interface/device/PrimaryControllerDevice";
-export {ExampleController} from "./browser/component/ExampleController";
-export {ExampleSystemController} from "./browser/system/ExampleSystemController";
 export {AddObjectTool} from "./browser/system/interface/tool/AddObjectTool";
 export {RemoveObjectTool} from "./browser/system/interface/tool/RemoveObjectTool";
 export {TeleportTool} from "./browser/system/interface/tool/TeleportTool";

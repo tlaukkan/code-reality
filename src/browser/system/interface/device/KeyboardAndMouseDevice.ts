@@ -1,15 +1,15 @@
-import {AbstractComponentController} from "../../../component/AbstractComponentController";
 import {Component, Entity} from "aframe";
 import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
-import {addDocumentEventListener, addEntityEventListener} from "../../../util";
 import {AddObjectTool} from "../../../..";
 import {js2xml, xml2js} from "xml-js";
+import {ComponentControllerDefinition} from "aframe-typescript-boilerplate";
+import {addDocumentEventListener} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../../../component/CodeRealityComponentController";
 
-export class KeyboardAndMouseDevice extends AbstractComponentController implements Device {
+export class KeyboardAndMouseDevice extends CodeRealityComponentController implements Device {
 
     public static DEFINITION = new ComponentControllerDefinition("keyboard-and-mouse", {}, false, false, (component: Component, entity: Entity, data: any) => new KeyboardAndMouseDevice(component, entity, data));
 

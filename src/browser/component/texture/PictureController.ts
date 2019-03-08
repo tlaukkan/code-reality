@@ -1,6 +1,5 @@
-import {Component, Entity, Geometry} from "aframe";
-import {AbstractComponentController} from "../AbstractComponentController";
-import {ComponentControllerDefinition} from "../../AFrame";
+import {Component, Entity} from "aframe";
+import {AbstractComponentController, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 
 /**
  * Modified from https://github.com/nylki/aframe-fit-texture-component.

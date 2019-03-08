@@ -1,4 +1,4 @@
-import {ComponentController} from "../../component/ComponentController";
+import {ComponentController} from "aframe-typescript-boilerplate";
 
 export interface Device extends ComponentController {
 }

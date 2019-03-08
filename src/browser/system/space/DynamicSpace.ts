@@ -1,7 +1,7 @@
 import {Entity, Scene} from "aframe";
 import {Actuator} from "./Actuator";
 import {StateSystemController} from "../state/StateSystemController";
-import {getSystemController} from "../../AFrame";
+import {getSystemController} from "aframe-typescript-boilerplate";
 
 export class DynamicSpace {
 

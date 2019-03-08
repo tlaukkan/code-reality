@@ -1,11 +1,10 @@
 import {Entity, Scene, System} from "aframe";
-import {AbstractSystemController} from "../AbstractSystemController";
-import {SystemControllerDefinition} from "../../AFrame";
 import List = Mocha.reporters.List;
 import {MergeData} from "./MergeData";
 import {Mesh, Object3D, Vector3} from "three";
 import {clearObject3Ds, cloneObject3D, mergeObject3Ds, ObjectMerge, updateObject3Ds} from "../../three/merge_util";
 import {LoaderSystemController} from "../loader/LoaderSystemController";
+import {AbstractSystemController, SystemControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class MergeSystemController extends AbstractSystemController {
 

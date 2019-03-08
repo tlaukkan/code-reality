@@ -1,12 +1,11 @@
 import {Entity, Scene} from "aframe";
-import {createElement} from "../../util";
 import {StateSystemController} from "../state/StateSystemController";
-import {getComponentController, getSystemController} from "../../AFrame";
 import {Vector3} from "three";
 import {LoaderSystemController} from "../loader/LoaderSystemController";
 import {MergeSystemController} from "../merge/MergeSystemController";
 import {ModelController} from "../merge/ModelController";
 import {Element as XmlElement, js2xml, xml2js} from "xml-js";
+import {createElement, getComponentController, getSystemController} from "aframe-typescript-boilerplate";
 export class StaticSpace {
 
     scene: Scene;

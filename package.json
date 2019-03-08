@@ -70,6 +70,7 @@
     "@types/three": "^0.93.18",
     "@types/uuid": "^3.4.4",
     "@types/websocket": "0.0.40",
+    "aframe-typescript-boilerplate": "^0.0.4",
     "body-parser": "^1.18.3",
     "config": "^1.30.0",
     "console-stamp": "^0.2.6",

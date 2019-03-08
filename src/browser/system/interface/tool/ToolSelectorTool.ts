@@ -1,7 +1,4 @@
 import {Component, Entity} from "aframe";
-import {AbstractComponentController} from "../../../component/AbstractComponentController";
-import {ComponentControllerDefinition} from "../../../AFrame";
-import {addEntityEventListener, createElement} from "../../../util";
 import {Tool} from "../Tool";
 import {Device} from "../Device";
 import {Button} from "../model/Button";
@@ -10,8 +7,14 @@ import {Stick} from "../model/Stick";
 import {SlotListener} from "../SlotListener";
 import {EntityActionEventDetail} from "../../../model/EntityActionEventDetail";
 import {Events} from "../../../model/Events";
+import {
+    AbstractComponentController,
+    addEntityEventListener,
+    ComponentControllerDefinition, createElement
+} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../../../component/CodeRealityComponentController";
 
-export class ToolSelectorTool extends AbstractComponentController implements Tool, SlotListener {
+export class ToolSelectorTool extends CodeRealityComponentController implements Tool, SlotListener {
 
     public static DEFINITION = new ComponentControllerDefinition("tool-selector-tool", {}, false, false, (component: Component, entity: Entity, data: any) => new ToolSelectorTool(component, entity, data));
 

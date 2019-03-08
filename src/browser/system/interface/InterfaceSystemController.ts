@@ -1,5 +1,4 @@
 import {Component, Entity, Scene, System} from "aframe";
-import {AbstractSystemController} from "../AbstractSystemController";
 import {InterfaceController} from "./InterfaceController";
 import {DeviceSlot} from "./model/DeviceSlot";
 import {Device} from "./Device";
@@ -7,10 +6,10 @@ import {Slot} from "./model/Slot";
 import {Tool} from "./Tool";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
-import {SystemControllerDefinition} from "../../AFrame";
 import {Object3D} from "three";
 import {SlotListener} from "./SlotListener";
 import {SpaceSystemController} from "../../..";
+import {AbstractSystemController, SystemControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class InterfaceSystemController extends AbstractSystemController {
 

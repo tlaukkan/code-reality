@@ -1,4 +1,3 @@
-import {ComponentController} from "../../component/ComponentController";
 import {
     AnimationAction,
     AnimationClip,
@@ -15,12 +14,11 @@ import {AnimationFinishedEventDetails} from "../../model/AnimationFinishedEventD
 import {Events} from "../../model/Events";
 import {AnimationLoopStyle} from "./AnimationLoopStyle";
 import {Entity} from "aframe";
-import {AbstractFeature} from "../AbstractFeature";
 import {StateSystemController} from "../../system/state/StateSystemController";
-import {getSystemController} from "../../AFrame";
 import {MovementState} from "../../model/MovementState";
 import {States} from "../../model/States";
-import {InterfaceSystemController} from "../../..";
+import {ComponentController} from "aframe-typescript-boilerplate";
+import {AbstractFeature} from "aframe-typescript-boilerplate";
 
 export class AnimationFeature extends AbstractFeature {
 

@@ -3,9 +3,8 @@ import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
-import {createElement} from "../../../util";
 import {PointerTool} from "./PointerTool";
+import {createElement, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class GrabObjectTool extends PointerTool {
 

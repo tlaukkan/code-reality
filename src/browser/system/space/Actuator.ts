@@ -1,15 +1,14 @@
-import {createElement} from "../../util";
 import {Entity, Scene} from "aframe";
 import {Euler, Quaternion, Vector3} from "three";
 import {Spring} from "./Spring";
 import {Events} from "../../model/Events";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {StateSystemController} from "../state/StateSystemController";
-import {getSystemController} from "../../AFrame";
 import {States} from "../../model/States";
 import {MovementState} from "../../model/MovementState";
 import {Element, js2xml, xml2js} from "xml-js";
 import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
+import {createElement, getSystemController} from "aframe-typescript-boilerplate";
 
 export class Actuator {
 

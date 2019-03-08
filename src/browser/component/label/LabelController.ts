@@ -1,6 +1,5 @@
-import {ComponentControllerDefinition} from "../../AFrame";
 import {Component, Entity} from "aframe";
-import {AbstractComponentController} from "../AbstractComponentController";
+import {AbstractComponentController, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class LabelController extends AbstractComponentController {
 

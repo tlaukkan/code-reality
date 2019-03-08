@@ -1,8 +1,10 @@
-import {AbstractFeature} from "../../feature/AbstractFeature";
-import {ComponentController} from "../ComponentController";
+
+
 import {Entity} from "AFrame";
 import {Events} from "../../model/Events";
 import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
+import {AbstractFeature} from "aframe-typescript-boilerplate";
+import {ComponentController} from "aframe-typescript-boilerplate";
 
 export class AvatarActionLoggerFeature extends AbstractFeature {
 

@@ -1,8 +1,11 @@
 import {Component, Entity} from "aframe";
-import {AbstractComponentController} from "../../component/AbstractComponentController";
-import {ComponentControllerDefinition, getSystemController} from "../../AFrame";
 import {setEntityGltfModel} from "../../three/gltf_load";
 import {MergeSystemController} from "./MergeSystemController";
+import {
+    AbstractComponentController,
+    ComponentControllerDefinition,
+    getSystemController
+} from "aframe-typescript-boilerplate";
 
 export class ModelController extends AbstractComponentController {
 

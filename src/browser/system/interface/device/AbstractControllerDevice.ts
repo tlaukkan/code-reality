@@ -1,8 +1,8 @@
-import {AbstractComponentController} from "../../../component/AbstractComponentController";
 import {Button} from "../model/Button";
 import {Component, Entity} from "aframe";
+import {CodeRealityComponentController} from "../../../component/CodeRealityComponentController";
 
-export abstract class AbstractControllerDevice extends AbstractComponentController {
+export abstract class AbstractControllerDevice extends CodeRealityComponentController {
     protected controllerName: string = "";
     protected axis: Array<number> | undefined;
     protected lastStickButton: Button | undefined;

@@ -3,9 +3,9 @@ import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
 import {PointerTool} from "./PointerTool";
 import {WalkTool} from "./WalkTool";
+import {ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class TeleportTool extends PointerTool {
 

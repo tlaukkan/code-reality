@@ -1,8 +1,8 @@
 import {Component, Entity} from "aframe";
-import {AbstractComponentController} from "../../component/AbstractComponentController";
-import {ComponentControllerDefinition} from "../../AFrame";
+import {AbstractComponentController, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../../component/CodeRealityComponentController";
 
-export class InterfaceController extends AbstractComponentController {
+export class InterfaceController extends CodeRealityComponentController {
 
     public static DEFINITION = new ComponentControllerDefinition("interface", {}, false, false, (component: Component, entity: Entity, data: any) => new InterfaceController(component, entity, data));
 

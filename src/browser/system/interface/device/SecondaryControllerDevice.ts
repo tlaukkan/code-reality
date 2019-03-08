@@ -1,12 +1,11 @@
-import {AbstractComponentController} from "../../../component/AbstractComponentController";
 import {Component, Entity} from "aframe";
 import {DeviceSlot} from "../model/DeviceSlot";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
-import {ComponentControllerDefinition} from "../../../AFrame";
 import {AbstractControllerDevice} from "./AbstractControllerDevice";
+import {ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class SecondaryControllerDevice extends AbstractControllerDevice implements Device {
 

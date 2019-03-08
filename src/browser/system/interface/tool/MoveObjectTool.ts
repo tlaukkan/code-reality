@@ -3,11 +3,10 @@ import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
-import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {SpaceSystemController} from "../../../..";
 import {snapVector3ToAxisAlignedGrid} from "../../../math/math";
+import {ComponentControllerDefinition, getEntity} from "aframe-typescript-boilerplate";
 
 export class MoveObjectTool extends PointerTool {
 

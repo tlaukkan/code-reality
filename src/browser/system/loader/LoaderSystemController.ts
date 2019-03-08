@@ -1,9 +1,7 @@
-import {Entity, Scene, System} from "aframe";
+import {Scene, System} from "aframe";
 
-import {Clock, Color, DoubleSide, Mesh, MeshBasicMaterial, SphereGeometry} from "three";
-import {AbstractSystemController} from "../AbstractSystemController";
-import {SystemControllerDefinition} from "../../AFrame";
-
+import {DoubleSide, Mesh, MeshBasicMaterial, SphereGeometry} from "three";
+import {AbstractSystemController, SystemControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class LoaderSystemController extends AbstractSystemController {
 

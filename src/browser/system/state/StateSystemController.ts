@@ -1,6 +1,5 @@
 import {Component, Entity, Scene, System} from "aframe";
-import {AbstractSystemController} from "../AbstractSystemController";
-import {SystemControllerDefinition} from "../../AFrame";
+import {AbstractSystemController, SystemControllerDefinition} from "aframe-typescript-boilerplate";
 
 const factories: Map<string, () => any> = new Map();
 

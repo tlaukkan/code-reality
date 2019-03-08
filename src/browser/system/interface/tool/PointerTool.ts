@@ -1,4 +1,3 @@
-import {AbstractComponentController} from "../../../component/AbstractComponentController";
 import {Face3, Geometry, Line, LineBasicMaterial, Mesh, Object3D, Raycaster, SphereGeometry, Vector3} from "three";
 import {Component, Entity} from "aframe";
 import {Device} from "../Device";
@@ -6,10 +5,11 @@ import {Tool} from "../Tool";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
 import {Stick} from "../model/Stick";
-import {ComponentControllerDefinition} from "../../../AFrame";
 import {raycast} from "../../../three/raycast";
+import {AbstractComponentController, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../../../component/CodeRealityComponentController";
 
-export class PointerTool extends AbstractComponentController implements Tool {
+export class PointerTool extends CodeRealityComponentController implements Tool {
 
     public static DEFINITION = new ComponentControllerDefinition("pointer-tool", {}, false, true, (component: Component, entity: Entity, data: any) => new PointerTool(component, entity, data));
 

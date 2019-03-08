@@ -1,8 +1,8 @@
 import {Component, Entity} from "aframe";
-import {AbstractComponentController} from "../AbstractComponentController";
-import {ComponentControllerDefinition} from "../../AFrame";
+import {AbstractComponentController, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../CodeRealityComponentController";
 
-export class CollidableController extends AbstractComponentController {
+export class CollidableController extends CodeRealityComponentController {
 
     public static DEFINITION = new ComponentControllerDefinition("collidable", {}, false, false, (component: Component, entity: Entity, data: any) => new CollidableController(component, entity, data));
 

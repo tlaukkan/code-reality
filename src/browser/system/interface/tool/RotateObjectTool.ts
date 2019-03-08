@@ -3,10 +3,9 @@ import {Component, Entity} from "aframe";
 import {Device} from "../Device";
 import {Slot} from "../model/Slot";
 import {Button} from "../model/Button";
-import {ComponentControllerDefinition} from "../../../AFrame";
-import {getEntity} from "../../../util";
 import {PointerTool} from "./PointerTool";
 import {SpaceSystemController} from "../../../..";
+import {getEntity, ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 
 export class RotateObjectTool extends PointerTool {
 

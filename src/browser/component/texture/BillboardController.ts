@@ -1,12 +1,12 @@
 import {Component, Entity} from "aframe";
-import {AbstractComponentController} from "../AbstractComponentController";
-import {ComponentControllerDefinition} from "../../AFrame";
 import {Quaternion, Vector3} from "three";
+import {ComponentControllerDefinition} from "aframe-typescript-boilerplate";
+import {CodeRealityComponentController} from "../CodeRealityComponentController";
 
 /**
  * Modified from https://github.com/nylki/aframe-fit-texture-component.
  */
-export class BillboardController extends AbstractComponentController {
+export class BillboardController extends CodeRealityComponentController {
 
     public static DEFINITION = new ComponentControllerDefinition("billboard",
         {

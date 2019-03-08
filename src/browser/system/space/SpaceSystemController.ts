@@ -5,15 +5,17 @@ import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
 import {DynamicSpace} from "./DynamicSpace";
 import {StaticSpace} from "./StaticSpace";
-import {AbstractSystemController} from "../AbstractSystemController";
-import {getComponentController, SystemControllerDefinition} from "../../AFrame";
-import {createElement} from "../../util";
 import {ClusterClient, Decode, Encode} from "reality-space";
 import {InterfaceSystemController} from "../../..";
 import {ModelController} from "../merge/ModelController";
 import {MergeSystemController} from "../merge/MergeSystemController";
 import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
 import {BrowserContext} from "../../../common/model/BrowserContext";
+import {
+    AbstractSystemController, createElement,
+    getComponentController,
+    SystemControllerDefinition
+} from "aframe-typescript-boilerplate";
 
 export class SpaceSystemController extends AbstractSystemController {
 
