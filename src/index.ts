@@ -1,5 +1,4 @@
-export {LabelController} from "./browser/component/label/LabelController";
-export {IdentityController} from "./browser/component/identity/IdentityController";
+export {UserNameController} from "./browser/component/label/UserNameController";
 export {KeyboardAndMouseDevice} from "./browser/system/interface/device/KeyboardAndMouseDevice";
 export {AnimatorController} from "./browser/component/animation/AnimatorController";
 export {AvatarController} from "./browser/component/avatar/AvatarController";

@@ -1,5 +1,4 @@
-import {LabelController} from "./component/label/LabelController";
-import {IdentityController} from "./component/identity/IdentityController";
+import {UserNameController} from "./component/label/UserNameController";
 import {KeyboardAndMouseDevice} from "./system/interface/device/KeyboardAndMouseDevice";
 import {AnimatorController} from "./component/animation/AnimatorController";
 import {AvatarController} from "./component/avatar/AvatarController";
@@ -61,8 +60,7 @@ registerComponentController(ExampleController.DEFINITION);
 registerComponentController(CollidableController.DEFINITION);
 registerComponentController(AnimatorController.DEFINITION);
 registerComponentController(AvatarController.DEFINITION.add(AvatarActionLoggerFeature.DEFINITION));
-registerComponentController(IdentityController.DEFINITION);
-registerComponentController(LabelController.DEFINITION);
+registerComponentController(UserNameController.DEFINITION);
 registerComponentController(QuaternionController.DEFINITION);
 
 registerComponentController(MergeController.DEFINITION);
