@@ -2,8 +2,22 @@ import {Express} from "express";
 import {User} from "./model/User";
 import config = require('config');
 import {infoWithRequestId} from "./util/log";
+import {BrowserContext} from "../common/model/BrowserContext";
 
 export function initializeRoutes(app: Express) {
+    app.get('/api/context', function (request, response) {
+        const requestId = request.headers['request-id'] as string;
+        infoWithRequestId(requestId, '/api/users/current: ' + JSON.stringify(request.user));
+        const user = request.user as User;
+        response.send(JSON.stringify(new BrowserContext(
+            user.userId,
+            user.userName,
+            user.groups ? user.groups : [],
+            user.idToken,
+            config.get("Cluster.configurationUrl"),
+            (request as any).session.space ? (request as any).session.space : "default"
+        )));
+    });
     app.get('/api/users/current', function (request, response) {
         const requestId = request.headers['request-id'] as string;
         infoWithRequestId(requestId, '/api/users/current: ' + JSON.stringify(request.user));

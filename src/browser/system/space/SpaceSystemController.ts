@@ -13,6 +13,7 @@ import {InterfaceSystemController} from "../../..";
 import {ModelController} from "../merge/ModelController";
 import {MergeSystemController} from "../merge/MergeSystemController";
 import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
+import {BrowserContext} from "../../../common/model/BrowserContext";
 
 export class SpaceSystemController extends AbstractSystemController {
 
@@ -23,6 +24,7 @@ export class SpaceSystemController extends AbstractSystemController {
 
     private clusterUrl: string | undefined = undefined;
     private idToken: string | undefined;
+    private context: BrowserContext | undefined;
     private space: string | undefined;
 
     private avatarId = uuid.v4();
@@ -50,10 +52,28 @@ export class SpaceSystemController extends AbstractSystemController {
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
 
-        this.dynamicSpace = new DynamicSpace(this.scene!!, this.avatarId);
         this.staticSpace = new StaticSpace(this.scene!!);
 
-        fetch('/api/users/current/cluster-url', {
+
+        fetch('/api/context', {
+            credentials: 'same-origin'
+        }).then((response) => {
+                response.json().then((responseData) => {
+                    const context = responseData as BrowserContext;
+                    this.clusterUrl = context.clusterUrl;
+                    this.space = context.space;
+                    this.idToken = context.idToken;
+                    this.context = context;
+
+                    this.dynamicSpace = new DynamicSpace(this.scene!!, this.context!!.userId + ":" + this.avatarId);
+
+                    //console.log("cluster URL: " + this.clusterUrl);
+                });
+            }).catch((err) => {
+            console.error(err);
+        });
+
+        /*fetch('/api/users/current/cluster-url', {
             credentials: 'same-origin'
         })
             .then((response) => {
@@ -84,7 +104,7 @@ export class SpaceSystemController extends AbstractSystemController {
                 });
             }).catch((err) => {
             console.error(err);
-        });
+        });*/
     }
 
     init(): void {

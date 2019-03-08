@@ -33,7 +33,6 @@ export class DynamicSpace {
     added(region: string, index: number, id: string, x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number, description: string) : void {
         if (id === this.avatarId) {
             this.avatarIndex = index;
-            //console.log("dataspace - observed own avatar add:" + y);
             return;
         }
         const actuators = this.actuatorsMap.get(region);
