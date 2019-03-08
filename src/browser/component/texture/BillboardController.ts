@@ -22,6 +22,9 @@ export class BillboardController extends CodeRealityComponentController {
     geometryWidth: number | undefined;
     geometryHeight: number | undefined;
     heightCorrection: number | undefined;
+
+    cameraPosition: Vector3 = new Vector3(0,0,0);
+    billboardPosition: Vector3 = new Vector3(0,0,0);
     cameraLastPosition: Vector3 = new Vector3(0,0,0);
 
     constructor(component: Component, entity: Entity, data: any) {
@@ -72,20 +75,22 @@ export class BillboardController extends CodeRealityComponentController {
 
     tick(time: number, timeDelta: number): void {
 
-        const cameraPosition = this.interface.cameraEntity.object3D.parent!!.localToWorld(this.interface.cameraEntity.object3D.position.clone());
+        this.cameraPosition.copy(this.interface.cameraEntity.object3D.position);
+        this.cameraPosition = this.interface.cameraEntity.object3D.parent!!.localToWorld(this.cameraPosition);
 
-        if (cameraPosition.x == this.cameraLastPosition.x &&
-            cameraPosition.y == this.cameraLastPosition.y &&
-            cameraPosition.z == this.cameraLastPosition.z) {
+        if (this.cameraPosition.x == this.cameraLastPosition.x &&
+            this.cameraPosition.y == this.cameraLastPosition.y &&
+            this.cameraPosition.z == this.cameraLastPosition.z) {
             // No need to turn billboard.
             return;
         }
 
-        this.cameraLastPosition = cameraPosition.clone();
+        this.cameraLastPosition.copy(this.cameraPosition);
 
-        const billboardPosition = this.entity.object3D.parent!!.localToWorld(this.entity.object3D.position.clone());
+        this.billboardPosition.copy(this.entity.object3D.position);
+        this.billboardPosition = this.entity.object3D.parent!!.localToWorld(this.billboardPosition);
 
-        const direction = billboardPosition.sub(cameraPosition).normalize();
+        const direction = this.billboardPosition.sub(this.cameraPosition).normalize();
         direction.y = 0;
         direction.normalize();
 
