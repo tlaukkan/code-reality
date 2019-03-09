@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Code Reality Test</title>
-        <meta name="description" content="Code Reality Test">
+        <title>Code Reality</title>
+        <meta name="description" content="Code Reality">
 
         <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
         <!--<script src="aframe-master.js"></script>-->
@@ -21,6 +21,9 @@
             <a-assets timeout="15000">
                 <a-asset-item id="tree" src="https://cdn.rawgit.com/bubblecloud/assets/1c1313f0/bitgem/birch_tree/scene.gltf"></a-asset-item>
                 <a-asset-item id="robot" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/avatars/RobotExpressive.glb"></a-asset-item>
+                <a-asset-item id="male_suit" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.17/avatars/quaternius/human/male/Male_Suit.glb"></a-asset-item>
+
+
 
                 <img id="sky" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.15/environments/space/deep_space_equirectangular.png">
                 <!--<img id="sky" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.5/environments/desert/gradient_env_equirectangular.png">-->
@@ -71,6 +74,9 @@
             <a-billboard position="-2 1.6 0" src="https://66.media.tumblr.com/14a4d4777e95162bfd126f0c99228261/tumblr_n59pgipQxX1t0naplo1_500.jpg" height="1.0"></a-billboard>
             <a-picture position="2 1.6 0" src="https://66.media.tumblr.com/14a4d4777e95162bfd126f0c99228261/tumblr_n59pgipQxX1t0naplo1_500.jpg" height="1.0"></a-picture>
             -->
+
+            <!--<a-entity gltf-model="#male_suit" collidable position="0 1 -2" scale="0.4 0.4 0.4" rotation="0 0 0"></a-entity>-->
+
 
             <a-entity model="#cube" collidable position="0 -1 0" scale="2 2 2" rotation="90 0 0" avatar></a-entity>
 

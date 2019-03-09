@@ -279,8 +279,8 @@ export class SpaceSystemController extends AbstractSystemController {
     private getAvatarDescription(): string {
         const interfaceSystem = this.getSystemController("interface") as InterfaceSystemController;
         const selfScale = interfaceSystem ? interfaceSystem.getSelfScale() : 1;
-        const avatarScale = selfScale * 0.3; // TODO fix the model size.
-        return '<a-entity gltf-model="#robot" scale="' + avatarScale + ' ' + avatarScale + ' ' + avatarScale + '" avatar=""></a-entity>';
+        const avatarScale = selfScale * 0.4; // TODO fix the model size.
+        return '<a-entity gltf-model="#male_suit" scale="' + avatarScale + ' ' + avatarScale + ' ' + avatarScale + '" avatar=""></a-entity>';
     }
 
     public addEntity(template: string, position: Vector3, scale: Vector3) {

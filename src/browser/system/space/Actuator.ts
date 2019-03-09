@@ -236,7 +236,7 @@ export class Actuator {
         //console.log(orientationDelta);
 
         //const orientationDelta = ((this.springOne.targetOrientation) as any).angleTo(this.springTwo.currentOrientation) as number;
-        const moving = positionDelta > 0.1;
+        const moving = positionDelta > 0.2;
         const turning = orientationDelta > 0.2;
         //console.log(positionDelta);
 

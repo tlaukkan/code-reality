@@ -64,7 +64,7 @@ export class AnimationFeature extends AbstractFeature {
                 const walkingAction = this.actions.get("walking")!!;
 
                 // TODO 0.3 scale factor and 1.9 animation walk speed are model specific
-                const walkingAnimationNormalSpeed =  (this.entity.getAttribute("scale") as Vector3).x / 0.3 * 1.9; // 1 m/s
+                const walkingAnimationNormalSpeed =  (this.entity.getAttribute("scale") as Vector3).x / 0.4 * 2; // 1 m/s
                 const entityActualSpeed = this.movementState.distanceDelta / this.movementState.timeDeltaSeconds;
                 const timeScale = this.movementState.facing * entityActualSpeed / walkingAnimationNormalSpeed;
 
@@ -104,14 +104,18 @@ export class AnimationFeature extends AbstractFeature {
     }
 
     private beginAnimation(clipName: string, style: AnimationLoopStyle, repetitions: number) {
+
+        // If clipNameOriginal is walking and walking does not exist in clips then switch to clipName walk.
+        const clipNameFinal = clipName != "walking" ? clipName : (this.clips.has(clipName) ? clipName : "walk");
+
         if (!this.mixer) {
             return;
         }
-        if (!this.clips.has(clipName)) {
+        if (!this.clips.has(clipNameFinal)) {
             return;
         }
 
-        const clip = this.clips.get(clipName);
+        const clip = this.clips.get(clipNameFinal);
 
         if (clip) {
             const action = this.actions.has(clipName) ? this.actions.get(clipName)!! : this.mixer!!.clipAction(clip);
