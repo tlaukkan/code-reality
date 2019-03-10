@@ -16,28 +16,34 @@
     <div class="hero-body">
         <div class="container has-text-centered">
             <div class="column is-4 is-offset-4">
-                <h3 class="title has-text-grey">Login</h3>
-                <p class="subtitle has-text-grey">Please login to proceed.</p>
-                <div class="box">
-                    <form action="login" method="post">
-                        <div class="field">
-                            <div class="control">
-                                <input name="username" class="input is-large" type="username" placeholder="Your Username" autofocus="">
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="control">
-                                <input name="password" class="input is-large" type="password" placeholder="Your Password">
-                            </div>
-                        </div>
-                        <button class="button is-block is-info is-large is-fullwidth">Login</button>
-                    </form>
-                </div>
+                <h3 class="title has-text-grey">Authentication</h3>
+                <p class="subtitle has-text-grey">Please authenticate to proceed.</p>
 
                 <div class="box">
                     <a class="button facebook-login-button is-large is-fullwidth" href="/api/auth/facebook">Continue with Facebook</a>
                 </div>
+
+                <h3 class="title has-text-grey">Viewer</h3>
+                <p class="subtitle has-text-grey">Proceed as viewer.</p>
+
+                <div class="box">
+                    <form action="login" method="post">
+                        <div class="field">
+                            <div class="control">
+                                <input name="username" class="input is-large" type="username" placeholder="Display Name" autofocus="">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <input name="password" class="input is-large" type="hidden" placeholder="Your Password" value="-">
+                            </div>
+                        </div>
+                        <button class="button is-block is-info is-large is-fullwidth">Continue as viewer</button>
+                    </form>
+                </div>
+
+
 
             </div>
         </div>
