@@ -41,7 +41,7 @@ export async function initializeAuthentication(app: Express) {
     passport.use(new LocalStrategy({usernameField: "username"}, function (username: string, password: string, cb) {
         if (username) {
             const userId: string = "an" + uuid.v4();
-            const user = createFormAuthenticatedUser(userId, "Viewer " + username, "viewers");
+            const user = createFormAuthenticatedUser(userId, "Guest - " + username, "viewers");
             info(user, 'form authentication success: ' + username);
             return cb(null, user);
         } else {

@@ -17,14 +17,13 @@
         <div class="container has-text-centered">
             <div class="column is-4 is-offset-4">
                 <h3 class="title has-text-grey">Authentication</h3>
-                <p class="subtitle has-text-grey">Please authenticate to proceed.</p>
+                <p class="subtitle has-text-grey">Please authenticate to proceed as privileged user.</p>
 
                 <div class="box">
                     <a class="button facebook-login-button is-large is-fullwidth" href="/api/auth/facebook">Continue with Facebook</a>
                 </div>
 
-                <h3 class="title has-text-grey">Viewer</h3>
-                <p class="subtitle has-text-grey">Proceed as viewer.</p>
+                <p class="subtitle has-text-grey">Alternatively give your display name to proceed as guest user.</p>
 
                 <div class="box">
                     <form action="login" method="post">
@@ -39,7 +38,7 @@
                                 <input name="password" class="input is-large" type="hidden" placeholder="Your Password" value="-">
                             </div>
                         </div>
-                        <button class="button is-block is-info is-large is-fullwidth">Continue as viewer</button>
+                        <button class="button is-block is-large is-fullwidth">Continue as guest</button>
                     </form>
                 </div>
 
