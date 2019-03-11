@@ -36,7 +36,14 @@ export class DynamicSpace {
             return;
         }
         const actuators = this.actuatorsMap.get(region);
-        if (!actuators) { return; }
+        if (!actuators) {
+            console.log("Region does not have actuators map i.e. client not connected: " + region);
+            return;
+        }
+        if (actuators!!.has(index)) {
+            console.log("object already added.");
+            return;
+        }
         const actuator = new Actuator(this.scene, region, id, description);
         actuators!!.set(index, actuator);
         actuator.added(x, y, z, rx, ry, rz, rw);
@@ -65,6 +72,7 @@ export class DynamicSpace {
         if (!actuator) { return; }
         actuator!!.removed();
         (getSystemController(this.scene, "state") as StateSystemController).removeStates(actuator.entity);
+        actuators.delete(index);
     }
 
     described(region: string, index: number, description: string) : void {
