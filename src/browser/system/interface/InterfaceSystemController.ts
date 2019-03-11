@@ -6,7 +6,7 @@ import {Slot} from "./model/Slot";
 import {Tool} from "./Tool";
 import {Button} from "./model/Button";
 import {Stick} from "./model/Stick";
-import {Object3D} from "three";
+import {Object3D, Vector3} from "three";
 import {SlotListener} from "./SlotListener";
 import {SpaceSystemController} from "../../..";
 import {AbstractSystemController, SystemControllerDefinition} from "aframe-typescript-boilerplate";
@@ -31,6 +31,7 @@ export class InterfaceSystemController extends AbstractSystemController {
     private slots: Map<Slot, Tool> = new Map();
 
     private slotListeners: Map<Slot, Array<SlotListener>> = new Map();
+    public cameraPosition: Vector3 = new Vector3(0,0,0);
 
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
@@ -60,6 +61,8 @@ export class InterfaceSystemController extends AbstractSystemController {
     }
 
     tick(time: number, timeDelta: number): void {
+        this.cameraPosition.copy(this.cameraEntity.object3D.position);
+        this.cameraPosition = this.cameraEntity.object3D.parent!!.localToWorld(this.cameraPosition);
     }
 
     getCollidables(): Array<Object3D> {

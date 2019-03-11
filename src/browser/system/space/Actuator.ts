@@ -9,6 +9,7 @@ import {MovementState} from "../../model/MovementState";
 import {Element, js2xml, xml2js} from "xml-js";
 import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
 import {createElement, getSystemController} from "aframe-typescript-boilerplate";
+import {InterfaceSystemController, SpaceSystemController} from "../../..";
 
 export class Actuator {
 
@@ -34,6 +35,8 @@ export class Actuator {
 
     stateSystemController: StateSystemController;
     movementState: MovementState;
+
+    cameraPosition: Vector3 = new Vector3(0,0,0);
 
     constructor(scene: Scene, serverUrl: string, id: string, description: string) {
         this.scene = scene;
@@ -214,8 +217,18 @@ export class Actuator {
             }
 
             this.checkIfMoving();
-
         }
+
+        // Check if dynamic object is in observation range. Do this every round to keep the cost independent of whether user is moving or not.
+        const spaceSystem = getSystemController(this.scene, "space") as SpaceSystemController;
+        const interfaceSystem = getSystemController(this.scene, "interface") as InterfaceSystemController;
+        const range = spaceSystem.getObservationRange();
+        //console.log("Observation range: "+ range);
+        this.cameraPosition.copy(interfaceSystem.cameraPosition);
+        this.cameraPosition.sub(this.entity.object3D.position);
+        const distanceToCamera = this.cameraPosition.length();
+        this.entity.object3D.visible = distanceToCamera < range;
+
     }
 
     checkIfMoving() {

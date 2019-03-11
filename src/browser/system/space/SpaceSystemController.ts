@@ -50,6 +50,7 @@ export class SpaceSystemController extends AbstractSystemController {
     private xzDirection: Vector3 = new Vector3(0, 0, 0);
     private directionMatrix = new Matrix4();
     private directionQuaternion = new Quaternion();
+    private observationRange = 0;
 
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
@@ -259,11 +260,19 @@ export class SpaceSystemController extends AbstractSystemController {
                 this.staticSpace!!.disconnected(region);
 
             };
-            this.client.connect().catch((error: Error) => {
+            this.client.connect().then(() => {
+                if (this.client && this.client.clusterConfiguration) {
+                    this.observationRange = Math.trunc(this.client!!.clusterConfiguration!!.range / this.client!!.clusterConfiguration!!.step) * this.client.clusterConfiguration!!.step
+                }
+            }).catch((error: Error) => {
                 console.warn("dataspace - cluster client connect error.", error);
                 this.client = undefined;
             });
         }
+    }
+
+    public getObservationRange() {
+        return this.observationRange;
     }
 
     public sendAvatarDescriptionUpdate() {
