@@ -14,7 +14,8 @@ import {InterfaceSystemController, SpaceSystemController} from "../../..";
 export class Actuator {
 
     id: string;
-    serverUrl: string;
+    index: number;
+    region: string;
     description: string;
     scene: Scene;
     entity: Entity;
@@ -38,18 +39,25 @@ export class Actuator {
 
     cameraPosition: Vector3 = new Vector3(0,0,0);
 
-    constructor(scene: Scene, serverUrl: string, id: string, description: string) {
+    constructor(scene: Scene, region: string, id: string, index: number, description: string) {
         this.scene = scene;
-        this.serverUrl = serverUrl;
+        this.region = region;
         this.id = id;
+        this.index = index;
         this.description = description;
         this.entity = createElement(description) as Entity;
         this.entity.setAttribute("did", id);
-        this.entity.setAttribute("server", serverUrl);
+        this.entity.setAttribute("server", region);
         this.springOne.relaxationTime = 0.2;
         this.springTwo.relaxationTime = 0.2;
         this.stateSystemController = getSystemController(this.scene, "state");
         this.movementState = this.stateSystemController.getState(this.entity, States.STATE_MOVEMENT);
+    }
+
+    changeRegion(region: string, index: number) {
+        this.entity.setAttribute("server", region);
+        this.region = region;
+        this.index = index;
     }
 
     added(x: number, y: number, z: number, rx: number, ry: number, rz: number, rw: number) : void {

@@ -10,6 +10,7 @@ export class DynamicSpace {
     avatarIndex: number = -1;
     actuatorsMap: Map<string, Map<number, Actuator>> = new Map<string, Map<number, Actuator>>();
 
+    actuatorRemoves: Map<string, Actuator> = new Map();
 
     constructor(scene: Scene, avatarId: string) {
         this.avatarId = avatarId;
@@ -35,6 +36,24 @@ export class DynamicSpace {
             this.avatarIndex = index;
             return;
         }
+        if (this.actuatorRemoves.has(id)) {
+            // In case of fast reconnect remove actuator from removal set and move actuator to new region.
+
+            const actuator = this.actuatorRemoves.get(id);
+
+
+            if (actuator) {
+                this.actuatorRemoves.delete(id);
+
+                // Change region.
+                this.actuatorsMap.get(actuator.region)!!.delete(actuator.index);
+                this.actuatorsMap.get(region)!!.set(index, actuator);
+                actuator.changeRegion(region, index);
+
+                return;
+            }
+        }
+
         const actuators = this.actuatorsMap.get(region);
         if (!actuators) {
             console.log("Region does not have actuators map i.e. client not connected: " + region);
@@ -44,7 +63,7 @@ export class DynamicSpace {
             console.log("object already added.");
             return;
         }
-        const actuator = new Actuator(this.scene, region, id, description);
+        const actuator = new Actuator(this.scene, region, id, index, description);
         actuators!!.set(index, actuator);
         actuator.added(x, y, z, rx, ry, rz, rw);
     }
@@ -67,12 +86,30 @@ export class DynamicSpace {
             return;
         }
         const actuators = this.actuatorsMap.get(region);
-        if (!actuators) { return; }
+        if (!actuators) {
+            return;
+        }
         const actuator = actuators.get(index);
-        if (!actuator) { return; }
-        actuator!!.removed();
-        (getSystemController(this.scene, "state") as StateSystemController).removeStates(actuator.entity);
-        actuators.delete(index);
+        if (!actuator) {
+            return;
+        }
+        this.actuatorRemoves.set(id, actuator);
+        setTimeout(() => {
+            if (this.actuatorRemoves.has(id)) {
+                this.actuatorRemoves.delete(id);
+                const actuators = this.actuatorsMap.get(region);
+                if (!actuators) {
+                    return;
+                }
+                const actuator = actuators.get(index);
+                if (!actuator) {
+                    return;
+                }
+                actuator!!.removed();
+                (getSystemController(this.scene, "state") as StateSystemController).removeStates(actuator.entity);
+                actuators.delete(index);
+            }
+        }, 1000);
     }
 
     described(region: string, index: number, description: string) : void {
