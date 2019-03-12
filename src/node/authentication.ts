@@ -95,6 +95,7 @@ export async function initializeAuthentication(app: Express) {
             req.path.startsWith("/api/auth") ||
             req.path === "/login" ||
             req.path === "/login.html" ||
+            req.path === "/login_failed.html" ||
             req.path === "/https_required.html" ||
             req.path === "/health" ||
             req.path === "/favicon.ico") {
