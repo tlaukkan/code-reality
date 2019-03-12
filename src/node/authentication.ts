@@ -1,8 +1,7 @@
 import {Express, Request, Response, NextFunction} from "express";
 
 import uuid from "uuid";
-import crypto from 'crypto';
-import config from 'config';
+import config from "config";
 
 import passport from "passport";
 import passportLocal from "passport-local";
@@ -83,11 +82,12 @@ export async function initializeAuthentication(app: Express) {
         // No authentication for the following paths.
         if (req.path.startsWith("/css/") ||
             req.path.startsWith("/images/") ||
-            req.path.startsWith("/login") ||
             req.path.startsWith("/api/auth") ||
-            req.path.startsWith("/https_required.html") ||
-            req.path.startsWith("/health") ||
-            req.path.startsWith("/favicon.ico")) {
+            req.path === "/login" ||
+            req.path === "/login.html" ||
+            req.path === "/https_required.html" ||
+            req.path === "/health" ||
+            req.path === "/favicon.ico") {
             return next();
         }
 

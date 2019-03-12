@@ -27,11 +27,15 @@ export async function newServer(host: string, port: number): Promise<Server> {
 
     await initializeAuthentication(app);
 
-    initializeRoutes(app);
+    /*app.get("/", async function (request, response) {
+        const space = (request as any).session.space ? (request as any).session.space : 'default';
+        response.redirect("/" + space);
+    });*/
 
     app.use(express.static('static'));
     app.use(express.static('dist'));
 
+    initializeRoutes(app);
 
     const server = app.listen(port, host, function () {
         console.log('code-reality - http server listening at local URL: http://' + host + ':' + port + '/');

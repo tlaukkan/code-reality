@@ -6,10 +6,6 @@ import {BrowserContext} from "../common/model/BrowserContext";
 const fs = require('fs')
 
 export function initializeRoutes(app: Express) {
-    app.get("/", async function (request, response) {
-        const space = (request as any).session.space ? (request as any).session.space : 'default';
-        response.redirect("/space/" + space);
-    });
     app.get('/api/context', function (request, response) {
         const requestId = request.headers['request-id'] as string;
         infoWithRequestId(requestId, '/api/users/current: ' + JSON.stringify(request.user));
@@ -50,7 +46,7 @@ export function initializeRoutes(app: Express) {
         response.status(200);
         response.send('');
     });
-    app.get("/space/:space", async function (request, response) {
+    app.get("/:space", async function (request, response) {
         const requestId = request.headers['request-id'] as string;
         const space = request.params.space;
         infoWithRequestId(requestId, "set current space according to query path to: " + space);
