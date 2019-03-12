@@ -27,5 +27,8 @@
   },
   "Software" : {
     "version": "VERSION"
+  },
+  "AccessControl" : {
+    "administrator": "ADMINISTRATORS"
   }
 }

@@ -24,6 +24,8 @@ const LocalStrategy = passportLocal.Strategy;
 
 const idTokenIssuers: Map<string, IdTokenIssuer> = new Map<string, IdTokenIssuer>();
 
+const administrators = ((config.get('AccessControl.administrators')) as string).split(',');
+
 export async function initializeAuthentication(app: Express) {
 
     (await getIdTokenIssuers()).forEach(idTokenIssuer => {
@@ -55,8 +57,16 @@ export async function initializeAuthentication(app: Express) {
         callbackURL: config.get('Facebook.callbackUrl'),
         profileFields: ['id', 'name', 'displayName']
     }, (accessToken, refreshToken, profile, cb) => {
-        let user = createFormAuthenticatedUser("fb" + profile.id, profile.displayName, "administrators,users");
-        console.log(JSON.stringify(user));
+
+        const userId = "fb" + profile.id;
+        let userName = profile.displayName;
+        let userGroups = "users";
+
+        if (administrators.length > 0 && administrators[0].length > 0 && administrators.indexOf(userId) > -1) {
+            userGroups += ", administrators";
+            userName = "Admin - " + userName;
+        }
+        let user = createFormAuthenticatedUser(userId, userName, userGroups);
         return cb(null, user);
     }));
 
@@ -108,23 +118,26 @@ export async function initializeAuthentication(app: Express) {
     });
 
     app.post('/login', passport.authenticate('local', { session: true, failureRedirect: '/login_failed.html' }), function(req, res) {
-        if ((req as any).session.afterLoginUrl) {
-            res.redirect((req as any).session.afterLoginUrl);
-        } else {
-            res.redirect('/');
-        }
+        afterLoginRedirect(req, res);
     });
 
     app.get('/api/auth/facebook', passport.authenticate('facebook', {}));
     app.get('/api/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/api/login_failed.html'}), (req, res) => {
-        if ((req as any).session.afterLoginUrl) {
-            res.redirect((req as any).session.afterLoginUrl);
-        } else {
-            res.redirect('/');
-        }
+        afterLoginRedirect(req, res);
     })
 
 };
+
+function afterLoginRedirect(req: Request, res: Response) {
+    const user: User = req.user;
+    info(user, "User authenticated: " + user.userId + " : " + user.userName);
+    if ((req as any).session.afterLoginUrl) {
+        res.redirect((req as any).session.afterLoginUrl);
+    } else {
+        res.redirect('/');
+    }
+}
+
 
 function bearerTokenAuthentication(req: Request, res: Response, next: NextFunction) {
     try {

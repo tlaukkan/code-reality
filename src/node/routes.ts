@@ -8,7 +8,7 @@ const fs = require('fs')
 export function initializeRoutes(app: Express) {
     app.get('/api/context', function (request, response) {
         const requestId = request.headers['request-id'] as string;
-        infoWithRequestId(requestId, '/api/users/current: ' + JSON.stringify(request.user));
+        //infoWithRequestId(requestId, '/api/users/current: ' + JSON.stringify(request.user));
         const user = request.user as User;
         response.send(JSON.stringify(new BrowserContext(
             user.userId,
