@@ -29,7 +29,9 @@ export async function newServer(host: string, port: number): Promise<Server> {
 
     /*app.get("/", async function (request, response) {
         const space = (request as any).session.space ? (request as any).session.space : 'default';
-        response.redirect("/" + space);
+        if (request.query.space) {
+            response.redirect("/" + request.query.space);
+        }
     });*/
 
     app.use(express.static('static'));
@@ -92,7 +94,12 @@ function spaceSelectionMiddleware(req: Request, res: Response, next: NextFunctio
     if (req.query.space) {
         const requestId = req.headers['request-id'] as string;
         infoWithRequestId(requestId, "set current space according to query parameter to: " + req.query.space);
-        (req as any).session.space = req.query.space;
+        //(req as any).session.space = req.query.space;
+        res.redirect("/" + req.query.space);
+    } else {
+        if (req.path === "/") {
+            (req as any).session.space = "default";
+        }
+        next();
     }
-    next();
 }
