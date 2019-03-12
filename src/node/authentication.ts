@@ -102,17 +102,26 @@ export async function initializeAuthentication(app: Express) {
             return next();
         } else {
             infoWithRequestId(requestId, "redirecting to form login.");
+            (req as any).session.afterLoginUrl = req.path;
             res.redirect('/login.html');
         }
     });
 
     app.post('/login', passport.authenticate('local', { session: true, failureRedirect: '/login_failed.html' }), function(req, res) {
-        res.redirect('/');
+        if ((req as any).session.afterLoginUrl) {
+            res.redirect((req as any).session.afterLoginUrl);
+        } else {
+            res.redirect('/');
+        }
     });
 
     app.get('/api/auth/facebook', passport.authenticate('facebook', {}));
     app.get('/api/auth/facebook/callback', passport.authenticate('facebook', {failureRedirect: '/api/login_failed.html'}), (req, res) => {
-        res.redirect('/');
+        if ((req as any).session.afterLoginUrl) {
+            res.redirect((req as any).session.afterLoginUrl);
+        } else {
+            res.redirect('/');
+        }
     })
 
 };
