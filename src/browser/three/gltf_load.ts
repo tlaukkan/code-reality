@@ -84,7 +84,7 @@ let loading = false;
 
 function setMaterialAnisotropy(material: MeshBasicMaterial) {
     if (material.map) {
-        material.map.anisotropy = 1;
+        material.map.anisotropy = 2;
         //material.map.minFilter = LinearMipMapNearestFilter;
     }
 }
