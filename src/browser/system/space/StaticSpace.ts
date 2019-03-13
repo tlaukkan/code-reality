@@ -19,7 +19,7 @@ export class StaticSpace {
 
     connected(region: string, regionOrigo: Vector3) {
         if (!this.regionElements.has(region)) {
-            const regionElement = createElement('<a-entity merge region="' + region + '" position="' + regionOrigo.x + ' ' + regionOrigo.y + ' ' + regionOrigo.z + '"/>');
+            const regionElement = createElement('<a-entity merge shadow region="' + region + '" position="' + regionOrigo.x + ' ' + regionOrigo.y + ' ' + regionOrigo.z + '"/>');
             this.regionElements.set(region, regionElement);
             this.scene.appendChild(regionElement);
         }

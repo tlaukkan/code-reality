@@ -1,5 +1,5 @@
 import uuid = require("uuid");
-import {Matrix4, Object3D, Plane, Quaternion, Vector3} from "three";
+import {Matrix4, Object3D, PerspectiveCamera, Plane, Quaternion, Vector3} from "three";
 import {Entity, Scene, System} from "aframe";
 import {EntityStateEventDetail} from "../../model/EntityStateEventDetail";
 import {Events} from "../../model/Events";
@@ -13,7 +13,7 @@ import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
 import {BrowserContext} from "../../../common/model/BrowserContext";
 import {
     AbstractSystemController, createElement,
-    getComponentController,
+    getComponentController, getSystemController,
     SystemControllerDefinition
 } from "aframe-typescript-boilerplate";
 
@@ -262,7 +262,12 @@ export class SpaceSystemController extends AbstractSystemController {
             };
             this.client.connect().then(() => {
                 if (this.client && this.client.clusterConfiguration) {
-                    this.observationRange = Math.trunc(this.client!!.clusterConfiguration!!.range / this.client!!.clusterConfiguration!!.step) * this.client.clusterConfiguration!!.step
+                    this.observationRange = Math.trunc(this.client!!.clusterConfiguration!!.range / this.client!!.clusterConfiguration!!.step) * this.client.clusterConfiguration!!.step;
+
+                    const interfaceSystem = getSystemController(this.scene, "interface") as InterfaceSystemController;
+                    const observationRange = this.getObservationRange();
+                    console.log("Set camera far to: " + observationRange);
+                    (interfaceSystem.cameraEntity.object3D as PerspectiveCamera).far = observationRange;
                 }
             }).catch((error: Error) => {
                 console.warn("dataspace - cluster client connect error.", error);

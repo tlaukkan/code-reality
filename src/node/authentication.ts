@@ -63,7 +63,7 @@ export async function initializeAuthentication(app: Express) {
         let userGroups = "users";
 
         if (administrators.length > 0 && administrators[0].length > 0 && administrators.indexOf(userId) > -1) {
-            userGroups += ", administrators";
+            userGroups += ",administrators";
             userName = "Admin - " + userName;
         }
         let user = createFormAuthenticatedUser(userId, userName, userGroups);

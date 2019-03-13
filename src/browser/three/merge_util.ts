@@ -44,7 +44,10 @@ export async function mergeObject3Ds(merge: ObjectMerge, objects: Array<Object3D
                 //console.log("adding geometry merge: " + geometryId);
                 const geometryMerge = new BufferGeometryMerge(material);
                 merge.geometryMerges.set(geometryId, geometryMerge);
-                merge.group.add(new Mesh(geometryMerge.geometry, geometryMerge.material));
+                const mesh = new Mesh(geometryMerge.geometry, geometryMerge.material);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                merge.group.add(mesh);
             }
         }
 

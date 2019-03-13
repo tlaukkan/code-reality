@@ -48,6 +48,7 @@ export class Actuator {
         this.entity = createElement(description) as Entity;
         this.entity.setAttribute("did", id);
         this.entity.setAttribute("server", region);
+        this.entity.setAttribute("shadow", "");
         this.springOne.relaxationTime = 0.2;
         this.springTwo.relaxationTime = 0.2;
         this.stateSystemController = getSystemController(this.scene, "state");
@@ -228,14 +229,14 @@ export class Actuator {
         }
 
         // Check if dynamic object is in observation range. Do this every round to keep the cost independent of whether user is moving or not.
-        const spaceSystem = getSystemController(this.scene, "space") as SpaceSystemController;
+        /*const spaceSystem = getSystemController(this.scene, "space") as SpaceSystemController;
         const interfaceSystem = getSystemController(this.scene, "interface") as InterfaceSystemController;
         const range = spaceSystem.getObservationRange();
         //console.log("Observation range: "+ range);
         this.cameraPosition.copy(interfaceSystem.cameraPosition);
         this.cameraPosition.sub(this.entity.object3D.position);
         const distanceToCamera = this.cameraPosition.length();
-        this.entity.object3D.visible = distanceToCamera < range;
+        this.entity.object3D.visible = distanceToCamera < range;*/
 
     }
 

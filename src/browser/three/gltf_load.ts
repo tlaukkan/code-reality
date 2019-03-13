@@ -1,6 +1,15 @@
-import {GLTF, GLTFLoader} from "three";
+import {
+    BufferGeometry,
+    GLTF,
+    GLTFLoader, LinearMipMapNearestFilter,
+    Material,
+    Mesh,
+    MeshBasicMaterial, NearestMipMapLinearFilter,
+    NearestMipMapNearestFilter,
+    Object3D
+} from "three";
 import {Entity} from "aframe";
-import {cloneObject3D} from "./merge_util";
+import {cloneObject3D, ObjectMerge} from "./merge_util";
 
 const models = new Map<string, GLTF>();
 const modelLoadedCallbacks = new Map<string, Array<() => void>>();
@@ -73,12 +82,41 @@ function attemptGltfModelWithDelay(src: string): Promise<boolean> {
 
 let loading = false;
 
+function setMaterialAnisotropy(material: MeshBasicMaterial) {
+    if (material.map) {
+        material.map.anisotropy = 4;
+        //material.map.minFilter = LinearMipMapNearestFilter;
+    }
+}
+
+function setObjectMaterialAnisotropy(object: Object3D) {
+    if (object.type == "Mesh") {
+        const mesh = object as Mesh;
+        if (mesh.material instanceof Array) {
+            const materials = mesh.material as Array<Material>;
+            for (const material of materials) {
+                setMaterialAnisotropy(material as MeshBasicMaterial);
+            }
+        } else if (mesh.material) {
+            setMaterialAnisotropy(mesh.material as MeshBasicMaterial);
+        }
+    }
+
+    if (object.children) {
+        for (const child of object.children) {
+            setObjectMaterialAnisotropy(child);
+        }
+    }
+}
+
 async function loadGltfModel(src: string) {
     loading = true;
     const loader = new GLTFLoader();
-    console.log("GLTF manager - loading: " + src);
 
     loader.load(src, function (gltf: GLTF) {
+        let scene = (gltf.scene || gltf.scenes[0]);
+        setObjectMaterialAnisotropy(scene);
+
         //console.log("GLTF manager - loaded: " + src);
         models.set(src, gltf);
         for (const modelLoaded of modelLoadedCallbacks.get(src)!!) {

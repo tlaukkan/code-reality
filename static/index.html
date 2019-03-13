@@ -15,7 +15,7 @@
     </head>
     <body>
 
-        <a-scene keyboard-shortcuts="enterVR: false" loading-screen="enabled: false" light="defaultLightsEnabled: false" stats space renderer="antialias: true; sortObjects: true; maxCanvasWidth: -1; maxCanvasHeight: -1; colorManagement: true;">
+        <a-scene fog="type: exponential; color: #000; density: 0.025;" keyboard-shortcuts="enterVR: false" loading-screen="enabled: false" light="defaultLightsEnabled: false" stats space shadow="type: pcfsoft;" renderer="antialias: true; sortObjects: true; maxCanvasWidth: -1; maxCanvasHeight: -1; colorManagement: true;">
 
             <!-- Assets -->
             <a-assets timeout="15000">
@@ -52,8 +52,17 @@
             </a-assets>
 
             <!-- Lights -->
-            <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.3"></a-entity>
-            <a-entity light="type: directional; color: #FFFFFF; intensity: 0.5" position="0.1 0.6 -0.3"></a-entity>
+            <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.07"></a-entity>
+            <a-entity light="type: directional; color: #FFFFFF; intensity: 0.15; castShadow:true;
+                   shadowCameraVisible: false;
+                   shadowCameraLeft: -40;
+                   shadowCameraRight: 40;
+                   shadowCameraBottom: -40;
+                   shadowCameraTop: 40;
+                   shadowMapWidth: 4096;
+                   shadowMapHeight: 4096;
+                   shadowBias: 0;" position="20 120 -80"></a-entity>
+            <a-entity light="type: directional; color: #FFFFFF; intensity: 0.05" position="-0.1 0.6 0.4"></a-entity>
 
 
             <!-- Terrain -->
@@ -78,16 +87,16 @@
             <!--<a-entity gltf-model="#male_suit" collidable position="0 1 -2" scale="0.4 0.4 0.4" rotation="0 0 0"></a-entity>-->
 
 
-            <a-entity model="#cube" collidable position="0 -1 0" scale="2 2 2" rotation="90 0 0" avatar></a-entity>
+            <a-entity model="#cube" collidable position="0 -1 0" scale="2 2 2" rotation="90 0 0" shadow></a-entity>
 
             <!-- Interface -->
             <a-entity interface position="0 0 0">
 
                 <!-- Sky -->
-                <a-sky src="#sky" segments-height="16" segments-width="32"></a-sky>
                 <!--<a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>-->
+                <a-sky src="#sky" material="fog: false" radius="50" egments-height="16" segments-width="32" transparent="true"></a-sky>
 
-                <a-entity camera look-controls="pointerLockEnabled: true;" position="0 1.6 0">
+                <a-entity camera="far: 55;" look-controls="pointerLockEnabled: true;" position="0 1.6 0">
                     <a-entity keyboard-and-mouse position="0.25 -0.25 -0.4">
                         <a-entity id="tool-selector-desktop-placeholder" position="0 0.01 0.05" scale="1 1 1" rotation="60 -45 -10">
                             <a-entity id="tool-selector" tool-selector-tool gltf-model="#tool-selector"></a-entity>

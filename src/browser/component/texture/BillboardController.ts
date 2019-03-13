@@ -36,7 +36,7 @@ export class BillboardController extends CodeRealityComponentController {
         this.width = this.data.width;
         this.height = this.data.height;
         //console.log(this.componentName + " init: " + srcUrl);
-        this.entity.setAttribute("material", "src: url(" + srcUrl + ");  side: double; transparent: true;");
+        this.entity.setAttribute("material", "src: url(" + srcUrl + ");  side: double; transparent: true; shader: flat;");
     }
 
     update(data: any, oldData: any): void {
