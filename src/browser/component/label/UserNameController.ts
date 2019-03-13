@@ -55,6 +55,7 @@ export class UserNameController extends CodeRealityComponentController {
 
                 this.labelElement = document.createElement('a-text');
                 //this.labelElement.setAttribute("shadow", "castShadow: false; receiveShadow: false;");
+                this.labelElement.setAttribute("transparent", "true");
                 this.labelElement.setAttribute("value", text);
                 this.labelElement.setAttribute("color", "#EFEFEF");
                 this.labelElement.setAttribute("opacity", "0.9");
