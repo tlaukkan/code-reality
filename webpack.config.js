@@ -14,12 +14,17 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.html$/,
+                use: 'raw-loader',
+            },
+            {
                 test: /\.js$/,
                 exclude: [/(node_modules)/,/(node)/,/(lib)/],
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ["@babel/preset-env"]
+                        presets: ["@babel/preset-env"],
+                        plugins: ["transform-html-import-to-string"]
                     }
                 }
             },

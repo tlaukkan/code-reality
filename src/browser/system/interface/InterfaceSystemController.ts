@@ -38,6 +38,7 @@ export class InterfaceSystemController extends AbstractSystemController {
 
     private slotListeners: Map<Slot, Array<SlotListener>> = new Map();
     public cameraPosition: Vector3 = new Vector3(0,0,0);
+    public cameraDirection: Vector3 = new Vector3(0,0,0);
 
     constructor(system: System, scene: Scene, data: any) {
         super(system, scene, data);
@@ -84,6 +85,9 @@ export class InterfaceSystemController extends AbstractSystemController {
     tick(time: number, timeDelta: number): void {
         this.cameraPosition.copy(this.cameraEntity.object3D.position);
         this.cameraPosition = this.cameraEntity.object3D.parent!!.localToWorld(this.cameraPosition);
+
+        this.cameraEntity!!.object3D.getWorldDirection(this.cameraDirection);
+        this.cameraDirection.multiplyScalar(-1);
     }
 
     getCollidables(): Array<Object3D> {

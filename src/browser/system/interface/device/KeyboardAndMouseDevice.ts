@@ -8,6 +8,7 @@ import {js2xml, xml2js} from "xml-js";
 import {ComponentControllerDefinition} from "aframe-typescript-boilerplate";
 import {addDocumentEventListener} from "aframe-typescript-boilerplate";
 import {CodeRealityComponentController} from "../../../component/CodeRealityComponentController";
+import {UiSystemController} from "../../ui/UiSystemController";
 
 export class KeyboardAndMouseDevice extends CodeRealityComponentController implements Device {
 
@@ -224,6 +225,15 @@ export class KeyboardAndMouseDevice extends CodeRealityComponentController imple
         }
         if (key == this.leftKey || key == 'q') {
             this.interface.buttonUp(this, Slot.PRIMARY_SELECTOR, Button.LEFT);
+        }
+
+        if (key == 'o') {
+            const uiSystem = this.getSystemController("ui") as UiSystemController;
+            uiSystem.pushView("<a-example-view/>");
+        }
+        if (key == 'i') {
+            const uiSystem = this.getSystemController("ui") as UiSystemController;
+            uiSystem.popView();
         }
 
     }

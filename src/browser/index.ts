@@ -35,6 +35,8 @@ import {
     registerSystemController
 } from "aframe-typescript-boilerplate";
 import {registerMaterialUiSystem} from "@tlaukkan/aframe-material-collection-ts/built/src/ui";
+import {UiSystemController} from "./system/ui/UiSystemController";
+import {ExampleView} from "./system/ui/view/ExampleView";
 
 registerMaterialUiSystem();
 
@@ -44,6 +46,9 @@ registerSystemController(InterfaceSystemController.DEFINITION);
 registerSystemController(StateSystemController.DEFINITION);
 registerSystemController(SpaceSystemController.DEFINITION);
 registerSystemController(MergeSystemController.DEFINITION);
+
+registerSystemController(UiSystemController.DEFINITION);
+registerComponentController(ExampleView.DEFINITION);
 
 registerComponentController(InterfaceController.DEFINITION);
 registerComponentController(ToolSelectorTool.DEFINITION);
