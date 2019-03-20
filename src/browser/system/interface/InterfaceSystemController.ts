@@ -61,9 +61,17 @@ export class InterfaceSystemController extends AbstractSystemController {
         const materialUiSystem = this.getSystemController("material-ui") as MaterialUiSystem;
         materialUiSystem.onFocus = () => {
             this.uiFocus = true;
+            const lookControls = this.cameraEntity.components["look-controls"] as any;
+            if (lookControls) {
+                lookControls.pause();
+            }
         };
         materialUiSystem.onFocusOut = () => {
             this.uiFocus = false;
+            const lookControls = this.cameraEntity.components["look-controls"] as any;
+            if (lookControls) {
+                lookControls.play();
+            }
         };
     }
 
