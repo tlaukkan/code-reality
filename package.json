@@ -63,7 +63,7 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "@tlaukkan/aframe-material-collection-ts": "^0.5.13",
+    "@tlaukkan/aframe-material-collection-ts": "^0.5.15",
     "@types/aframe": "^0.8.2",
     "@types/config": "0.0.34",
     "@types/express": "^4.16.0",
