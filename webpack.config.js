@@ -12,20 +12,22 @@ module.exports = {
         extensions: [ '.ts', ".js", ".json"]
     },
     module: {
-        rules: [ {
-            test: /\.js$/,
-            exclude: [/(node_modules)/,/(node)/,/(lib)/],
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: ["@babel/preset-env"]
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: [/(node_modules)/,/(node)/,/(lib)/],
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ["@babel/preset-env"]
+                    }
                 }
+            },
+            {
+                test: /\.ts?$/,
+                exclude: [/(node_modules)/,/(node)/,/(lib)/],
+                loader: "ts-loader"
             }
-        }, {
-            test: /\.ts?$/,
-            exclude: [/(node_modules)/,/(node)/,/(lib)/],
-            loader: "ts-loader"
-        }
         ]
     },
     devtool: 'eval-source-map',

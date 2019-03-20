@@ -20,6 +20,7 @@ export class ToolSelectorTool extends CodeRealityComponentController implements 
 
     toolSymbolEntities: Map<String, Entity> = new Map();
     currentToolName: string | undefined;
+    public vrMode: boolean = false;
 
     constructor(component: Component, entity: Entity, data: any) {
         super(component, entity, data);
@@ -32,6 +33,7 @@ export class ToolSelectorTool extends CodeRealityComponentController implements 
         this.interface.registerSlotListener(Slot.PRIMARY, this);
 
         addEntityEventListener(this.scene, "enter-vr", (detail: any) => {
+            this.vrMode = true;
             const toolSelectorObject = this.entity.object3D;
             const vrModePlaceholderObject = document.getElementById("tool-selector-vr-placeholder") as Entity;
             const desktopModePlaceholderObject = document.getElementById("tool-selector-desktop-placeholder") as Entity;
@@ -43,6 +45,7 @@ export class ToolSelectorTool extends CodeRealityComponentController implements 
             }
         });
         addEntityEventListener(this.scene, "exit-vr", (detail: any) => {
+            this.vrMode = false;
             const toolSelectorObject = this.entity.object3D;
             const vrModePlaceholderObject = document.getElementById("tool-selector-vr-placeholder") as Entity;
             const desktopModePlaceholderObject = document.getElementById("tool-selector-desktop-placeholder") as Entity;

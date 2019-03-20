@@ -42,10 +42,18 @@ export class KeyboardAndMouseDevice extends CodeRealityComponentController imple
         });
 
         window.addEventListener('keydown', (e: KeyboardEvent) => {
+            if (this.interface.isUiFocus()) {
+                return;
+            }
+
             this.onKeyDown(e.key);
         });
 
         window.addEventListener('keyup', (e: KeyboardEvent) => {
+            if (this.interface.isUiFocus()) {
+                return;
+            }
+
             this.onKeyUp(e.key);
         });
 
@@ -53,6 +61,11 @@ export class KeyboardAndMouseDevice extends CodeRealityComponentController imple
             if (!this.pointerLock) {
                 return;
             }
+            if (this.interface.isUiFocus()) {
+                return;
+            }
+
+
             if (e.button == 0) {
                 this.interface.buttonDown(this, Slot.PRIMARY, Button.TRIGGER);
             }
@@ -80,6 +93,10 @@ export class KeyboardAndMouseDevice extends CodeRealityComponentController imple
         });
 
         window.addEventListener("paste", (event: any) => {
+            if (this.interface.isUiFocus()) {
+                return;
+            }
+
             if (this.pointerLock) {
                 for (const item of event.clipboardData.items) {
                     const itemTyped = item as DataTransferItem;
@@ -146,6 +163,7 @@ export class KeyboardAndMouseDevice extends CodeRealityComponentController imple
     }
 
     onKeyDown(key: string) {
+
         if (key == this.movementForwardKey) {
             this.interface.buttonDown(this, Slot.WALK, Button.UP);
         }
@@ -178,6 +196,7 @@ export class KeyboardAndMouseDevice extends CodeRealityComponentController imple
     }
 
     onKeyUp(key: string) {
+
         if (key == this.movementForwardKey) {
             this.interface.buttonUp(this, Slot.WALK, Button.UP);
         }

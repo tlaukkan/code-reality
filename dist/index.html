@@ -97,7 +97,10 @@
                 <!--<a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>-->
                 <a-sky src="#sky" material="fog: false" radius="50" egments-height="16" segments-width="32" transparent="true"></a-sky>
 
-                <a-entity camera="far: 55;" look-controls="pointerLockEnabled: true;" position="0 1.6 0">
+                <a-entity id="camera" camera="far: 55;" look-controls="pointerLockEnabled: false;" position="0 1.6 0">
+                    <a-entity id="cursor" cursor="rayOrigin: mouse" ui-mouse-shim
+                              raycaster="far: 30; objects: .intersect;"></a-entity>
+
                     <a-entity keyboard-and-mouse position="0.25 -0.25 -0.4">
                         <a-entity id="tool-selector-desktop-placeholder" position="0 0.01 0.05" scale="1 1 1" rotation="60 -45 -10">
                             <a-entity id="tool-selector" tool-selector-tool gltf-model="#tool-selector"></a-entity>
@@ -120,6 +123,12 @@
                 <a-entity teleport-tool></a-entity>
 
             </a-entity>
+
+
+
+
+
+
 
         </a-scene>
 

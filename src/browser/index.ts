@@ -34,6 +34,9 @@ import {
     registerComponentController,
     registerSystemController
 } from "aframe-typescript-boilerplate";
+import {registerMaterialUiSystem} from "@tlaukkan/aframe-material-collection-ts/built/src/ui";
+
+registerMaterialUiSystem();
 
 registerSystemController(LoaderSystemController.DEFINITION);
 registerSystemController(ExampleSystemController.DEFINITION);

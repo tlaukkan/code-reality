@@ -10,6 +10,9 @@ import {Object3D, Vector3} from "three";
 import {SlotListener} from "./SlotListener";
 import {SpaceSystemController} from "../../..";
 import {AbstractSystemController, SystemControllerDefinition} from "aframe-typescript-boilerplate";
+import {ToolSelectorTool} from "./tool/ToolSelectorTool";
+import {InteractionMode} from "./model/InteractionMode";
+import {MaterialUiSystem} from "@tlaukkan/aframe-material-collection-ts";
 
 export class InterfaceSystemController extends AbstractSystemController {
 
@@ -17,6 +20,9 @@ export class InterfaceSystemController extends AbstractSystemController {
         "interface", {},
         (system: System, scene: Scene, data: any) => new InterfaceSystemController(system, scene, data)
     );
+
+    private interactionMode: InteractionMode = InteractionMode.FP;
+    private uiFocus: boolean = false;
 
     private selfScale: number = 1;
     public interfaceEntity: Entity;
@@ -52,6 +58,13 @@ export class InterfaceSystemController extends AbstractSystemController {
     }
 
     init(): void {
+        const materialUiSystem = this.getSystemController("material-ui") as MaterialUiSystem;
+        materialUiSystem.onFocus = () => {
+            this.uiFocus = true;
+        };
+        materialUiSystem.onFocusOut = () => {
+            this.uiFocus = false;
+        };
     }
 
     pause(): void {
@@ -197,6 +210,38 @@ export class InterfaceSystemController extends AbstractSystemController {
         return this.selfScale;
     }
 
+    isVrMode(): boolean {
+        return (this.getToolAtSlot(Slot.PRIMARY_SELECTOR)!! as ToolSelectorTool).vrMode;
+    }
+
+    isUiFocus(): boolean {
+        return this.uiFocus;
+    }
+
+    setVrMode(vrMode: boolean) {
+        if (this.isVrMode() === vrMode) {
+            return;
+        } else {
+            if (vrMode) {
+                this.scene.enterVR();
+            } else {
+                this.scene.exitVR();
+            }
+        }
+    }
+
+    getInteractionMode(): InteractionMode {
+        return this.interactionMode;
+    }
+
+    setInteractionMode(interactionMode: InteractionMode):  void {
+        if (interactionMode === this.interactionMode) {
+            return;
+        }
+
+
+        this.interactionMode = interactionMode;
+    }
 }
 
 
