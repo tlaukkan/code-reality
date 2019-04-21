@@ -49,12 +49,18 @@
                 <a-asset-item id="teleport-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/teleport-tool.glb"></a-asset-item>
                 <a-asset-item id="add-object-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/add-object-tool.glb"></a-asset-item>
                 <a-asset-item id="walk-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/walk-tool.glb"></a-asset-item>
+                <a-asset-item id="walk-tool" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection/tools/walk-tool.glb"></a-asset-item>
+
+
+                <a-asset-item id="gallery_island" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.23/environments/quaternius/gallery_island.glb"></a-asset-item>
+                <a-asset-item id="pedestal" src="https://cdn.jsdelivr.net/gh/tlaukkan/aframe-asset-collection@0.0.23/environments/quaternius/pedestal.glb"></a-asset-item>
+
             </a-assets>
 
             <!-- Lights -->
-            <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.2"></a-entity>
+            <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.3"></a-entity>
 
-            <a-entity light="type: directional; color: #FFFFFF; intensity: 0.1" position="-0.1 0.6 0.4"></a-entity>
+            <a-entity light="type: directional; color: #FFFFFF; intensity: 0.2" position="-0.1 0.6 0.4"></a-entity>
 
 
             <!-- Terrain -->
@@ -81,6 +87,8 @@
 
             <a-entity model="#cube" collidable position="0 -1 0" scale="2 2 2" rotation="90 0 0" shadow></a-entity>
 
+            <a-entity model="#gallery_island" collidable position="0 -1 0" scale="2 2 2" rotation="00 0 0" shadow></a-entity>
+
             <!-- Interface -->
             <a-entity interface position="0 0 0">
                 <a-entity light="type: directional; color: #FFFFFF; intensity: 0.2; castShadow:true;
@@ -97,7 +105,7 @@
                 <!--<a-sky geometry="primitive: sphere" material="shader: threeColorGradientShader; topColor: #F5BB00; middleColor: #EC9F05; bottomColor: #D76A03;"></a-sky>-->
                 <a-sky src="#sky" material="fog: false" radius="50" egments-height="16" segments-width="32" transparent="true"></a-sky>
 
-                <a-entity camera="far: 55;" look-controls="pointerLockEnabled: false;" position="0 1.6 0">
+                <a-entity camera="far: 55;" look-controls="pointerLockEnabled: true;" position="0 1.6 0">
                     <a-entity id="cursor" cursor="rayOrigin: mouse" ui-mouse-shim
                               raycaster="far: 30; objects: .intersect;"></a-entity>
 

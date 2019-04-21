@@ -27,7 +27,8 @@ export class AddObjectTool extends PointerTool {
         '<a-entity model="#cube_stone" collidable/>',
         '<a-entity model="#slab_sand" collidable/>',
         '<a-entity model="#slab_marble" collidable/>',
-        '<a-entity model="#slab_stone" collidable/>'
+        '<a-entity model="#slab_stone" collidable/>',
+        '<a-entity model="#pedestal" collidable/>'
     ];
     entityTemplateIndex = 0;
     entityTemplate: string = this.entityTemplates[this.entityTemplateIndex];
