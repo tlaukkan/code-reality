@@ -119,14 +119,18 @@ async function loadGltfModel(src: string) {
 
         //console.log("GLTF manager - loaded: " + src);
         models.set(src, gltf);
+        for (const modelLoaded of modelLoadedCallbacks.get(src)!!) {
+            modelLoaded();
+        }
+        modelLoadedCallbacks.delete(src);
+        loading = false;
     }, undefined /* onProgress */, function (error) {
         console.error("GLTF manager - loading failed: " + src, error);
+        for (const modelLoaded of modelLoadedCallbacks.get(src)!!) {
+            modelLoaded();
+        }
+        modelLoadedCallbacks.delete(src);
+        loading = false;
     });
-
-    for (const modelLoaded of modelLoadedCallbacks.get(src)!!) {
-        modelLoaded();
-    }
-    modelLoadedCallbacks.delete(src);
-    loading = false;
 }
 

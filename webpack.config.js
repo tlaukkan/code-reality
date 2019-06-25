@@ -53,7 +53,7 @@ module.exports = {
         host: "localhost",
         port: 3001,
         proxy: {
-            '/api': 'http://localhost:3000'
+            '/api': 'http://localhost:3010'
         }
     },
     mode: "development"
