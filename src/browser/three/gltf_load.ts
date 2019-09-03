@@ -84,6 +84,7 @@ let loading = false;
 
 function setMaterialAnisotropy(material: MeshBasicMaterial) {
     if (material.map) {
+        console.log('disabled mipmaps.');
         material.map.anisotropy = 2;
         material.map.generateMipmaps = false;
         material.map.minFilter = LinearFilter;

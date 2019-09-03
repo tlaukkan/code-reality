@@ -37,6 +37,10 @@ export class ModelController extends AbstractComponentController {
             }
         }).catch((error) => {
             console.error("Error loading static model:" + data, error);
+            if (this.merge) {
+                this.entity.object3D.visible = false;
+                this.mergeSystem.setMergeChildLoaded(this.merge!!, this.entity);
+            }
         });
     }
 
