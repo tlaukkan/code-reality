@@ -1,7 +1,7 @@
 import {
     BufferGeometry,
     GLTF,
-    GLTFLoader, LinearMipMapNearestFilter,
+    GLTFLoader, LinearFilter, LinearMipMapNearestFilter,
     Material,
     Mesh,
     MeshBasicMaterial, NearestMipMapLinearFilter,
@@ -85,7 +85,8 @@ let loading = false;
 function setMaterialAnisotropy(material: MeshBasicMaterial) {
     if (material.map) {
         material.map.anisotropy = 2;
-        material.map.minFilter = NearestMipMapLinearFilter;
+        material.map.generateMipmaps = false;
+        material.map.minFilter = LinearFilter;
     }
 }
 
