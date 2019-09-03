@@ -89,7 +89,7 @@ function setMaterialAnisotropy(material: MeshBasicMaterial) {
         material.map.generateMipmaps = false;
         material.map.minFilter = LinearFilter;
         if (material.map.image) {
-            console.log('texture ' + material.map.image.name + ' width: ' + material.map.image.width + ' height: ' + material.map.image.height + ' expected size: ' + ( 4 * 1.3 * (material.map.image.width * material.map.image.height) / (1024*1024)) + 'Mb');
+            console.log('texture ' + material.map.image.name + 'format: ' + material.map.format + ' width: ' + material.map.image.width + ' height: ' + material.map.image.height + ' expected size: ' + ( 4 * 1.3 * (material.map.image.width * material.map.image.height) / (1024*1024)) + 'Mb');
         }
     }
 }
