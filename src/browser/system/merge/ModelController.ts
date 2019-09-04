@@ -23,7 +23,7 @@ export class ModelController extends AbstractComponentController {
         //console.log(this.componentName + " init: " + JSON.stringify(this.data));
         this.merge = this.recursiveFindMergeParent(this.entity);
         if (this.merge) {
-            //this.mergeSystem.addLoadingMergeChild(this.merge!!, this.entity);
+            this.mergeSystem.addLoadingMergeChild(this.merge!!, this.entity);
         }
     }
 
@@ -32,14 +32,14 @@ export class ModelController extends AbstractComponentController {
         setEntityGltfModel(this.entity, data).then(() => {
             //console.log("Static model loaded: " + data);
             if (this.merge) {
-                //this.entity.object3D.visible = false;
-                //this.mergeSystem.setMergeChildLoaded(this.merge!!, this.entity);
+                this.entity.object3D.visible = false;
+                this.mergeSystem.setMergeChildLoaded(this.merge!!, this.entity);
             }
         }).catch((error) => {
             console.error("Error loading static model:" + data, error);
             if (this.merge) {
-                //this.entity.object3D.visible = false;
-                //this.mergeSystem.setMergeChildLoaded(this.merge!!, this.entity);
+                this.entity.object3D.visible = false;
+                this.mergeSystem.setMergeChildLoaded(this.merge!!, this.entity);
             }
         });
     }
@@ -47,7 +47,7 @@ export class ModelController extends AbstractComponentController {
     remove(): void {
         if (this.merge) {
             //console.log("Removing merge child due to model removal.");
-            //this.mergeSystem.removeMergeChild(this.merge!!, this.entity);
+            this.mergeSystem.removeMergeChild(this.merge!!, this.entity);
         }
 
     }
