@@ -1,6 +1,4 @@
-
-
-import {Entity} from "AFrame";
+import {Entity} from "aframe";
 import {Events} from "../../model/Events";
 import {EntityActionEventDetail} from "../../model/EntityActionEventDetail";
 import {AbstractFeature} from "aframe-typescript-boilerplate";
